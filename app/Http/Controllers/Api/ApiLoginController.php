@@ -23,21 +23,23 @@ class ApiLoginController extends Controller
         
         if ($validator->fails()) {
             return response()->json([
-                'invalid'=>$validator->getMessageBag()
+                'message'=>'invalid',
+                'data'=>$validator->getMessageBag()
             ],422);
         }
 
         try {
             $cekEmail = Pengguna::where('email', $request->email)->first();
             if (!$cekEmail) {
-                return response()->json(['failed' => 'Unauthorized'], 401);
+                return response()->json(['message' => 'Unauthorized'], 401);
             }
             $cekPassword = Hash::check($request->password, $cekEmail->password);
             if (!$cekPassword) {
-                return response()->json(['failed' => 'Unauthorized'], 401);
+                return response()->json(['message' => 'Unauthorized'], 401);
             }
             $token = $cekEmail->createToken($cekEmail->email)->plainTextToken;
             return response()->json([
+                'message'=>'success',
                 'data'=>[
                     'token' => $token,
                     'user' => [
@@ -50,7 +52,7 @@ class ApiLoginController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'error'=>$th->getMessage()
+                'message'=>$th->getMessage()
             ],500);
         }
         

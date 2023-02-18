@@ -22,7 +22,8 @@ class ApiRegisterController extends Controller
         
         if ($validator->fails()) {
             return response()->json([
-                'invalid'=>$validator->getMessageBag()
+                'message'=>'invalid',
+                'data'=>$validator->getMessageBag()
             ],422);
         }
 
@@ -37,6 +38,7 @@ class ApiRegisterController extends Controller
             $token = $pengguna->createToken($pengguna->email)->plainTextToken;
     
             return response()->json([
+                'message'=>'success',
                 'data'=>[
                     'token' => $token,
                     'user' => [
@@ -49,7 +51,7 @@ class ApiRegisterController extends Controller
             ]);
         } catch (\Throwable $th) {
             return response()->json([
-                'error'=>$th->getMessage()
+                'message'=>$th->getMessage()
             ],500);
         }
     }

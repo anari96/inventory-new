@@ -8,4 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class KategoriItem extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'pengguna_id',
+        'nama_kategori',
+        'warna_kategori',
+    ];
+
+    protected $hidden = [
+        'pengguna_id',
+    ];
+
+    public function pengguna()
+    {
+        return $this->belongsTo(Pengguna::class);
+    }
 }

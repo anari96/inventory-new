@@ -20,5 +20,9 @@ class Pengguna extends Authenticatable
         'api_token'
     ];
 
+    protected $hidden = [
+        'password',
+    ];
+
     
 }
