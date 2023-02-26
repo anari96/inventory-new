@@ -17,9 +17,13 @@ class ApiKategoriItemController extends Controller
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
-    {
+    {   
+        $datas = KategoriItem::where('pengguna_id',auth()->user()->id);
+        if(request()->has('search') && request()->search != ""){
+            $datas = $datas->where('nama_kategori','like','%'.request()->search.'%');
+        }
         return response()->json([
-            'data'=>KategoriItem::where('pengguna_id',auth()->user()->id)->get()
+            'data'=>$datas->get()
         ]);
     }
 
@@ -92,7 +96,11 @@ class ApiKategoriItemController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, KategoriItem $kategoriItem): JsonResponse
-    {
+    {   
+        if($kategoriItem->pengguna_id != $request->user()->id) return response()->json([
+            'message'=>'unauthorized'
+        ],401);
+
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required|string|min:1',
             'warna_kategori' => [
@@ -100,9 +108,7 @@ class ApiKategoriItemController extends Controller
                 'regex:/^(#(?:[0-9a-f]{2}){2,4}|#[0-9a-f]{3}|(?:rgba?|hsla?)\((?:\d+%?(?:deg|rad|grad|turn)?(?:,|\s)+){2,3}[\s\/]*[\d\.]+%?\))$/i' //rgb, rgba, hsl and hsla
             ],
         ]);
-        if($kategoriItem->pengguna_id != $request->user()->id) return response()->json([
-            'message'=>'unauthorized'
-        ],401);
+        
         
         if ($validator->fails()) {
             return response()->json([
@@ -137,6 +143,9 @@ class ApiKategoriItemController extends Controller
     public function destroy($id): JsonResponse
     {   
         $kategoriItem = KategoriItem::find($id);
+        if($kategoriItem->pengguna_id != auth()->user()->id) return response()->json([
+            'message'=>'unauthorized'
+        ],401);
         if (!$kategoriItem) {
             return response()->json([
                 'message'=>'not found'

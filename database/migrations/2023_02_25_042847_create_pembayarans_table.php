@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_penjualans', function (Blueprint $table) {
+        Schema::create('pembayarans', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('pengguna_id')->index();
             $table->unsignedBigInteger('penjualan_id')->index();
-            $table->unsignedBigInteger('item_id')->index();
-            $table->unsignedBigInteger('diskon_id')->index()->nullable();
-            $table->integer('qty');
-            $table->integer('harga_item',false)->default(0);
-            $table->string('nama_item',100)->nullable();
+            $table->enum('jenis_bayar',['tunai','kartu']);
+            $table->integer('jumlah_bayar',false)->default(0);
+            $table->date('tanggal_bayar');
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_penjualans');
+        Schema::dropIfExists('pembayarans');
     }
 };

@@ -15,10 +15,6 @@ class KategoriItem extends Model
         'warna_kategori',
     ];
 
-    protected $hidden = [
-        'pengguna_id',
-    ];
-
     public function pengguna()
     {
         return $this->belongsTo(Pengguna::class);

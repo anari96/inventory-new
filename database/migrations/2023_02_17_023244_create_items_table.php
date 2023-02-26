@@ -13,16 +13,19 @@ return new class extends Migration
     {
         Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pelanggan_id')->index();
-            $table->unsignedBigInteger('kategori_item_id')->index();
+            $table->unsignedBigInteger('pengguna_id')->index();
+            $table->unsignedBigInteger('kategori_item_id')->nullable()->index();
             $table->string('nama_item',100);
-            $table->integer('harga_item',false);
+            $table->integer('biaya_item',false)->nullable();
+            $table->integer('harga_item',false)->nullable();
+            $table->enum('tipe_jual',['satuan','berat'])->nullable();
             $table->string('sku',50);
             $table->string('barcode',100)->nullable();
             $table->boolean('lacak_stok')->default(false);
-            $table->double('stok')->default(0);
-            $table->enum('tipe_stok',['satuan','berat'])->nullable();
+            $table->double('stok')->nullable();
+            
             $table->string('warna_item',100)->nullable();
+            $table->integer('bentuk_item',false)->default(0);
             $table->string('gambar_item',150)->nullable();
             $table->timestamps();
         });

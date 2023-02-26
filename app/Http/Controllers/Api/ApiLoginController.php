@@ -15,7 +15,6 @@ class ApiLoginController extends Controller
 {
     public function login(Request $request): JsonResponse
     {
-       
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:6',
@@ -29,24 +28,33 @@ class ApiLoginController extends Controller
         }
 
         try {
-            $cekEmail = Pengguna::where('email', $request->email)->first();
-            if (!$cekEmail) {
+            // $cek = Auth::attempt([
+            //     'email' => $request->email,
+            //     'password' => $request->password
+            // ]);
+            // if (!$cek) {
+            //     return response()->json(['message' => 'Email or password ar incorrect'], 401);
+            // }
+            // $user = Auth::user();
+
+            $user = Pengguna::where('email', $request->email)->first();
+            if (!$user) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
-            $cekPassword = Hash::check($request->password, $cekEmail->password);
+            $cekPassword = Hash::check($request->password, $user->password);
             if (!$cekPassword) {
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
-            $token = $cekEmail->createToken($cekEmail->email)->plainTextToken;
+            $token = $user->createToken($user->email)->plainTextToken;
             return response()->json([
                 'message'=>'success',
                 'data'=>[
                     'token' => $token,
                     'user' => [
-                        'id'=>$cekEmail->id,
-                        'email'=>$cekEmail->email,
-                        'nama_pengguna'=>$cekEmail->nama_pengguna,
-                        'nama_usaha'=>$cekEmail->nama_usaha,
+                        'id'=>$user->id,
+                        'email'=>$user->email,
+                        'nama_pengguna'=>$user->nama_pengguna,
+                        'nama_usaha'=>$user->nama_usaha,
                     ]
                 ]
             ]);

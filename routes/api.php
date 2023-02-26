@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Api\ApiItemController;
 use App\Http\Controllers\Api\ApiKategoriItemController;
 use App\Http\Controllers\Api\ApiLoginController;
 use App\Http\Controllers\Api\ApiRegisterController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/profil-pengguna', function (Request $request) {
     return response()->json([
         'message'=>'success',
-        'data'=>$request->user()
+        'data'=>Auth::user()
     ]);
 });
 
@@ -34,6 +36,24 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/{kategoriItem}', [ApiKategoriItemController::class,'show']);
         Route::post('/{kategoriItem}/update', [ApiKategoriItemController::class,'update']);
         Route::post('/{kategoriItem}/delete', [ApiKategoriItemController::class,'destroy']);
+    });
+
+    Route::group(['prefix' => 'item'], function () {
+        Route::get('/generate-sku', [ApiItemController::class,'generateSku']);
+        Route::get('/', [ApiItemController::class,'index']);
+        Route::post('/store', [ApiItemController::class,'store']);
+        Route::get('/{item}', [ApiItemController::class,'show']);
+        Route::post('/{item}/update', [ApiItemController::class,'update']);
+        Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
+        Route::get('/{item}/gambar-item', [ApiItemController::class,'getGambarItem']);
+    });
+
+    Route::group(['prefix' => 'penjualan'], function () {
+        Route::get('/', [ApiItemController::class,'index']);
+        Route::post('/store', [ApiItemController::class,'store']);
+        Route::get('/{penjualan}', [ApiItemController::class,'show']);
+        // Route::post('/{item}/update', [ApiItemController::class,'update']);
+        // Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
     });
     //Route::resource('', ApiKategoriItemController::class);
 });
