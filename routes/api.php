@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiItemController;
 use App\Http\Controllers\Api\ApiKategoriItemController;
 use App\Http\Controllers\Api\ApiLoginController;
+use App\Http\Controllers\Api\ApiPenjualanController;
 use App\Http\Controllers\Api\ApiRegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,20 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::post('test-json',function(Request $request){
+    
+    if($request->json()){
+        $json = $request->json()->all();
+        foreach ($json['detail_penjualan'] as $key => $value) {
+            dd($value);
+        }
+        dd($request->detail_penjualan);
+    } else {
+        dd('not ajax');
+    }
+    //dd($request->detail_penjualan[0]['id']);
+});
 
 Route::middleware('auth:sanctum')->get('/profil-pengguna', function (Request $request) {
     return response()->json([
@@ -49,9 +64,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     });
 
     Route::group(['prefix' => 'penjualan'], function () {
-        Route::get('/', [ApiItemController::class,'index']);
-        Route::post('/store', [ApiItemController::class,'store']);
-        Route::get('/{penjualan}', [ApiItemController::class,'show']);
+        Route::get('/', [ApiPenjualanController::class,'index']);
+        Route::post('/store', [ApiPenjualanController::class,'store']);
+        Route::get('/{penjualan}', [ApiPenjualanController::class,'show']);
         // Route::post('/{item}/update', [ApiItemController::class,'update']);
         // Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
     });

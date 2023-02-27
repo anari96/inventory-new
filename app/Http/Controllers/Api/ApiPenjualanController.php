@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
+use App\Models\Pembayaran;
 use App\Models\Penjualan;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class ApiPenjualanController extends Controller
@@ -36,10 +38,17 @@ class ApiPenjualanController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            "item_id.*"  => "required|integer",
-            "qty.*"  => "required|integer",
-        ]);
+        if($request->json()){
+            $validator = Validator::make($request->all(), [
+                "detail_penjualan.*"  => "required|array",
+                
+            ]);
+        } else {
+            $validator = Validator::make($request->all(), [
+                "item_id.*"  => "required|integer",
+                "qty.*"  => "required|integer",
+            ]);
+        }
 
         if ($validator->fails()) {
             return response()->json([
@@ -52,19 +61,39 @@ class ApiPenjualanController extends Controller
         try {
             $nomor_nota = Penjualan::where('pengguna_id',$request->user()->id)->count() + 1;
             $penjualan = Penjualan::create([
-                'pelanggan_id' => $request->user()->id,
+                'pengguna_id' => $request->user()->id,
                 'tanggal_penjualan' => date("Y-m-d"),
                 'nomor_nota' => date("Ymd-").$nomor_nota,
             ]);
 
-            foreach ($request->item_id as $key => $item_id) {
-                $item = Item::find($item_id);
-                $penjualan->detail_penjualan()->create([
-                    'item_id' => $item_id,
-                    'qty' => $request->qty[$key],
-                    'harga_item'=> $item->harga_item,
-                    'nama_item'=> $item->nama_item,
+            if($request->json()){
+                $json = $request->json()->all();
+                foreach ($json['detail_penjualan'] as $key => $detail) {
+                    $item = Item::find($detail['item_id']);
+                    $penjualan->detail_penjualan()->create([
+                        'item_id' => $item->id,
+                        'qty' => $detail['qty'],
+                        'harga_item'=> $detail['harga_item'],
+                        'nama_item'=> $item->nama_item,
+                    ]);
+                }
+                Pembayaran::create([
+                    'pengguna_id' => $request->user()->id,
+                    'penjualan_id' => $penjualan->id,
+                    'jumlah_bayar' => $json['pembayaran']['jumlah_bayar'],
+                    'jenis_bayar' => $json['pembayaran']['jenis_bayar'],
+                    'tanggal_bayar' => date("Y-m-d"),
                 ]);
+            } else {
+                foreach ($request->item_id as $key => $item_id) {
+                    $item = Item::find($item_id);
+                    $penjualan->detail_penjualan()->create([
+                        'item_id' => $item_id,
+                        'qty' => $request->qty[$key],
+                        'harga_item'=> $item->harga_item,
+                        'nama_item'=> $item->nama_item,
+                    ]);
+                }
             }
 
             DB::commit();
@@ -74,6 +103,7 @@ class ApiPenjualanController extends Controller
             ]);
         } catch (\Throwable $th) {
             DB::rollback();
+            Log::error($th);
             return response()->json([
                 'message'=>'failed',
                 'data'=>$th->getMessage()
