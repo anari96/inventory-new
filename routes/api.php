@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\ApiKategoriItemController;
 use App\Http\Controllers\Api\ApiLoginController;
 use App\Http\Controllers\Api\ApiPenjualanController;
 use App\Http\Controllers\Api\ApiRegisterController;
+use App\Http\Controllers\Api\ApiStrukController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +68,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/', [ApiPenjualanController::class,'index']);
         Route::post('/store', [ApiPenjualanController::class,'store']);
         Route::get('/{penjualan}', [ApiPenjualanController::class,'show']);
+        // Route::post('/{item}/update', [ApiItemController::class,'update']);
+        // Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
+    });
+
+    Route::group(['prefix' => 'struk'], function () {
+        Route::get('/', [ApiStrukController::class,'index']);
+        Route::get('/{struk}', [ApiStrukController::class,'show']);
         // Route::post('/{item}/update', [ApiItemController::class,'update']);
         // Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
     });

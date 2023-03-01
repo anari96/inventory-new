@@ -5,22 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailPenjualan extends Model
+class DetailPengembalian extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'penjualan_id',
+        'pengembalian_id',
+        'detail_penjualan_id',
         'qty',
-        'item_id',
-        'harga_item',
-        'nama_item'
     ];
 
     protected $appends = ['total'];
 
+    public function detail_penjualan()
+    {
+        return $this->belongsTo(DetailPenjualan::class);
+    }
+
+
     public function getTotalAttribute()
     {
-        return $this->harga_item * $this->qty;
+        return $this->detail_penjualan->harga_item * $this->qty;
     }
 }

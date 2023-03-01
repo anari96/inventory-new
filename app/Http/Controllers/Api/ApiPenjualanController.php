@@ -19,9 +19,14 @@ class ApiPenjualanController extends Controller
      * Display a listing of the resource.
      */
     public function index(): JsonResponse
-    {
+    {   
+        $datas = Penjualan::where('pengguna_id',auth()->user()->id)->get();
+        $datas = $datas->map(function($data){
+            $data->total = $data->detail_penjualan->sum('total');
+            return $data;
+        });
         return response()->json([
-            'data'=>Penjualan::where('pengguna_id',auth()->user()->id)->get()
+            'data'=>$datas
         ]);
     }
 
