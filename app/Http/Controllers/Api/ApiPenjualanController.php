@@ -59,7 +59,11 @@ class ApiPenjualanController extends Controller
 
         DB::beginTransaction();
         try {
-            $nomor_nota = Penjualan::where('pengguna_id',$request->user()->id)->count() + 1;
+            $last_penjualan = Penjualan::where('pengguna_id',$request->user()->id)->latest()->first();
+            $nomor_nota = 1;
+            if($last_penjualan){
+                $nomor_nota = explode("-",$last_penjualan->nomor_nota)[1]+1;
+            }
             $penjualan = Penjualan::create([
                 'pengguna_id' => $request->user()->id,
                 'tanggal_penjualan' => date("Y-m-d"),
@@ -70,6 +74,10 @@ class ApiPenjualanController extends Controller
                 $json = $request->json()->all();
                 foreach ($json['detail_penjualan'] as $key => $detail) {
                     $item = Item::find($detail['item_id']);
+                    if($item->lacak_stok){
+                        $item->stok = $item->stok - $detail['qty'];
+                        $item->save();
+                    }
                     $penjualan->detail_penjualan()->create([
                         'item_id' => $item->id,
                         'qty' => $detail['qty'],
