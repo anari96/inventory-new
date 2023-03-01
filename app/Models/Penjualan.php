@@ -16,7 +16,16 @@ class Penjualan extends Model
     
     ];
 
+    protected $appends = ['total'];
+
     public function detail_penjualan(){
         return $this->hasMany(DetailPenjualan::class);
+    }
+
+    public function getTotalAttribute()
+    {
+        return $this->detail_penjualan->sum(function($detail){
+            return $detail->harga_item * $detail->qty;
+        });
     }
 }
