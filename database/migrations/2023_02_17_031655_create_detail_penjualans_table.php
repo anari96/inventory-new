@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->integer('harga_item',false)->default(0);
             $table->string('nama_item',100)->nullable();
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

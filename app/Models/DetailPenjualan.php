@@ -23,4 +23,9 @@ class DetailPenjualan extends Model
     {
         return $this->harga_item * $this->qty;
     }
+
+    public function detail_pengembalians()
+    {
+        return $this->hasMany(DetailPengembalian::class);
+    }
 }

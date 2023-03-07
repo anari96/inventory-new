@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\ApiItemController;
 use App\Http\Controllers\Api\ApiKategoriItemController;
 use App\Http\Controllers\Api\ApiLoginController;
+use App\Http\Controllers\Api\ApiPengembalianController;
 use App\Http\Controllers\Api\ApiPenjualanController;
 use App\Http\Controllers\Api\ApiRegisterController;
 use App\Http\Controllers\Api\ApiStrukController;
@@ -77,6 +78,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/{struk}', [ApiStrukController::class,'show']);
         // Route::post('/{item}/update', [ApiItemController::class,'update']);
         // Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
+    });
+
+    Route::group(['prefix' => 'pengembalian'], function () {
+        Route::post('/store', [ApiPengembalianController::class,'store']);
     });
     //Route::resource('', ApiKategoriItemController::class);
 });

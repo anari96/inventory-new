@@ -19,7 +19,7 @@ class ApiStrukController extends Controller
             if($object->jenis == 'penjualan') {
                 $relationName = 'detail_penjualan';
                 $relationKey = 'penjualan_id';
-                $attachableType = DetailPenjualan::query();
+                $attachableType = DetailPenjualan::with('detail_pengembalians');
                 
             }
             if($object->jenis == 'pengembalian') {
@@ -35,17 +35,26 @@ class ApiStrukController extends Controller
             //unset($object->detail_pengembalians);
             //$object->total = null;
             //$object->detail_pengembalians = null;
-            $object->detail = $attachableType->where($relationKey, $object->id)->get();
-            $object->setAttribute('total_struk', $object->detail->sum('total'));
-            
+            $object->detail_struk = $attachableType->where($relationKey, $object->id)->get()->map(function ($detail)
+            {
+                if($detail->detail_penjualan_id != null) {
+                    $detail->nama_item = $detail->detail_penjualan->barang->nama_item;
+                    $detail->harga_item = $detail->detail_penjualan->harga_item;
+                    
+                }
+                return $detail;
+                
+            });
+            $object->setAttribute('total_struk', $object->detail_struk->sum('total'));
+            return $object;
         });
 
         return $datas;
     }
     public function index():JsonResponse
     {   
-        $penjualans = Penjualan::selectRaw(DB::raw('id,created_at as tanggal,"penjualan" as jenis'))->where('pengguna_id',auth()->user()->id);
-        $pengembalians = Pengembalian::selectRaw(DB::raw('id,created_at as tanggal,"pengembalian" as jenis'))->where('pengguna_id',auth()->user()->id)->unionAll($penjualans)->orderBy('tanggal','DESC')->get();
+        $penjualans = Penjualan::selectRaw(DB::raw('id,nomor_nota,created_at as tanggal,"penjualan" as jenis'))->where('pengguna_id',auth()->user()->id);
+        $pengembalians = Pengembalian::selectRaw(DB::raw('id,nomor_nota,created_at as tanggal,"pengembalian" as jenis'))->where('pengguna_id',auth()->user()->id)->unionAll($penjualans)->orderBy('tanggal','DESC')->get();
         $datas = $this->getRelatedData($pengembalians);
        
         return response()->json([

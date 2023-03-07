@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pengembalians', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pengguna_id')->index();
+            $table->unsignedBigInteger('penjualan_id')->index();
             $table->date('tanggal_pengembalian');
             $table->string('nomor_nota',100);
             $table->timestamps();
