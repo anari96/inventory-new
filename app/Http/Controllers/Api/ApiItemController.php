@@ -108,8 +108,12 @@ class ApiItemController extends Controller
      * Display the specified resource.
      */
     public function show(Item $item): JsonResponse
-    {
-        //
+    {   
+        $data = Item::where('id',$item->id)->with('kategoriItem')->first();
+        return response()->json([
+            'message'=>'success',
+            'data'=>$data
+        ]);
     }
 
     /**
@@ -161,18 +165,18 @@ class ApiItemController extends Controller
             }
             
             $item->update([
-                'kategori_item_id' => $request->kategori_item_id,
+                'kategori_item_id' => $request->kategori_item_id != 0 ? $request->kategori_item_id : null,
                 'nama_item' => $request->nama_item,
                 'harga_item' => $request->harga_item,
                 'biaya_item'=>$request->biaya_item,
                 'sku' => $request->sku,
                 'barcode' => $request->barcode,
-                'lacak_stok' => $request->lacak_stok ?? false,
-                'stok' => $request->stok_item,
+                'lacak_stok' => (($request->lacak_stok || $request->lacak_stok == 'true') && $request->lacak_stok != 'false') ? true : false,
+                'stok' => $request->stok ?? 0,
                 'tipe_jual' => $request->tipe_jual,
                 'warna_item' => $request->warna_item,
                 'bentuk_item'=>$request->bentuk_item,
-                'gambar_item' => $gambar ?? $old_gambar,
+                'gambar_item' => $gambar,
             ]);
             if($old_gambar != null && Storage::exists($old_gambar) && $gambar != null) Storage::delete($old_gambar);
             DB::commit();

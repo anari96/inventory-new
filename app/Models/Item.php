@@ -19,9 +19,15 @@ class Item extends Model
         'barcode',
         'lacak_stok',
         'stok',
-        
         'warna_item',
         'bentuk_item',
         'gambar_item',
     ];
+
+    public function kategoriItem()
+    {
+        return $this->belongsTo(KategoriItem::class)->withDefault([
+            'nama_kategori'=>'Tidak Ada'
+        ]);
+    }
 }

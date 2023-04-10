@@ -26,6 +26,8 @@ class ApiStrukController extends Controller
                 $relationName = 'detail_pengembalians';
                 $relationKey = 'pengembalian_id';
                 $attachableType = DetailPengembalian::query();
+
+                $object->penjualan = Penjualan::find($object->penjualan_id);
             }
             // $functionalAreas = $attachableType->whereHas($relationName, function($q) use ($object, $relationKey){
             //     $q->where($relationKey, $object->id);
@@ -38,10 +40,11 @@ class ApiStrukController extends Controller
             $object->detail_struk = $attachableType->where($relationKey, $object->id)->get()->map(function ($detail)
             {
                 if($detail->detail_penjualan_id != null) {
-                    $detail->nama_item = $detail->detail_penjualan->barang->nama_item;
+                    $detail->nama_item = $detail->detail_penjualan->nama_item;
                     $detail->harga_item = $detail->detail_penjualan->harga_item;
                     
                 }
+                
                 return $detail;
                 
             });
@@ -53,8 +56,8 @@ class ApiStrukController extends Controller
     }
     public function index():JsonResponse
     {   
-        $penjualans = Penjualan::selectRaw(DB::raw('id,nomor_nota,created_at as tanggal,"penjualan" as jenis'))->where('pengguna_id',auth()->user()->id);
-        $pengembalians = Pengembalian::selectRaw(DB::raw('id,nomor_nota,created_at as tanggal,"pengembalian" as jenis'))->where('pengguna_id',auth()->user()->id)->unionAll($penjualans)->orderBy('tanggal','DESC')->get();
+        $penjualans = Penjualan::selectRaw(DB::raw('id,nomor_nota,pengguna_id,created_at as tanggal,"penjualan" as jenis'))->where('pengguna_id',auth()->user()->id);
+        $pengembalians = Pengembalian::selectRaw(DB::raw('id,nomor_nota,penjualan_id,created_at as tanggal,"pengembalian" as jenis'))->where('pengguna_id',auth()->user()->id)->unionAll($penjualans)->orderBy('tanggal','DESC')->get();
         $datas = $this->getRelatedData($pengembalians);
        
         return response()->json([

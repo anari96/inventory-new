@@ -13,12 +13,18 @@ class Pengembalian extends Model
         'pengguna_id',
         'nomor_nota',
         'tanggal_pengembalian',
+        'penjualan_id'
     ];
 
 
     public function detail_pengembalians()
     {
         return $this->hasMany(DetailPengembalian::class);
+    }
+
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class);
     }
 
     
