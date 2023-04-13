@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('diskons', function (Blueprint $table) {
+        Schema::create('diskon_detail_penjualans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pengguna_id')->index();
-            $table->string('nama_diskon',100);
-            $table->enum('jenis_diskon',['persen','rupiah']);
-            $table->double('nilai_diskon')->default(0);
+            $table->unsignedBigInteger('diskon_id')->index();
+            $table->unsignedBigInteger('detail_penjualan_id')->index();
+            $table->integer('nilai_diskon')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('diskons');
+        Schema::dropIfExists('diskon_detail_penjualans');
     }
 };

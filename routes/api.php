@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiDiskonController;
 use App\Http\Controllers\Api\ApiItemController;
 use App\Http\Controllers\Api\ApiKategoriItemController;
 use App\Http\Controllers\Api\ApiLoginController;
@@ -63,6 +64,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('/{item}/update', [ApiItemController::class,'update']);
         Route::post('/{item}/delete', [ApiItemController::class,'destroy']);
         Route::get('/{item}/gambar-item', [ApiItemController::class,'getGambarItem']);
+    });
+
+    Route::group(['prefix' => 'diskon'], function () {
+        Route::get('/', [ApiDiskonController::class,'index']);
+        Route::post('/store', [ApiDiskonController::class,'store']);
+        Route::get('/{diskon}', [ApiDiskonController::class,'show']);
+        Route::post('/{diskon}/update', [ApiDiskonController::class,'update']);
+        Route::post('/{diskon}/delete', [ApiDiskonController::class,'destroy']);
     });
 
     Route::group(['prefix' => 'penjualan'], function () {

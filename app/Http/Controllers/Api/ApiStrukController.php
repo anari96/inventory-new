@@ -19,7 +19,7 @@ class ApiStrukController extends Controller
             if($object->jenis == 'penjualan') {
                 $relationName = 'detail_penjualan';
                 $relationKey = 'penjualan_id';
-                $attachableType = DetailPenjualan::with('detail_pengembalians');
+                $attachableType = DetailPenjualan::with('detail_pengembalians')->with('diskons');
                 
             }
             if($object->jenis == 'pengembalian') {

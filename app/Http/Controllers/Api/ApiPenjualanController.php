@@ -83,12 +83,17 @@ class ApiPenjualanController extends Controller
                         $item->stok = $item->stok - $detail['qty'];
                         $item->save();
                     }
-                    $penjualan->detail_penjualan()->create([
+                    $detailPenjualan = $penjualan->detail_penjualan()->create([
                         'item_id' => $item->id,
                         'qty' => $detail['qty'],
                         'harga_item'=> $detail['harga_item'],
                         'nama_item'=> $item->nama_item,
                     ]);
+                    foreach ($detail['diskons'] as $diskons) {
+                        $detailPenjualan->diskons()->attach($diskons['id'],[
+                            'nilai_diskon' => $diskons['nilai_diskon'] ?? null,
+                        ]);
+                    }
                 }
                 Pembayaran::create([
                     'pengguna_id' => $request->user()->id,
