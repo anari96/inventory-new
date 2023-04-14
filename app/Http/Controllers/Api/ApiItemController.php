@@ -159,9 +159,9 @@ class ApiItemController extends Controller
         DB::beginTransaction();
         try {
             
-            if ($request->hasFile('gambar_item')) {
+            if ($request->hasFile('gambar_item_file') && $request->gambar_item_file != null) {
                 //save image to storage
-                $gambar = $request->file('gambar_item')->store('gambar_item');
+                $gambar = $request->file('gambar_item_file')->store('gambar_item_file');
             }
             
             $item->update([
@@ -176,7 +176,7 @@ class ApiItemController extends Controller
                 'tipe_jual' => $request->tipe_jual,
                 'warna_item' => $request->warna_item,
                 'bentuk_item'=>$request->bentuk_item,
-                'gambar_item' => $gambar,
+                'gambar_item' => $gambar ?? $old_gambar,
             ]);
             if($old_gambar != null && Storage::exists($old_gambar) && $gambar != null) Storage::delete($old_gambar);
             DB::commit();

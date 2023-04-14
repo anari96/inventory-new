@@ -89,7 +89,7 @@ class ApiPenjualanController extends Controller
                         'harga_item'=> $detail['harga_item'],
                         'nama_item'=> $item->nama_item,
                     ]);
-                    foreach ($detail['diskons'] as $diskons) {
+                    foreach ($detail['diskons'] ?? [] as $diskons) {
                         $detailPenjualan->diskons()->attach($diskons['id'],[
                             'nilai_diskon' => $diskons['nilai_diskon'] ?? null,
                         ]);
