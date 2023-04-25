@@ -30,4 +30,10 @@ class Item extends Model
             'nama_kategori'=>'Tidak Ada'
         ]);
     }
+
+    public function getMarginHargaAttribute()
+    {
+        //margin harga dalam persen
+        return ($this->biaya_item - $this->harga_item) / $this->harga_item * 100;
+    }
 }

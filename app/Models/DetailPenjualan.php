@@ -20,6 +20,16 @@ class DetailPenjualan extends Model
 
     protected $appends = ['total'];
 
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
+
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class);
+    }
+
     public function getTotalAttribute()
     {   
         $total = ($this->harga_item * $this->qty);

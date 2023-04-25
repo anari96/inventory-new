@@ -21,7 +21,14 @@ class Penjualan extends Model
         return $this->hasMany(DetailPenjualan::class);
     }
 
-   
+    public function getTotalAttribute()
+    {
+        $total = 0;
+        foreach ($this->detail_penjualan as $detail) {
+            $total += $detail->total;
+        }
+        return $total;
+    }
 
 
 }

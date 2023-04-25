@@ -27,6 +27,15 @@ class Pengembalian extends Model
         return $this->belongsTo(Penjualan::class);
     }
 
+
+    public function getTotalAttribute()
+    {
+        $total = 0;
+        foreach ($this->detail_pengembalians as $detail) {
+            $total += $detail->total;
+        }
+        return $total;
+    }
     
 
 }
