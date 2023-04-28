@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengguna;
+use App\Models\Usaha;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -28,11 +29,18 @@ class ApiRegisterController extends Controller
         }
 
         try {
+            $usaha = Usaha::create([
+                'nama_usaha'=>$request->nama_usaha,
+            ]);
             $pengguna = Pengguna::create([
                 'nama_pengguna' => $request->nama_pengguna,
                 'nama_usaha' => $request->nama_usaha,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'usaha_id' => $usaha->id,
+            ]);
+            $usaha->update([
+                'owner_id'=>$pengguna->id
             ]);
     
             $token = $pengguna->createToken($pengguna->email)->plainTextToken;

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DiskonController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\KategoriItemController;
 use App\Http\Controllers\LoginController;
@@ -24,6 +25,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::post('/logout', [LogoutController::class,'index'])->name('logout');
     Route::resource('item', ItemController::class);
     Route::resource('kategori-item', KategoriItemController::class);
+    Route::resource('diskon', DiskonController::class);
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {

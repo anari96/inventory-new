@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('penggunas', function (Blueprint $table) {
-            $table->string('nama_usaha')->nullable()->change();
-            $table->enum('role',['owner','admin','kasir'])->default('owner')->after('api_token');
-            $table->unsignedBigInteger('usaha_id')->index();
+        Schema::create('usahas', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama_usaha');
+            $table->string('logo_usaha')->nullable();
+            $table->unsignedBigInteger('owner_id')->index()->nullable();
+            $table->timestamps();
         });
     }
 
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('usahas');
     }
 };

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailPenjualan;
+use App\Models\KategoriItem;
 use App\Models\Pengembalian;
+use App\Models\Pengguna;
 use App\Models\Penjualan;
 use DateInterval;
 use DatePeriod;
@@ -16,6 +18,7 @@ class DashboardController extends Controller
     {   
         $user = auth()->user();
         if(auth()->guard('penggunas')->check()){
+            
             // $penjualanKotor = Penjualan::where('pengguna_id', $user->id)->get()->sum('total');
             // $pengembalian = Pengembalian::where('pengguna_id', $user->id)->get()->sum('total');
             // $diskon = DetailPenjualan::whereHas('diskons')->whereHas('penjualan', function($query) use ($user){
@@ -29,9 +32,19 @@ class DashboardController extends Controller
             $labaKotor = 0;
             
             // this will default to a time of 00:00:00
-            $begin = new DateTime('-30 day');
-            
+            $begin = new DateTime('-1 month');
             $end = new DateTime();
+            $periode = [
+                $begin->format('d/m/Y'),
+                $end->format('d/m/Y'),
+            ];
+        
+            if(request()->periode){
+                $periode = explode(" - ",request()->periode);
+                $begin = DateTime::createFromFormat('d/m/Y', $periode[0]);
+                $end = DateTime::createFromFormat('d/m/Y', $periode[1]);
+                
+            }
             $end->modify('+1 day');
 
             $interval = new DateInterval('P1D');
@@ -44,7 +57,18 @@ class DashboardController extends Controller
             
             $detail_penjualans = DetailPenjualan::whereHas('penjualan', function($query) use ($user){
                 $query->where('pengguna_id', $user->id);
-            })->whereBetween('created_at',[$begin,$end])->get();
+            })->whereBetween('created_at',[$begin,$end]);
+            if(request()->karaywan_id && request()->karaywan_id != ""){
+                $detail_penjualans = $detail_penjualans->whereHas('penjualan', function($query){
+                    $query->where('pengguna_id', request()->karaywan_id);
+                });
+            }
+            if(request()->kategori_item_id && request()->kategori_item_id != ""){
+                $detail_penjualans = $detail_penjualans->whereHas('item', function($query){
+                    $query->where('kategori_item_id', request()->kategori_item_id);
+                });
+            }
+            $detail_penjualans = $detail_penjualans->get();
             foreach ($detail_penjualans as $dp) {
                 $hargaBeli = $dp->item->biaya_item ?? 0;
                 $total = ($dp->harga_item * $dp->qty);
@@ -74,7 +98,18 @@ class DashboardController extends Controller
             foreach ($daterange as $key => $date) {
                 $detail_penjualans = DetailPenjualan::whereHas('penjualan', function($query) use ($user){
                     $query->where('pengguna_id', $user->id);
-                })->whereDate('created_at',$date->format('Y-m-d'))->get();
+                })->whereDate('created_at',$date->format('Y-m-d'));
+                if(request()->karaywan_id && request()->karaywan_id != ""){
+                    $detail_penjualans = $detail_penjualans->whereHas('penjualan', function($query){
+                        $query->where('pengguna_id', request()->karaywan_id);
+                    });
+                }
+                if(request()->kategori_item_id && request()->kategori_item_id != ""){
+                    $detail_penjualans = $detail_penjualans->whereHas('item', function($query){
+                        $query->where('kategori_item_id', request()->kategori_item_id);
+                    });
+                }
+                $detail_penjualans = $detail_penjualans->get();
                 $g_penjualanKotor = 0;
                 $g_pengembalian = 0;
                 $g_diskon = 0;
@@ -108,7 +143,10 @@ class DashboardController extends Controller
                 $charts['labaKotor'][] = $g_labaKotor;
             }
             
-            
+            $karyawans = Pengguna::where('usaha_id', $user->usaha_id)->get();
+            $kategoris = KategoriItem::whereHas('pengguna', function($query) use ($user){
+                $query->where('usaha_id', $user->usaha_id);
+            })->get();
 
             $data = [
                 'penjualanKotor' => $penjualanKotor,
@@ -117,7 +155,10 @@ class DashboardController extends Controller
                 'penjualanBersih' => $penjualanBersih,
                 'labaKotor' => $labaKotor,
                 'periodeTanggals'=>$periodeTanggals,
-                'charts'=>$charts
+                'charts'=>$charts,
+                'periode'=>$periode,
+                'karyawans'=>$karyawans,
+                'kategoris'=>$kategoris
             ];
             return view('dashboard.pengguna',$data);
         } else {

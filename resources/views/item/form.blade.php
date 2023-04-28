@@ -4,7 +4,8 @@
     <!-- Input Mask Plugin Js -->
     <script src="https://unpkg.com/autonumeric"></script>
     <script>
-        var rupiah = new AutoNumeric('.money-rupiah', { currencySymbol : 'Rp ' });
+        new AutoNumeric('#harga_item', { currencySymbol : 'Rp ',decimalPlaces: 0, digitGroupSeparator: '.', decimalCharacter: ',' })
+        new AutoNumeric('#biaya_item', { currencySymbol : 'Rp ',decimalPlaces: 0, digitGroupSeparator: '.', decimalCharacter: ',' });
 
         $(document).ready(function(){
             var input = $("#lacak_stok_input");
@@ -50,6 +51,16 @@
                 
             });
 
+            $('.pilih-bentuk').on('click', function(){
+                //empty html inside all .pilih-warna
+                //check warna_dan_bentuk is checked
+                if(warna_dan_bentuk.is(':checked')){
+                    $('.pilih-bentuk i').remove();
+                    $(this).append('<i class="material-icons">check</i>');
+                }
+                
+            });
+
             $("#file-input").on('change',function(){
                 var parent = $(this).closest('.image-upload');
                 var files = $(this)[0].files;
@@ -79,6 +90,23 @@
         .image-upload>input {
             display: none;
         }
+
+        .pilih-bentuk svg {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: auto;
+        }
+
+        .pilih-bentuk i {
+            font-size: 100px;
+            color:grey;
+            position:absolute;
+            left: 0%;
+            top: 0%;
+            right: 0%;
+            bottom: 0%;
+        }
     </style>
 @endpush
 
@@ -94,18 +122,25 @@
                     <div class="col-md-6">
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <input type="text" name="nama_item" class="form-control">
+                                <input type="text" name="nama_item" class="form-control" value="{{ old('nama_item',@$data->nama_item) }}">
                                 <label class="form-label">Nama</label>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <select class="form-control" name="kategori_id">
-                            <option value="">Tidak Ada</option>
-                            @foreach ($kategoris as $kategori)
-                                <option value="{{ $kategori->id }}">{{ $kategori->nama_kategori }}</option>
-                            @endforeach
-                        </select>
+                        <div class="form-group form-float ">
+                            <div class="form-line focused">
+                                <label for="" class="form-label" style="top: -18px">Kategori</label>
+                                <select class="form-control" name="kategori_item_id">
+                                    <option value="">Tidak Ada</option>
+                                    @foreach ($kategoris as $kategori)
+                                        <option value="{{ $kategori->id }}" @if(old('kategori_item_id',@$data->kategori_item_id) == $kategori->id) selected @endif>{{ $kategori->nama_kategori }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            
+                        </div>
+                        
                     </div>
                 </div>
                 
@@ -113,7 +148,7 @@
                     <div class="col-md-6">
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <input type="text" class="form-control money-rupiah" name="harga_item" >
+                                <input type="text" class="form-control money-rupiah" name="harga_item" id="harga_item" value="{{ old('harga_item',@$data->harga_item) }}">
                                 <label class="form-label">Harga Jual</label>
                             </div>
                         </div>
@@ -124,7 +159,7 @@
                         
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <input type="text" class="form-control money-rupiah" name="biaya_item" >
+                                <input type="text" class="form-control money-rupiah" name="biaya_item" id="biaya_item" value="{{ old('biaya_item',@$data->biaya_item) }}">
                                 <label class="form-label">Harga Beli</label>
                             </div>
                         </div>
@@ -136,9 +171,9 @@
                     <div class="col-md-12">
                         <p>Dijual Per</p>
                         <div class="demo-radio-button">
-                            <input name="tipe_jual" type="radio" id="radio_30" value="satuan" class="with-gap" checked="">
+                            <input name="tipe_jual" type="radio" id="radio_30" value="satuan" class="with-gap" @if(old('tipe_jual',@$data->tipe_jual)=='satuan'||old('tipe_jual',@$data->tipe_jual)=='') checked="true" @endif>
                             <label for="radio_30">Satuan</label>
-                            <input name="tipe_jual" type="radio" id="radio_31" value="berat" class="with-gap">
+                            <input name="tipe_jual" type="radio" id="radio_31" value="berat" class="with-gap" @if(old('tipe_jual',@$data->tipe_jual)=='berat') checked="true" @endif>
                             <label for="radio_31">Berat</label>
                             
                         </div>
@@ -149,7 +184,7 @@
                     <div class="col-md-6">
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <input type="text" name="sku" class="form-control">
+                                <input type="text" name="sku" class="form-control" value="{{ old('sku',@$data->sku) }}">
                                 <label class="form-label">Sku</label>
                             </div>
                         </div>
@@ -157,7 +192,7 @@
                     <div class="col-md-6">
                         <div class="form-group form-float">
                             <div class="form-line">
-                                <input type="text" name="barcode" class="form-control">
+                                <input type="text" name="barcode" class="form-control" value="{{ old('barcode',@$data->barcode) }}">
                                 <label class="form-label">Barcode</label>
                             </div>
                         </div>
@@ -188,16 +223,16 @@
                         <div class="col-sm-3">
                             <div class="demo-switch-title">Lacal Stok</div>
                             <div class="switch">
-                                <label><input type="checkbox" name="lacak_stok" id="lacak_stok"><span class="lever "></span></label>
+                                <label><input type="checkbox" name="lacak_stok" id="lacak_stok" @if(old('lacak_stok',@$data->lacak_stok)) checked @endif><span class="lever "></span></label>
                             </div>
                         </div>
                         
                     </div>
-                    <div class="row" id="lacak_stok_input" style="display:none;">
+                    <div class="row" id="lacak_stok_input" @if(old('lacak_stok',@$data->lacak_stok)) @else style="display:none;"  @endif>
                         <div class="col-md-6">
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="number" name="stok" class="form-control" value="0">
+                                    <input type="number" name="stok" class="form-control" value="{{ old('stok',@$data->stok ?? 0) }}">
                                     <label class="form-label">Stok Tersedia</label>
                                 </div>
                             </div>
@@ -237,11 +272,22 @@
                                 <div class="col-sm-2 pilihan-warna">
                                     
                                     <label for="warna_{{$index}}" style="text-align: center;width: 100px;height: 100px;background: {{ $color }};border-radius: 5px;display:block;margin:auto;" class="pilih-warna" data-warna="{{$color}}">
-                                        @if (@$data->warna_item == $color || ((!isset($data) || @$data->warna_item == null) && $index == 0))
+                                        @if (@$data->warna_item == strtolower($color) || ((!isset($data) || @$data->warna_item == null) && $index == 0))
                                             <i class="material-icons" style="font-size: 100px;color:white;">check</i>
                                         @endif
                                     </label>
-                                    <input name="warna_item" type="radio" id="warna_{{$index}}" value="{{$color}}" style="display:none;">
+                                    <input name="warna_item" type="radio" id="warna_{{$index}}" value="{{strtolower($color)}}" @if(@$data->warna_item == strtolower($color) || ((!isset($data) || @$data->warna_item == null) && $index == 0)) checked @endif style="display:none;">
+                                </div>
+                            @endforeach
+                            @foreach ($bentukItems as $index => $bentukItem)
+                                <div class="col-sm-2 pilihan-bentuk">
+                                    <label for="bentuk_{{$index}}" style="text-align: center;width: 100px;height: 100px;display:block;margin:auto;" class="pilih-bentuk" data-bentuk="{{$index}}">
+                                        {!! $bentukItem !!}
+                                        @if (@$data->bentuk_item == $index || ((!isset($data) || @$data->bentuk_item == null) && $index == 0))
+                                            <i class="material-icons" >check</i>
+                                        @endif
+                                    </label>
+                                    <input name="bentuk_item" type="radio" id="bentuk_{{$index}}" value="{{$index}}" @if(@$data->bentuk_item == $index || ((!isset($data) || @$data->bentuk_item == null) && $index == 0)) checked @endif style="display:none;">
                                 </div>
                             @endforeach
                             

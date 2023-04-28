@@ -34,6 +34,9 @@ class Item extends Model
     public function getMarginHargaAttribute()
     {
         //margin harga dalam persen
+        if($this->harga_item == 0){
+            return 0;
+        }
         return ($this->biaya_item - $this->harga_item) / $this->harga_item * 100;
     }
 }

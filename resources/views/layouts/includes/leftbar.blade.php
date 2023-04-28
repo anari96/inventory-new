@@ -92,7 +92,7 @@
                         <a href="#">Pengubah</a>
                     </li>
                     <li>
-                        <a href="#">Diskon</a>
+                        <a href="{{ route('diskon.index') }}">Diskon</a>
                     </li>
                 </ul>
             </li>

@@ -3,7 +3,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="block-header">
-            <h2>Kategori Item</h2>
+            <h2>Diskon</h2>
         </div>
 
         <div class="row clearfix">
@@ -11,15 +11,16 @@
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="card">
                     <div class="header">
-                        <a href="{{ route('kategori-item.create') }}" class="btn btn-primary">Tambah Kategori</a>
+                        <a href="{{ route('diskon.create') }}" class="btn btn-primary">Tambah Diskon</a>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
                                     <tr>
-                                        <th>Nama Kategori</th>
-                                        <th>Warna Kategori</th>
+                                        <th>Nama Diskon</th>
+                                        <th>Jenis Diskon</th>
+                                        <th>Nilai Diskon</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -27,15 +28,21 @@
                                     @foreach ($datas as $key => $data)
                                         <tr>
                                             <td>
-                                                {{$data->nama_kategori}}
+                                                {{$data->nama_diskon}}
                                             </td>
                                             <td>
-                                                <span class="label" style="background: {{$data->warna_kategori}};color:black;">{{$data->warna_kategori}}</span>  
+                                                {{$data->jenis_diskon}}
                                             </td>
-                                            
                                             <td>
-                                                <a href="{{ route('kategori-item.edit', $data->id) }}" class="btn btn-primary">Edit</a>
-                                                <form action="{{ route('kategori-item.destroy', $data->id) }}" method="POST" style="display:inline">
+                                                @if($data->jenis_diskon == "persen")
+                                                {{$data->nilai_diskon}}%
+                                                @else
+                                                {{number_format($data->nilai_diskon)}}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{ route('diskon.edit', $data->id) }}" class="btn btn-primary">Edit</a>
+                                                <form action="{{ route('diskon.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger">Delete</button>
@@ -47,7 +54,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="3">
+                                        <td colspan="4">
                                             <div class="text-center">
                                                 {{ $datas->links() }}
                                             </div>

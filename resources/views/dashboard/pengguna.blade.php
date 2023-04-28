@@ -1,27 +1,49 @@
 @extends('layouts.app')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endpush
+
 @push('scripts')
     {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
     <!-- ChartJs -->
     <script src="{{ url('material') }}/plugins/chartjs/Chart.bundle.js"></script>
 
-    <!-- Flot Charts Plugin Js -->
-    <script src="{{ url('material') }}/plugins/flot-charts/jquery.flot.js"></script>
-    <script src="{{ url('material') }}/plugins/flot-charts/jquery.flot.resize.js"></script>
-    <script src="{{ url('material') }}/plugins/flot-charts/jquery.flot.pie.js"></script>
-    <script src="{{ url('material') }}/plugins/flot-charts/jquery.flot.categories.js"></script>
-    <script src="{{ url('material') }}/plugins/flot-charts/jquery.flot.time.js"></script>
 
-    <!-- Sparkline Chart Plugin Js -->
-    <script src="{{ url('material') }}/plugins/jquery-sparkline/jquery.sparkline.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <script>
+        $(function() {
+            $('#daterange').daterangepicker({
+                opens: 'left',
+                locale: {
+                    format: 'DD/MM/YYYY'
+                }
+            }, function(start, end, label) {
 
-    <!-- Custom Js -->
-    <script src="{{ url('material') }}/js/pages/index.js"></script>
+                console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end
+                    .format('YYYY-MM-DD'));
+                var delayInMilliseconds = 500; //1 second
 
+                setTimeout(function() {
+                    $("#filter-form").submit();
+                }, delayInMilliseconds);
+
+            });
+        });
+
+        $("#karyawan_id").change(function() {
+            $("#filter-form").submit();
+        });
+
+        $("#kategori_item_id").change(function() {
+            $("#filter-form").submit();
+        });
+    </script>
     @foreach ($charts as $key => $v)
         <script>
             var ctx_{{ $key }} = document.getElementById('{{ $key }}Chart');
-            if(ctx_{{ $key }}){
+            if (ctx_{{ $key }}) {
                 new Chart(ctx_{{ $key }}, {
                     type: 'bar',
                     data: {
@@ -43,7 +65,6 @@
                     }
                 });
             }
-            
         </script>
     @endforeach
 @endpush
@@ -57,14 +78,57 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
-                    {{-- <div class="header">
-                        <h2>
-                            EXAMPLE TAB
-                            <small>Add quick, dynamic tab functionality to transition through panes of local content</small>
-                        </h2>
+                    <div class="header">
+                        <form action="" id="filter-form">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                        <div class="form-line">
+
+                                            <input type="text" class="form-control" name="periode" id="daterange"
+                                                value="{{ $periode[0] }} - {{ $periode[1] }}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">person</i>
+                                        </span>
+                                        <div class="form-line">
+                                            <select class="form-control" name="karyawan_id" id="karyawan_id">
+                                                <option value="">Semua Karyawan</option>
+                                                @foreach ($karyawans as $karyawan)
+                                                    <option value="{{ $karyawan->id }}" @if(old('karyawan_id',request()->karyawan_id) == $karyawan->id) selected @endif>{{ $karyawan->nama_pengguna }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">category</i>
+                                        </span>
+                                        <div class="form-line">
+                                            <select class="form-control" name="kategori_item_id" id="kategori_item_id">
+                                                <option value="">Semua Kategori</option>
+                                                @foreach ($kategoris as $kategori)
+                                                    <option value="{{ $kategori->id }}" @if(old('kategori_item_id',request()->kategori_item_id) == $kategori->id) selected @endif>{{ $kategori->nama_kategori }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <ul class="header-dropdown m-r--5">
                             <li class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                    aria-haspopup="true" aria-expanded="false">
                                     <i class="material-icons">more_vert</i>
                                 </a>
                                 <ul class="dropdown-menu pull-right">
@@ -74,7 +138,7 @@
                                 </ul>
                             </li>
                         </ul>
-                    </div> --}}
+                    </div>
                     <div class="body">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs tab-nav-right" style="display: flex;" role="tablist">
@@ -210,7 +274,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    
+
                                 </tbody>
                             </table>
                         </div>
