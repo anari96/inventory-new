@@ -39,11 +39,11 @@ class ApiLoginController extends Controller
 
             $user = Pengguna::where('email', $request->email)->first();
             if (!$user) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+                return response()->json(['message' => 'Email atau password yang anda masukan salah'], 401);
             }
             $cekPassword = Hash::check($request->password, $user->password);
             if (!$cekPassword) {
-                return response()->json(['message' => 'Unauthorized'], 401);
+                return response()->json(['message' => 'Email atau password yang anda masukan salah'], 401);
             }
             $token = $user->createToken($user->email)->plainTextToken;
             return response()->json([
