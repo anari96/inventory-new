@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\KategoriItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\SparepartController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TeknisiController;
 use App\Http\Controllers\PelangganController;
@@ -30,6 +31,8 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::get('get-item', [ItemController::class,'getItem'])->name('get-item');
     Route::resource('kategori-item', KategoriItemController::class);
     Route::resource('diskon', DiskonController::class);
+    Route::get('get-sparepart', [SparepartController::class,'getSparepart'])->name('get-sparepart');
+    Route::resource('sparepart', SparepartController::class);
     Route::resource('teknisi', TeknisiController::class);
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('supplier', SupplierController::class);
