@@ -192,4 +192,21 @@ class ItemController extends Controller
             return redirect()->route('item.index')->with('error','Item gagal dihapus');
         }
     }
+
+
+    public function getItem(Request $request)
+    {
+        $datas = Item::where('pengguna_id',auth()->user()->id);
+        if(request()->has('kategori_item_id') && request()->kategori_item_id != 0 && request()->kategori_item_id != null && request()->kategori_item_id != ''){
+            $datas = $datas->where('kategori_item_id',request()->kategori_item_id);
+        }
+
+        if(request()->has('search') && request()->search != 0 && request()->search != null && request()->search != ''){
+            $datas = $datas->where('id','like','%'.request()->search.'%');
+        }
+
+        return response()->json([
+            'data'=>$datas->get()
+        ]);
+    }
 }
