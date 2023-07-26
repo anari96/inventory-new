@@ -19,6 +19,7 @@ class PenggunasSeeder extends Seeder
             'nama_usaha' => 'RM.BAGUS',
             'email' => 'bagus@email.com',
             'password' => Hash::make('password'),
+            'usaha_id' => 2,
         ]);
     }
 }
