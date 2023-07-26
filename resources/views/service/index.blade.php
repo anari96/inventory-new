@@ -37,7 +37,7 @@
                         <a href="{{ route('service.create') }}" class="btn btn-primary">Tambah Service</a>
                     </div>
                     <div class="body">
-                        @include('layouts.includes.tableinput')
+                        @include('layouts.includes.filter')
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
