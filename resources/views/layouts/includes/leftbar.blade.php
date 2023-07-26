@@ -1,6 +1,6 @@
 <aside id="leftsidebar" class="sidebar">
     <!-- User Info -->
-    <div class="user-info">
+    <div class="user-info" style="background: #2f1c2e;border-bottom:0">
         <div class="image">
             <img src="{{ url('material') }}/images/user.png" width="48" height="48" alt="User" />
         </div>
@@ -28,16 +28,16 @@
     <!-- Menu -->
     <div class="menu">
         <ul class="list">
-            <li class="header">MAIN NAVIGATION</li>
+            <li class="header" style="background: #361c35; color:white">MAIN NAVIGATION</li>
             <li class="active">
-                <a href="{{ url("/") }}">
+                <a href="{{ route('service.dashboard') }}">
                     <i class="material-icons">home</i>
-                    <span>Home</span>
+                    <span>Dashboard</span>
                 </a>
             </li>
-   
-          
-            <li>
+
+
+            {{-- <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">bar_chart</i>
                     <span>Laporan</span>
@@ -74,9 +74,9 @@
                         <a href="#">Pajak</a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
 
-            <li>
+            {{-- <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">shopping_basket</i>
                     <span>Barang</span>
@@ -95,17 +95,106 @@
                         <a href="{{ route('diskon.index') }}">Diskon</a>
                     </li>
                 </ul>
-            </li>
-
+            </li> --}}
 
 
             <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Service</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a href="{{ route('service.dashboard') }}">Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('service.index') }}">Service</a>
+                    </li>
+<!--                    <li>
+                        <a href="{{ route('service.create') }}">Input Data</a>
+                    </li> -->
+                    <li>
+                        <a href="{{ route('service.list') }}">List</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('service.list_terpakai') }}">Sparepart Terpakai</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('service.kas') }}">Kas</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('service.garansi') }}">Garansi</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="{{ route('sparepart.index') }}">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Sparepart</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="{{ route('teknisi.index') }}">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Teknisi</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('pelanggan.index') }}">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Pelanggan</span>
+                </a>
+            </li>
+<!--            <li> <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Handphone</span>
+                </a>
+                <ul class="ml-menu">
+                </ul>
+            </li>
+
+
+            <li> <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Acc & Sparepart</span>
+                </a>
+                <ul class="ml-menu">
+                </ul>
+            </li>
+
+            <li> <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>List</span>
+                </a>
+                <ul class="ml-menu">
+                </ul>
+            </li>
+
+            <li> <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Pengeluaran</span>
+                </a>
+                <ul class="ml-menu">
+                </ul>
+            </li>
+
+            <li> <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Customer</span>
+                </a>
+                <ul class="ml-menu">
+                </ul>
+            </li> -->
+
+            {{-- <li>
                 <a href="#">
                     <i class="material-icons">inventory</i>
                     <span>Pengelolaan Inventaris</span>
                 </a>
-            </li>
-           
+            </li> --}}
+
         </ul>
     </div>
     <!-- #Menu -->

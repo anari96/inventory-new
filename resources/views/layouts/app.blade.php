@@ -34,9 +34,24 @@
     <link href="{{ url('material') }}/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
 
     @stack('styles')
+
+    <style>
+        .dark-purple-bg{
+            background-color: #2f1c2e;
+        }
+        .white-color{
+            color: white;
+        }
+    </style>
+
+    <style>
+        .menu > .slimScrollDiv > .list > li {
+            color: white !important;
+        }
+    </style>
 </head>
 
-<body class="theme-red">
+<body class="theme-purple">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -123,6 +138,7 @@
 
 
     <script src="{{ url('material') }}/js/admin.js"></script>
+    <script src="{{ url('material') }}/plugins/chartjs/Chart.bundle.js"></script>
 
     @stack('scripts')
 </body>
