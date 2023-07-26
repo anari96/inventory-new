@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemController;
 use App\Http\Controllers\KategoriItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TeknisiController;
 use App\Http\Controllers\PelangganController;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('diskon', DiskonController::class);
     Route::resource('teknisi', TeknisiController::class);
     Route::resource('pelanggan', PelangganController::class);
+    Route::resource('supplier', SupplierController::class);
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {
