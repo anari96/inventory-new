@@ -26,6 +26,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::get('/', [DashboardController::class,'index'])->name('dashboard');
     Route::post('/logout', [LogoutController::class,'index'])->name('logout');
     Route::resource('item', ItemController::class);
+    Route::get('get-item', [ItemController::class,'getItem'])->name('get-item');
     Route::resource('kategori-item', KategoriItemController::class);
     Route::resource('diskon', DiskonController::class);
     Route::resource('teknisi', TeknisiController::class);
