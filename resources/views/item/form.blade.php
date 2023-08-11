@@ -1,5 +1,5 @@
 @push('scripts')
-    
+
 
     <!-- Input Mask Plugin Js -->
     <script src="https://unpkg.com/autonumeric"></script>
@@ -12,9 +12,9 @@
             $('#lacak_stok').on('change', function(){
                 if($(this).is(':checked')){
                     input.show();
-                    //find and enable all input  
+                    //find and enable all input
                     input.find('input').removeAttr('disabled');
-                    
+
                 }else{
                     input.hide();
                     //find and disable all input
@@ -35,10 +35,10 @@
                 if($(this).is(':checked')){
                     $('.pilihan-warna').prop('disabled', true);
                     $("#file-input").removeAttr('disabled');
-                    
+
                 }else{
                     $("#file-input").prop('disabled', true);
-                    
+
                 }
             });
             $('.pilih-warna').on('click', function(){
@@ -48,7 +48,7 @@
                     $('.pilih-warna').html('');
                     $(this).html('<i class="material-icons" style="font-size: 100px;color:white;">check</i>');
                 }
-                
+
             });
 
             $('.pilih-bentuk').on('click', function(){
@@ -58,7 +58,7 @@
                     $('.pilih-bentuk i').remove();
                     $(this).append('<i class="material-icons">check</i>');
                 }
-                
+
             });
 
             $("#file-input").on('change',function(){
@@ -138,12 +138,12 @@
                                     @endforeach
                                 </select>
                             </div>
-                            
+
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group form-float">
@@ -152,21 +152,21 @@
                                 <label class="form-label">Harga Jual</label>
                             </div>
                         </div>
-                        
+
                     </div>
-                
+
                     <div class="col-md-6">
-                        
+
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <input type="text" class="form-control money-rupiah" name="biaya_item" id="biaya_item" value="{{ old('biaya_item',@$data->biaya_item) }}">
                                 <label class="form-label">Harga Beli</label>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-12">
                         <p>Dijual Per</p>
@@ -175,11 +175,11 @@
                             <label for="radio_30">Satuan</label>
                             <input name="tipe_jual" type="radio" id="radio_31" value="berat" class="with-gap" @if(old('tipe_jual',@$data->tipe_jual)=='berat') checked="true" @endif>
                             <label for="radio_31">Berat</label>
-                            
+
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group form-float">
@@ -210,25 +210,25 @@
             <div class="header">
                 <h2>
                     INVENTARIS
-                    
+
                 </h2>
-                
+
             </div>
             <div class="body">
-                
 
-                
+
+
                 <div class="demo-switch">
                     <div class="row clearfix">
                         <div class="col-sm-3">
                             <div class="demo-switch-title">Lacal Stok</div>
                             <div class="switch">
-                                <label><input type="checkbox" name="lacak_stok" id="lacak_stok" @if(old('lacak_stok',@$data->lacak_stok)) checked @endif><span class="lever "></span></label>
+                                <label><input type="checkbox" name="lacak_stok" id="lacak_stok" checked @if(old('lacak_stok',@$data->lacak_stok)) checked @endif><span class="lever "></span></label>
                             </div>
                         </div>
-                        
+
                     </div>
-                    <div class="row" id="lacak_stok_input" @if(old('lacak_stok',@$data->lacak_stok)) @else style="display:none;"  @endif>
+                    <div class="row" id="lacak_stok_input" @if(old('lacak_stok',@$data->lacak_stok))  @endif>
                         <div class="col-md-6">
                             <div class="form-group form-float">
                                 <div class="form-line">
@@ -237,7 +237,7 @@
                                 </div>
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
             </div>
@@ -245,81 +245,6 @@
     </div>
 </div>
 
-
-<div class="row clearfix">
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="card">
-            <div class="header">
-                <h2>
-                    PENGENAL ITEM
-                    
-                </h2>
-                
-            </div>
-            <div class="body">
-                
-                <div class="demo-radio-button row">
-                    <div class="col-md-8">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <input name="pengenal" type="radio" id="warna_dan_bentuk" value="warna_dan_bentuk" class="with-gap" checked="">
-                                <label for="warna_dan_bentuk">Warna & Bentuk</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            
-                            @foreach ($colors as $index => $color)
-                                <div class="col-sm-2 pilihan-warna">
-                                    
-                                    <label for="warna_{{$index}}" style="text-align: center;width: 100px;height: 100px;background: {{ $color }};border-radius: 5px;display:block;margin:auto;" class="pilih-warna" data-warna="{{$color}}">
-                                        @if (@$data->warna_item == strtolower($color) || ((!isset($data) || @$data->warna_item == null) && $index == 0))
-                                            <i class="material-icons" style="font-size: 100px;color:white;">check</i>
-                                        @endif
-                                    </label>
-                                    <input name="warna_item" type="radio" id="warna_{{$index}}" value="{{strtolower($color)}}" @if(@$data->warna_item == strtolower($color) || ((!isset($data) || @$data->warna_item == null) && $index == 0)) checked @endif style="display:none;">
-                                </div>
-                            @endforeach
-                            @foreach ($bentukItems as $index => $bentukItem)
-                                <div class="col-sm-2 pilihan-bentuk">
-                                    <label for="bentuk_{{$index}}" style="text-align: center;width: 100px;height: 100px;display:block;margin:auto;" class="pilih-bentuk" data-bentuk="{{$index}}">
-                                        {!! $bentukItem !!}
-                                        @if (@$data->bentuk_item == $index || ((!isset($data) || @$data->bentuk_item == null) && $index == 0))
-                                            <i class="material-icons" >check</i>
-                                        @endif
-                                    </label>
-                                    <input name="bentuk_item" type="radio" id="bentuk_{{$index}}" value="{{$index}}" @if(@$data->bentuk_item == $index || ((!isset($data) || @$data->bentuk_item == null) && $index == 0)) checked @endif style="display:none;">
-                                </div>
-                            @endforeach
-                            
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <input name="pengenal" type="radio" id="gambar" value="gambar" class="with-gap">
-                                <label for="gambar">Gambar</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="file-input" class="image-upload">
-                                    <label for="file-input" style="margin:auto;display:block;height: 50px;width: 50px;position: absolute; top:0px;bottom:0px;left:0px;right:0px;text-align: center;">
-                                        <i class="material-icons" style="font-size: 50px;margin:auto;display:block;">image</i>
-                                    </label>
-                                  
-                                    <input id="file-input" type="file" name="gambar_item_file" disabled/>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                
-                
-            </div>
-        </div>
-    </div>
-</div>
 <div class="row">
     <div class="col-md-12"><hr></div>
 </div>

@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPembelian extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        "pembelian_id",
+        "item_id",
+        "qty",
+        "diskon"
+    ];
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class);
+    }
 }

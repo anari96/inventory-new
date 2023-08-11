@@ -7,6 +7,7 @@ use App\Http\Controllers\KategoriItemController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TeknisiController;
@@ -46,6 +47,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
 
 
     Route::resource('penjualan', PenjualanController::class);
+    Route::resource('pembelian', PembelianController::class);
 
     Route::resource('teknisi', TeknisiController::class);
     Route::resource('pelanggan', PelangganController::class);

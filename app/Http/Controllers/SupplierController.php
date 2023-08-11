@@ -103,7 +103,7 @@ class SupplierController extends Controller
         $data = Supplier::find($id);
         DB::beginTransaction();
         try {
-            $data->([
+            $data->update([
                 "nama_supplier" => $request->nama_supplier,
                 "telp_supplier" => $request->telp_supplier,
                 "alamat" => $request->alamat,

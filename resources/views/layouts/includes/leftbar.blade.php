@@ -10,12 +10,6 @@
             <div class="btn-group user-helper-dropdown">
                 <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                 <ul class="dropdown-menu pull-right">
-                    <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
-                    <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
-                    <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
-                    <li role="separator" class="divider"></li>
                     <li><a href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit()"><i class="material-icons">input</i>Sign Out</a></li>
                     <form action="{{ route('logout') }}" style="display:none" id="logoutForm" method="POST">
                         @csrf
@@ -128,6 +122,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('pembelian.index') }}">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Pembelian</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('teknisi.index') }}">
                     <i class="material-icons">shopping_basket</i>
                     <span>Teknisi</span>
@@ -137,6 +137,12 @@
                 <a href="{{ route('pelanggan.index') }}">
                     <i class="material-icons">shopping_basket</i>
                     <span>Pelanggan</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ route('supplier.index') }}">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Supplier</span>
                 </a>
             </li>
 <!--            <li> <a href="javascript:void(0);" class="menu-toggle">
