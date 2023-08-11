@@ -37,7 +37,7 @@
                 <div class="form-line">
 
                     <input type="text" class="form-control" name="periode" id="daterange"
-                        value="{{ $periode[0] }} - {{ $periode[1] }}">
+                        value="@if(isset($periode)){{ $periode[0] }} - {{ $periode[1] }} @endif">
                 </div>
             </div>
         </div>

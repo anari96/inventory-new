@@ -60,7 +60,14 @@ class ServiceController extends Controller
     public function create(): Response
     {
         $teknisi = Teknisi::all();
-        return response()->view("service.create", compact("teknisi"));
+        $pelanggan = Pelanggan::all();
+
+        $data = [
+            "teknisi" => $teknisi,
+            "pelanggan" => $pelanggan,
+        ];
+
+        return response()->view("service.create", $data);
     }
 
     /**
@@ -92,7 +99,7 @@ class ServiceController extends Controller
             'kelengkapan' => $request->kelengkapan,
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
-            'biaya' => $request->biaya,
+            'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
 
             //status: pending, dikerjakan, selesai, batal, diambil, refund
             'status' => "pending"
@@ -104,7 +111,7 @@ class ServiceController extends Controller
             for($i = 0; $i < count($request->jumlah);$i++){
                     DetailService::create([
                         "service_id" => $service->id,
-                        "sparepart_id" => $request->id[$i],
+                        "item_id" => $request->id[$i],
                         "jumlah" => $request->jumlah[$i],
                     ]);
 
@@ -133,11 +140,16 @@ class ServiceController extends Controller
     {
         $data = Service::find($id);
         $detail = DetailService::where("service_id", $id)->get();
-
-
         $teknisi = Teknisi::all();
+
+        $data = [
+            "data" => $data,
+            "detail" => $detail,
+            "teknisi" => $teknisi
+        ];
+
         // dd($detail);
-        return response()->view("service.edit", compact('data','detail','teknisi'));
+        return response()->view("service.edit", $data);
     }
 
     /**
@@ -159,7 +171,6 @@ class ServiceController extends Controller
         $old_detail->delete();
 
         $data->update([
-            'pelanggan_id' => $data->id,
             'merk' => $request->merk,
             'tipe' => $request->tipe,
             'imei1' => $request->imei1,
@@ -169,7 +180,7 @@ class ServiceController extends Controller
             'kelengkapan' => $request->kelengkapan,
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
-            'biaya' => $request->biaya,
+            'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
 
             //status: pending, dikerjakan, selesai, batal, diambil, refund
             'status' => "pending"
@@ -180,7 +191,7 @@ class ServiceController extends Controller
             for($i = 0; $i < count($request->jumlah);$i++){
                     DetailService::create([
                         "service_id" => $data->id,
-                        "sparepart_id" => $request->id[$i],
+                        "item_id" => $request->id[$i],
                         "jumlah" => $request->jumlah[$i],
                     ]);
 

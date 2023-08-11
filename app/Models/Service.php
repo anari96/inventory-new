@@ -49,7 +49,7 @@ class Service extends Model
         $total = 0;
 
         foreach($this->detail as $d){
-            $total += $d->sparepart->harga_jual;
+            $total += $d->sparepart->harga_item;
         }
 
         return $total;
@@ -60,9 +60,9 @@ class Service extends Model
         $total = 0;
 
         foreach($this->detail as $d){
-            if($d->sparepart->tipe == "toko")
+            if($d->sparepart->kategoriItem->nama_kategori == "Sparepart")
             {
-                $total += $d->sparepart->harga_jual;
+                $total += $d->sparepart->harga_item;
             }
         }
 
@@ -75,9 +75,9 @@ class Service extends Model
         $total = 0;
 
         foreach($this->detail as $d){
-            if($d->sparepart->tipe == "luar")
+            if($d->sparepart->kategoriItem->nama_kategori == "Sparepart Luar")
             {
-                $total += $d->sparepart->harga_jual;
+                $total += $d->sparepart->harga_item;
             }
         }
 

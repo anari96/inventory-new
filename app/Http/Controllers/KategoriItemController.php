@@ -16,7 +16,7 @@ class KategoriItemController extends Controller
      */
     public function index(): Response
     {
-        $datas = KategoriItem::where('pengguna_id',Auth::user()->id)->paginate(10);
+        $datas = KategoriItem::paginate(10);
         return response()->view('kategori-item.index', compact('datas'));
     }
 
@@ -42,7 +42,7 @@ class KategoriItemController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request): RedirectResponse
-    {   
+    {
         DB::beginTransaction();
         try {
             $kategori = KategoriItem::create([

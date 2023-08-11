@@ -1,5 +1,15 @@
 @extends('layouts.app')
 
+@push("scripts")
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script>
+    let qrcode = document.getElementsByClassName("qrcode");
+    qrcode.forEach( (item) => {
+        new QRCode(qrcode, "test")
+    });
+</script>
+@endpush
+
 @push('styles')
 <style>
     .qr-card{
@@ -43,7 +53,10 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="row">Status Garansi :</div>
-                                    <div class="row"><img src="https://camo.githubusercontent.com/5c0e557ce429b13dfd71ef0c05124eda691129db9c7ca21787790a488ab5030d/68747470733a2f2f656e64726f69642e6e6c2f71722d636f64652f64656661756c742f4c6966652532306973253230746f6f25323073686f7274253230746f253230626525323067656e65726174696e672532305152253230636f646573" style="width: 120px;height:120px" alt="qr"></div>
+                                    <div class="row">
+<!--                                         <img src="https://camo.githubusercontent.com/5c0e557ce429b13dfd71ef0c05124eda691129db9c7ca21787790a488ab5030d/68747470733a2f2f656e64726f69642e6e6c2f71722d636f64652f64656661756c742f4c6966652532306973253230746f6f25323073686f7274253230746f253230626525323067656e65726174696e672532305152253230636f646573" style="width: 120px;height:120px" alt="qr"> -->
+                                            <div class="qrcode"></div>
+                                    </div>
                                     <div class="row">Aktif</div>
                                 </div>
                             </a>

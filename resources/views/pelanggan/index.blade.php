@@ -15,6 +15,7 @@
                         <a href="{{ route('pelanggan.create') }}" class="btn btn-primary">Tambah Customer</a>
                     </div>
                     <div class="body">
+                        @include('layouts.includes.filter')
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>

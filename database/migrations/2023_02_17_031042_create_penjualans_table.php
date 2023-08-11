@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('tanggal_penjualan');
             $table->string('nomor_nota',100);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

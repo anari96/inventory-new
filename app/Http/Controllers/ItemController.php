@@ -18,7 +18,7 @@ class ItemController extends Controller
      */
     public function index(): Response
     {
-        $datas = Item::where('pengguna_id',Auth::user()->id)->paginate(10);
+        $datas = Item::paginate(10);
         return response()->view('item.index', compact('datas'));
     }
 
@@ -26,7 +26,7 @@ class ItemController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(): Response
-    {   
+    {
         $kategoris = KategoriItem::where('pengguna_id',Auth::user()->id)->get();
         $colors = [
             "#F44336",
@@ -51,7 +51,7 @@ class ItemController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request): RedirectResponse
-    {   
+    {
         DB::beginTransaction();
         try {
             $gambar = null;
@@ -136,18 +136,18 @@ class ItemController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Item $item): RedirectResponse
-    {   
-       
+    {
+
         $old_gambar = $item->gambar_item;
         $gambar = null;
         DB::beginTransaction();
         try {
-            
+
             if ($request->hasFile('gambar_item_file') && $request->gambar_item_file != null) {
                 //save image to storage
                 $gambar = $request->file('gambar_item_file')->store('gambar_item_file');
             }
-            
+
             $item->update([
                 'kategori_item_id' => $request->kategori_item_id != 0 ? $request->kategori_item_id : null,
                 'nama_item' => $request->nama_item,
@@ -155,7 +155,7 @@ class ItemController extends Controller
                 'harga_item'=>str_replace("Rp ","",str_replace(".","",$request->harga_item)),
                 'sku' => $request->sku,
                 'barcode' => $request->barcode,
-                
+
                 'tipe_jual' => $request->tipe_jual,
                 'warna_item' => $request->warna_item,
                 'bentuk_item'=>$request->bentuk_item ?? 0,
@@ -167,7 +167,7 @@ class ItemController extends Controller
                     'stok'=>$request->stok
                 ]);
             }
-         
+
             if($old_gambar != null && Storage::exists($old_gambar) && $gambar != null) Storage::delete($old_gambar);
             DB::commit();
             return redirect()->route('item.index')->with('success','Berhasil mengubah item');
@@ -181,7 +181,7 @@ class ItemController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Item $item): RedirectResponse
-    {   
+    {
         DB::beginTransaction();
         try {
             $item->delete();
@@ -196,10 +196,37 @@ class ItemController extends Controller
 
     public function getItem(Request $request)
     {
-        $datas = Item::where('pengguna_id',auth()->user()->id);
+        $kategori = KategoriItem::where("nama_kategori", "like", "%Umum%")->get();
+        $id_kategori = [];
+
+        foreach($kategori as $item){
+            array_push($id_kategori, $item->id);
+        }
+
+        $datas = Item::whereIn('kategori_item_id',$id_kategori);
+
         if(request()->has('kategori_item_id') && request()->kategori_item_id != 0 && request()->kategori_item_id != null && request()->kategori_item_id != ''){
             $datas = $datas->where('kategori_item_id',request()->kategori_item_id);
         }
+
+        if(request()->has('search') && request()->search != 0 && request()->search != null && request()->search != ''){
+            $datas = $datas->where('id','like','%'.request()->search.'%');
+        }
+
+        return response()->json([
+            'data'=>$datas->get()
+        ]);
+    }
+    public function getItemSparepart(Request $request)
+    {
+        $sparepart_kategori = KategoriItem::where("nama_kategori", "like", "%Sparepart%")->get();
+        $id_sparepart_kategori = [];
+
+        foreach($sparepart_kategori as $item){
+            array_push($id_sparepart_kategori, $item->id);
+        }
+
+        $datas = Item::whereIn('kategori_item_id',$id_sparepart_kategori);
 
         if(request()->has('search') && request()->search != 0 && request()->search != null && request()->search != ''){
             $datas = $datas->where('id','like','%'.request()->search.'%');

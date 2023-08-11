@@ -3,14 +3,15 @@
 @section('content')
     <div class="container-fluid">
         <div class="block-header">
-            <h2>Tambah Teknisi</h2>
+            <h2>Tambah Penjualan</h2>
         </div>
 
-        <form action="{{ route('sparepart.update', $data->id) }}" method="POST">
+
+        <form action="{{ route('penjualan.store') }}" method="POST">
             @csrf
-            @method('PUT')
-            @include('sparepart.form')
+            @include('penjualan.form')
         </form>
+
 
     </div>
 @endsection

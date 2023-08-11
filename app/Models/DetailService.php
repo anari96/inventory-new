@@ -12,11 +12,12 @@ class DetailService extends Model
     protected $fillable = [
         "service_id",
         "sparepart_id",
+        "item_id",
         "jumlah"
     ];
 
     public function sparepart()
     {
-        return $this->belongsTo(Sparepart::class);
+        return $this->belongsTo(Item::class,'item_id');
     }
 }

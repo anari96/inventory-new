@@ -66,7 +66,7 @@
                                                 <td>{{ $data->pelanggan->nama_pelanggan }}</td>
                                                 <td>
                                                     @foreach($data->detail as $detail)
-                                                        {{$detail->sparepart->nama_sparepart;}} <br>
+                                                        {{$detail->sparepart->nama_item}} <br>
                                                     @endforeach
                                                 </td>
                                                 <td>{{ number_format($data->total_sparepart) }}</td>

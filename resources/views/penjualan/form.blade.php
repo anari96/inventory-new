@@ -2,17 +2,21 @@
 <!-- Input Mask Plugin Js -->
     <script src="https://unpkg.com/autonumeric"></script>
     <script>
-        new AutoNumeric('#biaya', { currencySymbol : 'Rp ',decimalPlaces: 0, digitGroupSeparator: '.', decimalCharacter: ',' });
         const tableSparepart = document.getElementById('table-sparepart');
         const tableSparepartShow = document.getElementById('table-sparepart-list');
-        const tableDetail = document.getElementById('table-detail-sparepart');
+        const tableDetail = document.getElementById('table-detail-item');
+        const itemDeleteButton = document.querySelectorAll(".item-delete");
+
+        let itemId = document.querySelectorAll(".item_id");
+
+        // console.log(itemId);
 
         const numberFormat = new Intl.NumberFormat({ style: 'currency' });
 
-        let detailArray = [];
+        let itemIdArray = [];
 
         tableSparepartShow.addEventListener("click", function () {
-            fetch("{{route('get-item-sparepart')}}",{
+            fetch("{{route('get-item')}}",{
                 method: "GET"
             })
             .then(
@@ -75,11 +79,13 @@
         function addEventPilih(element){
             element.addEventListener('click', function(event){
 
+                console.log("test");
+
                 let jumlah = this.parentElement.parentElement.childNodes[4];
 
                 let jumlahValue = jumlah.querySelector(".jumlah-input").value;
 
-                fetch("{{route('get-item-sparepart')}}?search=" + this.dataset.id,{
+                fetch("{{route('get-item')}}?search=" + this.dataset.id,{
                     method: "GET"
                 })
                 .then(
@@ -112,14 +118,18 @@
 
                             //hidden input for form request
                             let jumlahInput = document.createElement("input");
+                            jumlahInput.classList.add("qty");
                             jumlahInput.setAttribute('name', "jumlah[]");
                             jumlahInput.setAttribute('type', "number");
+                            jumlahInput.setAttribute('max', item.stok);
+                            jumlahInput.setAttribute('min', 0);
                             jumlahInput.setAttribute('value', jumlahValue);
-                            jumlahInput.setAttribute('hidden', true);
+                            // jumlahInput.setAttribute('hidden', true);
 
                              //hidden input for form request
                             let idInput = document.createElement("input");
                             idInput.setAttribute('name', "id[]");
+                            idInput.classList.add("item_id");
                             idInput.setAttribute('type', "text");
                             idInput.setAttribute('value', item.id);
                             idInput.setAttribute('hidden', true);
@@ -137,13 +147,12 @@
                             hargaJual.appendChild(hargaJualText);
                             hargaBeli.appendChild(hargaBeliText);
                             subTotal.appendChild(subTotalText);
-                            jumlah.appendChild(jumlahText);
+                            // jumlah.appendChild(jumlahText);
                             jumlah.appendChild(jumlahInput);
                             jumlah.appendChild(idInput);
                             hapus.appendChild(hapusButton);
 
                             let detail = [item.id,jumlahValue];
-                            detailArray.push(detail);
 
                             addEventHapus(hapusButton);
                             countGrandTotal();
@@ -155,13 +164,20 @@
             })
         }
 
-
         function addEventHapus(element){
            element.addEventListener("click", function(event){
                 this.parentElement.parentElement.remove();
                 countGrandTotal();
             });
         }
+
+        itemDeleteButton.forEach( (e)=>{
+            e.addEventListener("click", function(event){
+                this.parentElement.parentElement.remove();
+                countGrandTotal();
+            });
+        } );
+
 
         function countGrandTotal(){
             let subTotal = document.querySelectorAll(".subTotal");
@@ -208,6 +224,10 @@
             right: 0%;
             bottom: 0%;
         }
+
+        .qty{
+            width:55px;
+        }
     </style>
 @endpush
 
@@ -216,7 +236,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="card">
             <div class="header">
-                <a href="{{ route('service.index') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ route('penjualan.index') }}" class="btn btn-warning">Kembali</a>
             </div>
             <div class="body">
 
@@ -225,7 +245,7 @@
                         <b>Invoice</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line focused">
-                                <input type="text" class="form-control" name="no_service" @if(isset($data)) value="{{ $data->no_service }}" @else value="{{ "S-". date('Y')."".date('m')."".date('d')."".date("his") }}" @endif required>
+                                <input type="text" class="form-control" name="no_penjualan" @if(isset($data)) value="{{ $data->no_service }}" @else value="{{ "P-". date('Y')."".date('m')."".date('d')."".date("his") }}" @endif required>
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
@@ -237,22 +257,6 @@
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line focused">
                                 <input type="text" class="form-control" name="tanggal" value="{{ date('Y-m-d') }}" required>
-                            </div>
-                            <span class="input-group-addon">
-                                <i style="background-color: rgb(0, 170, 187);"></i>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <b>Teknisi</b>
-                        <div class="input-group colorpicker colorpicker-element">
-                            <div class="form-line focused">
-                                <select name="teknisi_id" class="form-control">
-                                    @foreach($teknisi as $t)
-                                        <option value="{{ $t->id }}" @if(isset($data)) @if($t->id == $data->teknisi_id) selected @endif @endif> {{ $t->nama_teknisi }} </option>
-                                    @endforeach
-                                </select>
-<!--                                 <input type="text" class="form-control" value="Teknisi 1"> -->
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
@@ -305,113 +309,28 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="nama" class="form-control" @if(isset($data)) value="{{ $data->pelanggan->nama_pelanggan }}" @endif placeholder="Nama" required>
+                                    <select class="form-control" name="pelanggan_id">
+                                        @foreach($pelanggans as $data)
+                                            <option value="{{ $data->id }}" @if(isset($datas)) @if($data->id == $datas->pelanggan_id) selected @endif @endif>{{ $data->nama_pelanggan }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+<!--                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" name="nama" class="form-control" @if(isset($penjualan)) value="{{ $penjualan->pelanggan->nama_pelanggan }}" @endif placeholder="Nama" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="alamat" class="form-control" @if(isset($data)) value="{{ $data->pelanggan->alamat_pelanggan }}" @endif placeholder="Alamat" required>
+                                    <input type="text" name="alamat" class="form-control" @if(isset($penjualan)) value="{{ $penjualan->pelanggan->alamat_pelanggan }}" @endif placeholder="Alamat" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="kontak" class="form-control" @if(isset($data)) value="{{ $data->pelanggan->telp_pelanggan }}" @endif placeholder="Kontak" required>
+                                    <input type="text" name="kontak" class="form-control" @if(isset($penjualan)) value="{{ $penjualan->pelanggan->telp_pelanggan }}" @endif placeholder="Kontak" required>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="row clearfix">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h2>
-                        Detail Gadget
-                    </h2>
-                </div>
-                <div class="body">
-                    <h2 class="card-inside-title">Detail Gadget</h2>
-                    <div class="row clearfix">
-                        <div class="col-sm-12 col-md-12">
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="merk" class="form-control" @if(isset($data)) value="{{ $data->merk }}" @endif placeholder="Merk" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="tipe" class="form-control" @if(isset($data)) value="{{ $data->tipe }}" @endif placeholder="Tipe" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="imei1" class="form-control" @if(isset($data)) value="{{ $data->imei1 }}" @endif placeholder="IMEI 1" >
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="imei2" class="form-control" @if(isset($data)) value="{{ $data->imei2 }}" @endif placeholder="IMEI 2">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="col-md-6">
-    <div class="row clearfix">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="header">
-                    <h2>
-                        Detail Service
-                    </h2>
-                </div>
-                <div class="body">
-                    <div class="row clearfix">
-                        <div class="col-sm-12 col-md-12">
-
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <h2 class="card-inside-title">Untuk Klaim Garansi</h2>
-                                    <input name="garansi" type="radio" id="radio_1" value='1' @if(isset($data)) @if($data->garansi == 1) checked="" @endif @endif>
-                                    <label for="radio_1">Ya</label>
-                                    <input name="garansi" type="radio" id="radio_2" value='0' @if(isset($data)) @if($data->garansi == 0) checked="" @endif @endif>
-                                    <label for="radio_2">Tidak</label>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="kerusakan" class="form-control" class="form-control" @if(isset($data)) value="{{ $data->kerusakan }}" @endif placeholder="Kerusakan" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($data)) value="{{ $data->deskripsi }}" @endif placeholder="Deskripsi" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="kelengkapan" class="form-control" class="form-control" @if(isset($data)) value="{{ $data->kelengkapan }}" @endif placeholder="Kelengkapan" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="biaya" class="form-control money-rupiah" id="biaya" class="form-control" @if(isset($data)) value="{{ $data->biaya }}" @endif placeholder="Total Biaya" required>
-                                </div>
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </div>
@@ -422,24 +341,24 @@
             </div>
         </div>
     </div>
+
+
 </div>
-
-
 
 <div class="row clearfix">
     <!-- Task Info -->
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="card">
             <div class="header">
-                <h2>Daftar Sparepart</h2>
-                <button type="button" id="table-sparepart-list" class="btn btn-primary" data-toggle="modal" data-target="#list-sparepart">Pilih Sparepart</button>
+                <h2>Daftar Barang</h2>
+                <button type="button" id="table-sparepart-list" class="btn btn-primary" data-toggle="modal" data-target="#list-sparepart">Pilih Barang</button>
             </div>
             <div class="body">
                 <div class="table-responsive">
-                    <table id="table-detail-sparepart" class="table table-hover ">
+                    <table id="table-detail-item" class="table table-hover ">
                         <thead>
                             <tr>
-                                <th>Nama Sparepart</th>
+                                <th>Nama Barang</th>
                                 <th>Harga Beli</th>
                                 <th>Jumlah</th>
                                 <th>Harga Jual</th>
@@ -448,16 +367,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($detail))
-                                @foreach($detail as $d)
+                            @if(isset($datas->detail_penjualan))
+                                @foreach($datas->detail_penjualan as $d)
                                     <tr>
-                                        <input name="jumlah[]" value="{{$d->jumlah}}" hidden>
-                                        <input name="id[]" value="{{$d->sparepart->id}}" hidden>
-                                        <td>{{ $d->sparepart->nama_item }}</td>
-                                        <td>{{ $d->sparepart->harga_item }}</td>
-                                        <td> {{ $d->jumlah }} </td>
-                                        <td>{{ number_format($d->sparepart->biaya_item) }}</td>
-                                        <td>{{ number_format($d->sparepart->biaya_item * $d->jumlah) }}</td>
+                                        <td>{{ $d->item->nama_item }}</td>
+                                        <td>{{ $d->item->harga_item }}</td>
+                                        <td>
+                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}" min="0" max="{{$d->item->stok}}" type="number">
+                                            <input class="item_id" name="id[]" value="{{$d->item_id}}" hidden>
+<!--                                             {{ $d->qty }} -->
+                                        </td>
+                                        <td>{{ number_format($d->item->biaya_item) }}</td>
+                                        <td class="subTotal">{{ number_format($d->item->biaya_item * $d->qty) }}</td>
+                                        <td><button class="btn btn-danger item-delete" type="button">X</button></td>
                                     </tr>
                                 @endforeach
                             @endif

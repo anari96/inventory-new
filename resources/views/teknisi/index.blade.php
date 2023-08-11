@@ -14,6 +14,7 @@
                         <a href="{{ route('teknisi.create') }}" class="btn btn-primary">Tambah Teknisi</a>
                     </div>
                     <div class="body">
+                        @include('layouts.includes.filter')
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>

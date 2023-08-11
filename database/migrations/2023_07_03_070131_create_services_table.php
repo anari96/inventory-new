@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('pelanggan_id');
             $table->string('merk');
             $table->string('tipe');
-            $table->string('imei1');
-            $table->string('imei2');
+            $table->string('imei1')->nullable();
+            $table->string('imei2')->nullable();
             $table->string('kerusakan');
             $table->string('deskripsi');
             $table->string('kelengkapan');

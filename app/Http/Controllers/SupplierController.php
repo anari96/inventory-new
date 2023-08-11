@@ -8,16 +8,44 @@ use Illuminate\Http\Response;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
 
+use DateInterval;
+use DatePeriod;
+use DateTime;
+
 class SupplierController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $datas = Supplier::paginate(10);
+        // this will default to a time of 00:00:00
+        $begin = new DateTime('-1 month');
+        $end = new DateTime();
+        $periode = [
+            $begin->format('d/m/Y'),
+            $end->format('d/m/Y'),
+        ];
 
-        return response()->view("supplier.index", compact('datas'));
+        if(request()->periode){
+            $periode = explode(" - ",request()->periode);
+            $begin = DateTime::createFromFormat('d/m/Y', $periode[0]);
+            $end = DateTime::createFromFormat('d/m/Y', $periode[1]);
+
+        }
+        $end->modify('+1 day');
+
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($begin, $interval, $end);
+        $periodeTanggals = [];
+        foreach($daterange as $date) {
+
+            $periodeTanggals[] = strftime("%d-%b", strtotime($date->format("Y-m-d")));
+        }
+
+        $datas = Supplier::whereBetween("created_at", [$begin->format('Y-m-d'), $end->format('Y-m-d')])->paginate(10);
+
+        return response()->view("supplier.index", compact('datas','periode',"periodeTanggals"));
     }
 
     /**
