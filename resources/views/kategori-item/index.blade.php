@@ -19,7 +19,6 @@
                                 <thead>
                                     <tr>
                                         <th>Nama Kategori</th>
-                                        <th>Warna Kategori</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -30,10 +29,6 @@
                                                 {{$data->nama_kategori}}
                                             </td>
                                             <td>
-                                                <span class="label" style="background: {{$data->warna_kategori}};color:black;">{{$data->warna_kategori}}</span>  
-                                            </td>
-                                            
-                                            <td>
                                                 <a href="{{ route('kategori-item.edit', $data->id) }}" class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('kategori-item.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
@@ -43,7 +38,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    
+
                                 </tbody>
                                 <tfoot>
                                     <tr>

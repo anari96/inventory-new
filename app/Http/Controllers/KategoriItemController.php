@@ -48,7 +48,6 @@ class KategoriItemController extends Controller
             $kategori = KategoriItem::create([
                 'pengguna_id'=>Auth::user()->id,
                 'nama_kategori'=>$request->nama_kategori,
-                'warna_kategori'=>$request->warna_kategori,
             ]);
             DB::commit();
             return redirect()->route('kategori-item.index')->with('success','Data berhasil disimpan');
