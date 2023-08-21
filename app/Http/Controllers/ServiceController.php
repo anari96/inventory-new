@@ -11,6 +11,7 @@ use App\Models\Service;
 use App\Models\DetailService;
 use App\Models\Teknisi;
 use App\Models\Sparepart;
+use App\Models\Item;
 
 use DateInterval;
 use DatePeriod;
@@ -109,12 +110,19 @@ class ServiceController extends Controller
 
         if(isset($request->jumlah)){
             for($i = 0; $i < count($request->jumlah);$i++){
+                    $item = Item::find($request->id[$i]);
+
                     DetailService::create([
                         "service_id" => $service->id,
                         "item_id" => $request->id[$i],
                         "jumlah" => $request->jumlah[$i],
                     ]);
 
+
+
+                    $item->update([
+                        "stok" => $item->stok - $request->jumlah[$i],
+                    ]);
                     // $sparepart = Sparepart::find($request->id[$i]);
                     // $sparepart->update([
                     //     "stok" => $sparepart->stok - $request->jumlah[$i]
@@ -168,6 +176,14 @@ class ServiceController extends Controller
         //     ]);
         // }
 
+
+        foreach($old_detail->get() as $o){
+            $item_old = Item::find($o->item_id);
+            $item_old->update([
+                "stok" => $item_old->stok + $o->qty
+            ]);
+        }
+
         $old_detail->delete();
 
         $data->update([
@@ -189,12 +205,17 @@ class ServiceController extends Controller
 
         if(isset($request->jumlah)){
             for($i = 0; $i < count($request->jumlah);$i++){
+                    $item = Item::find($request->id[$i]);
+
                     DetailService::create([
                         "service_id" => $data->id,
                         "item_id" => $request->id[$i],
                         "jumlah" => $request->jumlah[$i],
                     ]);
 
+                    $item->update([
+                        "stok" => $item->stok - $request->jumlah[$i],
+                    ]);
                     // $sparepart = Sparepart::find($request->id[$i]);
                     // $sparepart->update([
                     //     "stok" => $sparepart->stok - $request->jumlah[$i]

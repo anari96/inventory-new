@@ -51,7 +51,6 @@
                     let jumlahInput = document.createElement("input");
                     jumlahInput.setAttribute('type', "number");
                     jumlahInput.setAttribute('value', 0);
-                    jumlahInput.setAttribute('max', item.stok == null ? 0 : item.stok);
                     jumlahInput.setAttribute('min', 0);
                     jumlahInput.classList.add('form-control','jumlah-input');
 
@@ -122,7 +121,6 @@
                             jumlahInput.classList.add("qty");
                             jumlahInput.setAttribute('name', "jumlah[]");
                             jumlahInput.setAttribute('type', "number");
-                            jumlahInput.setAttribute('max', item.stok);
                             jumlahInput.setAttribute('min', 0);
                             jumlahInput.setAttribute('value', jumlahValue);
                             // jumlahInput.setAttribute('hidden', true);
@@ -359,7 +357,7 @@
                                         <td>{{ $d->item->nama_item }}</td>
                                         <td>{{ $d->item->harga_item }}</td>
                                         <td>
-                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}" min="0" max="{{$d->item->stok}}" type="number">
+                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}" min="0" type="number">
                                             <input class="item_id" name="id[]" value="{{$d->item_id}}" hidden>
 <!--                                             {{ $d->qty }} -->
                                         </td>

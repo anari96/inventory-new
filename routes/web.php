@@ -27,7 +27,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/login', [LoginController::class,'loginView'])->name('login');
 Route::post('/login', [LoginController::class,'loginAuth'])->name('login.auth');
 Route::group(['middleware' => ['auth:penggunas','auth']], function () {
-    Route::get('/', [DashboardController::class,'index'])->name('dashboard');
+    // Route::get('/', [DashboardController::class,'index'])->name('dashboard');
     Route::post('/logout', [LogoutController::class,'index'])->name('logout');
     Route::resource('item', ItemController::class);
 
@@ -38,7 +38,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('diskon', DiskonController::class);
 
     Route::post('service/proses/{id}', [ServiceController::class, 'proses'])->name('service.proses');
-    Route::get('service/dashboard', [ServiceController::class, 'dashboard'])->name('service.dashboard');
+    Route::get('/', [ServiceController::class, 'dashboard'])->name('service.dashboard');
     Route::get('service/list', [ServiceController::class, 'list'])->name('service.list');
     Route::get('service/list_terpakai', [ServiceController::class, 'list_terpakai'])->name('service.list_terpakai');
     Route::get('service/kas', [ServiceController::class, 'kas'])->name('service.kas');

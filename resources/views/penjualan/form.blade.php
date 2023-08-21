@@ -316,21 +316,6 @@
                                     </select>
                                 </div>
                             </div>
-<!--                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="nama" class="form-control" @if(isset($penjualan)) value="{{ $penjualan->pelanggan->nama_pelanggan }}" @endif placeholder="Nama" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="alamat" class="form-control" @if(isset($penjualan)) value="{{ $penjualan->pelanggan->alamat_pelanggan }}" @endif placeholder="Alamat" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="kontak" class="form-control" @if(isset($penjualan)) value="{{ $penjualan->pelanggan->telp_pelanggan }}" @endif placeholder="Kontak" required>
-                                </div>
-                            </div>-->
                             <div class="form-group">
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </div>
@@ -373,13 +358,13 @@
                                         <td>{{ $d->item->nama_item }}</td>
                                         <td>{{ $d->item->harga_item }}</td>
                                         <td>
-                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}" min="0" max="{{$d->item->stok}}" type="number">
+                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}" min="0" max="{{$d->item->stok + $d->qty}}" type="number">
                                             <input class="item_id" name="id[]" value="{{$d->item_id}}" hidden>
 <!--                                             {{ $d->qty }} -->
                                         </td>
                                         <td>{{ number_format($d->item->biaya_item) }}</td>
                                         <td class="subTotal">{{ number_format($d->item->biaya_item * $d->qty) }}</td>
-                                        <td><button class="btn btn-danger item-delete" type="button">X</button></td>
+                                        <td><button class="btn btn-danger item-delete"  type="button" >X</button></td>
                                     </tr>
                                 @endforeach
                             @endif

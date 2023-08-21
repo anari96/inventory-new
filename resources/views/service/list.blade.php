@@ -23,6 +23,7 @@
                             </div>
                     </div>
                     <div class="body">
+                        @include('layouts.includes.filter')
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
@@ -56,10 +57,10 @@
                                             <td>{{ $data->kerusakan }}</td>
                                             <td>{{ $data->deskripsi }}</td>
                                             <td>{{ $data->kelengkapan }}</td>
-                                            <td>{{ number_format($data->total_sparepart) }}</td>
+                                            <td>{{ number_format($data->biaya) }}</td>
                                             <td>{{ $data->teknisi->nama_teknisi }}</td>
                                             <td>
-                                               @if($status != "diambil")
+                                               @if($status != "diambil" && $status != "refund")
                                                     <form action="{{ route('service.proses', $data->id) }}" method="POST" style="display:inline">
                                                         @csrf
                                                         @if($status == "pending")

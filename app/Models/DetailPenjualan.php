@@ -4,11 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
 
 class DetailPenjualan extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
         'penjualan_id',
@@ -31,7 +33,7 @@ class DetailPenjualan extends Model
     }
 
     public function getTotalAttribute()
-    {   
+    {
         $total = ($this->harga_item * $this->qty);
         $totalDiskon = 0;
         foreach ($this->diskons as $key => $diskon) {

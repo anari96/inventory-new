@@ -14,6 +14,7 @@
                         <a href="{{ route('penjualan.create') }}" class="btn btn-primary">Tambah Penjualan</a>
                     </div>
                     <div class="body">
+                        @include('layouts.includes.filter')
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
@@ -41,7 +42,7 @@
                                                 <form action="{{ route('penjualan.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" onclick="return confirm('Apakah Yakin Untuk menghapus?')" class="btn btn-danger">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -52,6 +53,7 @@
                                     <tr>
                                         <td colspan="3">
                                             <div class="text-center">
+                                                {{ $datas->links() }}
                                             </div>
                                         </td>
                                     </tr>

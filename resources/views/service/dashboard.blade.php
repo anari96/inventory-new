@@ -66,7 +66,7 @@ function getChartJs(type) {
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="header row">
-                                            <div class="col-md-12" style="margin-bottom: 0;"><i class="material-icons col-red">report_problem</i> <h2>Emergency</h2></div>
+                                            <div class="col-md-12" style="margin-bottom: 0;"><i class="material-icons col-red">report_problem</i> <h2>Antrian</h2></div>
                                     </div>
                                     <div class="body row" style="padding-top:0">
                                         <div class="col-md-12" style="margin-bottom:0px;margin-top:0">
@@ -79,7 +79,7 @@ function getChartJs(type) {
                             <div class="col-md-4">
                                 <div class="card">
                                     <div class="header row">
-                                        <div class="col-md-12" style="margin-bottom: 0"><i class="material-icons col-yellow">error</i> <h2>Normal</h1></div>
+                                        <div class="col-md-12" style="margin-bottom: 0"><i class="material-icons col-yellow">error</i> <h2>Dikerjakan</h1></div>
                                     </div>
                                     <div class="body row" style="padding-top:0" >
                                         <div class="col-md-12" style="margin-bottom: 0;margin-top:0;" >

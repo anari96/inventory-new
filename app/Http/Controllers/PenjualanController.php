@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Penjualan;
 use App\Models\DetailPenjualan;
 use App\Models\Pelanggan;
+use App\Models\Item;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+
+use DateInterval;
+use DatePeriod;
+use DateTime;
 
 class PenjualanController extends Controller
 {
@@ -17,9 +22,36 @@ class PenjualanController extends Controller
      */
     public function index(): Response
     {
-        $datas = Penjualan::all();
+        // this will default to a time of 00:00:00
+        $begin = new DateTime('-1 month');
+        $end = new DateTime();
+        $periode = [
+            $begin->format('d/m/Y'),
+            $end->format('d/m/Y'),
+        ];
+
+        if(request()->periode){
+            $periode = explode(" - ",request()->periode);
+            $begin = DateTime::createFromFormat('d/m/Y', $periode[0]);
+            $end = DateTime::createFromFormat('d/m/Y', $periode[1]);
+
+        }
+        $end->modify('+1 day');
+
+        $interval = new DateInterval('P1D');
+        $daterange = new DatePeriod($begin, $interval, $end);
+        $periodeTanggals = [];
+        foreach($daterange as $date) {
+
+            $periodeTanggals[] = strftime("%d-%b", strtotime($date->format("Y-m-d")));
+        }
+
+
+        $datas = Penjualan::whereBetween("created_at", [$begin->format('Y-m-d'), $end->format('Y-m-d')])->paginate(10);
         $data = [
             'datas' => $datas,
+            "periode" => $periode,
+            "periodeTanggals" => $periodeTanggals
         ];
         return response()->view('penjualan.index', $data);
     }
@@ -52,11 +84,19 @@ class PenjualanController extends Controller
 
         if(isset($request->jumlah)){
             for($i = 0; $i < count($request->jumlah);$i++){
+                    $item = Item::find($request->id[$i]);
+
                     DetailPenjualan::create([
                         "penjualan_id" => $penjualan->id,
                         "item_id" => $request->id[$i],
                         "qty" => $request->jumlah[$i],
+                        "harga_item" => $item->harga_item,
                     ]);
+
+                    $item->update([
+                        "stok" => $item->stok - $request->jumlah[$i],
+                    ]);
+
             }
         }
 
@@ -103,14 +143,30 @@ class PenjualanController extends Controller
             "pengguna_id" => auth()->user()->id
         ]);
 
+        // dd($old_detail->count());
+
+        foreach($old_detail->get() as $o){
+            $item_old = Item::find($o->item_id);
+            $item_old->update([
+                "stok" => $item_old->stok + $o->qty
+            ]);
+        }
+
         $old_detail->delete();
 
         if(isset($request->jumlah)){
             for($i = 0; $i < count($request->jumlah);$i++){
+                    $item = Item::find($request->id[$i]);
+
                     DetailPenjualan::create([
                         "penjualan_id" => $penjualan->id,
                         "item_id" => $request->id[$i],
                         "qty" => $request->jumlah[$i],
+                        "harga_item" => $item->harga_item,
+                    ]);
+
+                    $item->update([
+                        "stok" => $item->stok - $request->jumlah[$i],
                     ]);
             }
         }

@@ -15,6 +15,7 @@
                         <a href="{{ route('pembelian.create') }}" class="btn btn-primary">Tambah Pembelian</a>
                     </div>
                     <div class="body">
+                        @include('layouts.includes.filter')
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
@@ -53,6 +54,7 @@
                                     <tr>
                                         <td colspan="3">
                                             <div class="text-center">
+                                                {{ $datas->links() }}
                                             </div>
                                         </td>
                                     </tr>

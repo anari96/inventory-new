@@ -93,9 +93,6 @@
                 </a>
                 <ul class="ml-menu">
                     <li>
-                        <a href="{{ route('service.dashboard') }}">Dashboard</a>
-                    </li>
-                    <li>
                         <a href="{{ route('service.index') }}">Service</a>
                     </li>
 <!--                    <li>
