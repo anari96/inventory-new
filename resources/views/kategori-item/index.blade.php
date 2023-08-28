@@ -33,7 +33,7 @@
                                                 <form action="{{ route('kategori-item.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" id="hapus-button">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>

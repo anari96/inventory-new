@@ -90,6 +90,7 @@ class PenjualanController extends Controller
                         "penjualan_id" => $penjualan->id,
                         "item_id" => $request->id[$i],
                         "qty" => $request->jumlah[$i],
+                        "diskon" => $request->diskon[$i],
                         "harga_item" => $item->harga_item,
                     ]);
 
@@ -109,7 +110,11 @@ class PenjualanController extends Controller
      */
     public function show(string $id): Response
     {
-        return response()->view('penjualan.create', $datas);
+        $datas = Penjualan::find($id);
+        $data = [
+            'datas' => $datas,
+        ];
+        return response()->view('penjualan.nota', $data);
     }
 
     /**
@@ -162,6 +167,7 @@ class PenjualanController extends Controller
                         "penjualan_id" => $penjualan->id,
                         "item_id" => $request->id[$i],
                         "qty" => $request->jumlah[$i],
+                        "diskon" => $request->diskon[$i],
                         "harga_item" => $item->harga_item,
                     ]);
 

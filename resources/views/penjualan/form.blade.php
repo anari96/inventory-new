@@ -6,6 +6,8 @@
         const tableSparepartShow = document.getElementById('table-sparepart-list');
         const tableDetail = document.getElementById('table-detail-item');
         const itemDeleteButton = document.querySelectorAll(".item-delete");
+        const itemDiskonInput = document.querySelectorAll(".item-diskon");
+        const itemQtyInput = document.querySelectorAll(".qty");
 
         let itemId = document.querySelectorAll(".item_id");
 
@@ -116,6 +118,13 @@
                             hapusButton.appendChild(hapusButtonText);
                             hapusButton.setAttribute('type', "button");
 
+                            let diskonInput = document.createElement("input");
+                            diskonInput.classList.add("item-diskon");
+                            diskonInput.setAttribute("name", "diskon[]");
+                            diskonInput.setAttribute("type", "number");
+                            diskonInput.setAttribute("min", 0);
+                            diskonInput.setAttribute("value", 0);
+
                             //hidden input for form request
                             let jumlahInput = document.createElement("input");
                             jumlahInput.classList.add("qty");
@@ -134,6 +143,13 @@
                             idInput.setAttribute('value', item.id);
                             idInput.setAttribute('hidden', true);
 
+                            let hargaInput = document.createElement("input");
+                            hargaInput.setAttribute('name', "harga[]");
+                            hargaInput.classList.add("harga");
+                            hargaInput.setAttribute('type', "number");
+                            hargaInput.setAttribute('value', item.harga_item);
+                            hargaInput.setAttribute('hidden', true);
+
                             let row = tableDetail.querySelector("tbody").insertRow(-1);
                             let namaSparepart = row.insertCell(0);
                             let hargaBeli = row.insertCell(1);
@@ -145,16 +161,19 @@
 
                             namaSparepart.appendChild(namaSparepartText);
                             hargaJual.appendChild(hargaJualText);
-                            hargaBeli.appendChild(hargaBeliText);
+                            hargaBeli.appendChild(diskonInput);
                             subTotal.appendChild(subTotalText);
                             // jumlah.appendChild(jumlahText);
                             jumlah.appendChild(jumlahInput);
                             jumlah.appendChild(idInput);
+                            jumlah.appendChild(hargaInput);
                             hapus.appendChild(hapusButton);
 
                             let detail = [item.id,jumlahValue];
 
                             addEventHapus(hapusButton);
+                            addEventDiskon(diskonInput);
+                            addEventQty(jumlahInput);
                             countGrandTotal();
                         }
                     });
@@ -171,6 +190,14 @@
             });
         }
 
+        function addEventDiskon(e){
+            countSubTotal(e);
+        }
+
+        function addEventQty(e){
+            countSubTotal(e);
+        }
+
         itemDeleteButton.forEach( (e)=>{
             e.addEventListener("click", function(event){
                 this.parentElement.parentElement.remove();
@@ -178,6 +205,34 @@
             });
         } );
 
+        itemDiskonInput.forEach( (e)=>{
+            countSubTotal(e);
+        } );
+
+        itemQtyInput.forEach( (e)=>{
+            countSubTotal(e);
+        } );
+
+        function countSubTotal(e){
+            e.addEventListener("input", function(event){
+               let qty = this.parentElement.parentElement.children[2].children[0];
+               let hargaItem = this.parentElement.parentElement.children[3];
+               let subTotalElement = this.parentElement.parentElement.children[4];
+               let diskonInput = this.parentElement.parentElement.children[1].children[0];
+
+               const harga = this.parentElement.parentElement.children[2].children[2];
+
+               let hargaDiskon = Math.max(parseFloat(harga.value) - diskonInput.value,0) ;
+
+               // hargaItem.textContent = hargaDiskon;
+
+               let subtotal = hargaDiskon * qty.value;
+
+               subTotalElement.textContent = numberFormat.format(subtotal);
+
+                countGrandTotal();
+            });
+        }
 
         function countGrandTotal(){
             let subTotal = document.querySelectorAll(".subTotal");
@@ -190,6 +245,7 @@
 
             grandTotal.textContent = numberFormat.format(grandTotalValue);
         }
+
         countGrandTotal();
     </script>
 @endpush
@@ -290,7 +346,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Konsumen
+                        Pelanggan
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -298,13 +354,13 @@
                                 <i class="material-icons">add</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="javascript:void(0);" class=" waves-effect waves-block">Tambah Konsumen</a></li>
+                                <li><a href="javascript:void(0);" class=" waves-effect waves-block">Tambah Pelanggan</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
                 <div class="body">
-                    <h2 class="card-inside-title">Konsumen</h2>
+                    <h2 class="card-inside-title">Pelanggan</h2>
                     <div class="row clearfix">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
@@ -344,7 +400,7 @@
                         <thead>
                             <tr>
                                 <th>Nama Barang</th>
-                                <th>Harga Beli</th>
+                                <th>Diskon</th>
                                 <th>Jumlah</th>
                                 <th>Harga Jual</th>
                                 <th>Subtotal</th>
@@ -356,14 +412,15 @@
                                 @foreach($datas->detail_penjualan as $d)
                                     <tr>
                                         <td>{{ $d->item->nama_item }}</td>
-                                        <td>{{ $d->item->harga_item }}</td>
                                         <td>
-                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}" min="0" max="{{$d->item->stok + $d->qty}}" type="number">
+                                            <input class="item-diskon" name="diskon[]" value="{{$d->diskon}}" step="500" min="0" type="number"></td>
+                                        <td>
+                                            <input class="qty" name="jumlah[]" value="{{$d->qty}}"  min="0" max="{{$d->item->stok + $d->qty}}" type="number">
                                             <input class="item_id" name="id[]" value="{{$d->item_id}}" hidden>
-<!--                                             {{ $d->qty }} -->
+                                            <input class="harga" name="harga[]" value="{{$d->item->harga_item}}" hidden>
                                         </td>
-                                        <td>{{ number_format($d->item->biaya_item) }}</td>
-                                        <td class="subTotal">{{ number_format($d->item->biaya_item * $d->qty) }}</td>
+                                        <td>{{ number_format($d->item->harga_item) }}</td>
+                                        <td class="subTotal">{{ number_format( $d->qty * ($d->item->harga_item - $d->diskon)) }}</td>
                                         <td><button class="btn btn-danger item-delete"  type="button" >X</button></td>
                                     </tr>
                                 @endforeach

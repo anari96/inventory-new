@@ -2,7 +2,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="block-header">
-            <h2>Tambah Customer</h2>
+            <h2>Tambah Pelanggan</h2>
         </div>
 
 

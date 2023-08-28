@@ -19,33 +19,9 @@ class SupplierController extends Controller
      */
     public function index(Request $request): Response
     {
-        // this will default to a time of 00:00:00
-        $begin = new DateTime('-1 month');
-        $end = new DateTime();
-        $periode = [
-            $begin->format('d/m/Y'),
-            $end->format('d/m/Y'),
-        ];
+        $datas = Supplier::paginate(10);
 
-        if(request()->periode){
-            $periode = explode(" - ",request()->periode);
-            $begin = DateTime::createFromFormat('d/m/Y', $periode[0]);
-            $end = DateTime::createFromFormat('d/m/Y', $periode[1]);
-
-        }
-        $end->modify('+1 day');
-
-        $interval = new DateInterval('P1D');
-        $daterange = new DatePeriod($begin, $interval, $end);
-        $periodeTanggals = [];
-        foreach($daterange as $date) {
-
-            $periodeTanggals[] = strftime("%d-%b", strtotime($date->format("Y-m-d")));
-        }
-
-        $datas = Supplier::whereBetween("created_at", [$begin->format('Y-m-d'), $end->format('Y-m-d')])->paginate(10);
-
-        return response()->view("supplier.index", compact('datas','periode',"periodeTanggals"));
+        return response()->view("supplier.index", compact('datas',"periodeTanggals"));
     }
 
     /**

@@ -38,11 +38,12 @@
                                             <td>{{ $data->jumlah_barang }}</td>
                                             <td>Rp. {{ number_format($data->total) }}</td>
                                             <td>
+                                                <a href="{{ route('penjualan.show', [$id = $data->id]) }}" class="btn btn-primary">Nota</a>
                                                 <a href="{{ route('penjualan.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('penjualan.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" onclick="return confirm('Apakah Yakin Untuk menghapus?')" class="btn btn-danger">Delete</button>
+                                                    <button type="submit" class="btn btn-danger" id="hapus-button">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -51,10 +52,26 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="3">
-                                            <div class="text-center">
-                                                {{ $datas->links() }}
-                                            </div>
+                                        <td colspan="5">
+                                            @if($datas->currentPage() != 1)
+                                                <a href="{{ $datas->previousPageUrl() }}" @if($datas->currentPage() == 1) style="display:none;" @endif > Previous </a>
+                                                <a href="{{ $datas->url(1) }}">1</a>
+                                            @endif
+                                            @for($i = max($datas->currentPage() - 5,2); $i < $datas->currentPage(); $i++ )
+                                                <a href="{{ $datas->url($i) }}">{{ $i }}</a>
+                                            @endfor
+                                            <a href="{{ $datas->url($datas->currentPage()) }}" style="font-weight: bold"> {{$datas->currentPage()}} </a>
+                                            @if($datas->currentPage() != $datas->lastPage() && $datas->currentPage() !=  $datas->lastPage() - 1)
+                                                @for($i = $datas->currentPage() + 1; $i < $datas->currentPage() + 5; $i++ )
+                                                    @if($i < $datas->lastPage() )
+                                                        <a href="{{ $datas->url($i) }}">{{ $i }}</a>
+                                                    @endif
+                                                @endfor
+                                            @endif
+                                            @if($datas->currentPage() != $datas->lastPage())
+                                                <a href="{{$datas->url($datas->lastPage())}}">{{$datas->lastPage()}}</a>
+                                                <a href="{{ $datas->nextPageUrl() }}"  > Next </a>
+                                            @endif
                                         </td>
                                     </tr>
                                 </tfoot>

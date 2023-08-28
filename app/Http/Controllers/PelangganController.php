@@ -96,4 +96,13 @@ class PelangganController extends Controller
             return redirect()->route('pelanggan.index')->with('error','Item gagal dihapus');
         }
     }
+
+    public function getPelanggan(string $id)
+    {
+        $datas = Pelanggan::find($id);
+
+        return response()->json([
+            'data' => $datas,
+        ]);
+    }
 }

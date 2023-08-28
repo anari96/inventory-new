@@ -6,7 +6,7 @@
             <h2>Tambah Teknisi</h2>
         </div>
 
-        <form action="{{ route('supplier.update', ['id'=> $data->$id]) }}" method="POST">
+        <form action="{{ route('supplier.update', $data->id) }}" method="POST">
             @csrf
             @method('PUT')
             @include('supplier.form')

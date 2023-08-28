@@ -76,18 +76,24 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->jumlah[0]);
+        if($request->pelanggan_id == "baru"){
+            $pelanggan = Pelanggan::create([
+                'nama_pelanggan' => $request->nama,
+                'telp_pelanggan' => $request->kontak,
+                'alamat_pelanggan' => $request->alamat
+            ]);
+            $pelanggan->save();
+        }
 
-        $pelanggan = Pelanggan::create([
-            'nama_pelanggan' => $request->nama,
-            'telp_pelanggan' => $request->kontak,
-            'alamat_pelanggan' => $request->alamat
-        ]);
 
-        $pelanggan->save();
+        if($request->pelanggan_id != "baru"){
+            $pelanggan_id = $request->pelanggan_id;
+        }else if($request->pelanggan_id == "baru"){
+            $pelanggan_id = $pelanggan->id;
+        }
 
         $service = Service::create([
-            'pelanggan_id' => $pelanggan->id,
+            'pelanggan_id' => $pelanggan_id,
             'pengguna_id' => $request->pengguna_id,
             'teknisi_id' => $request->teknisi_id,
             'no_service' => $request->no_service,
@@ -138,7 +144,11 @@ class ServiceController extends Controller
      */
     public function show(string $id): Response
     {
-        //
+        $datas = Service::find($id);
+        $data = [
+            'datas' => $datas,
+        ];
+        return response()->view('service.nota', $data);
     }
 
     /**
@@ -146,14 +156,16 @@ class ServiceController extends Controller
      */
     public function edit(string $id): Response
     {
-        $data = Service::find($id);
+        $datas = Service::find($id);
         $detail = DetailService::where("service_id", $id)->get();
         $teknisi = Teknisi::all();
+        $pelanggan = Pelanggan::all();
 
         $data = [
-            "data" => $data,
+            "datas" => $datas,
             "detail" => $detail,
-            "teknisi" => $teknisi
+            "teknisi" => $teknisi,
+            "pelanggan" => $pelanggan
         ];
 
         // dd($detail);
@@ -186,9 +198,27 @@ class ServiceController extends Controller
 
         $old_detail->delete();
 
+        if($request->pelanggan_id != "baru"){
+            $pelanggan = Pelanggan::create([
+                'nama_pelanggan' => $request->nama,
+                'telp_pelanggan' => $request->kontak,
+                'alamat_pelanggan' => $request->alamat
+            ]);
+            $pelanggan->save();
+        }
+
+
+        if($request->pelanggan_id != "baru"){
+            $pelanggan_id = $request->pelanggan_id;
+        }else if($request->pelanggan_id == "baru"){
+            $pelanggan_id = $pelanggan->id;
+        }
+
         $data->update([
             'merk' => $request->merk,
+            'pelanggan_id' => $pelanggan_id,
             'tipe' => $request->tipe,
+            'teknisi_id' => $request->teknisi_id,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
             'kerusakan' => $request->kerusakan,
@@ -199,7 +229,6 @@ class ServiceController extends Controller
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
 
             //status: pending, dikerjakan, selesai, batal, diambil, refund
-            'status' => "pending"
         ]);
 
 
@@ -305,7 +334,7 @@ class ServiceController extends Controller
     }
     public function garansi()
     {
-        $datas = Service::where('status','selesai')->paginate(10);
+        $datas = Service::where('garansi','1')->paginate(10);
         return response()->view('service.garansi', compact('datas'));
     }
 
@@ -316,6 +345,6 @@ class ServiceController extends Controller
             "status" => $request->status,
         ]);
 
-        return redirect(route("service.list"));
+        return redirect(route("service.list")."?status=".$request->status);
     }
 }

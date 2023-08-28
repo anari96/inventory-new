@@ -35,7 +35,7 @@ class Penjualan extends Model
     {
         $total = 0;
         foreach ($this->detail_penjualan as $detail) {
-            $total += $detail->qty * $detail->harga_item;
+            $total += $detail->total;
         }
         return $total;
     }

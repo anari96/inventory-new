@@ -1,12 +1,18 @@
 @extends('layouts.app')
 
 @push("scripts")
-<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script>
-    let qrcode = document.getElementsByClassName("qrcode");
-    qrcode.forEach( (item) => {
-        new QRCode(qrcode, "test")
+    let qrCodeClass = document.querySelectorAll(".qrcode");
+
+    qrCodeClass.forEach((e) => {
+        let textValue = e.children[0].value;
+        new QRCode(e, {
+            text: textValue,
+            width : 100,
+            height : 100
+        });
     });
+
 </script>
 @endpush
 
@@ -54,8 +60,9 @@
                                 <div class="col-md-6">
                                     <div class="row">Status Garansi :</div>
                                     <div class="row">
-<!--                                         <img src="https://camo.githubusercontent.com/5c0e557ce429b13dfd71ef0c05124eda691129db9c7ca21787790a488ab5030d/68747470733a2f2f656e64726f69642e6e6c2f71722d636f64652f64656661756c742f4c6966652532306973253230746f6f25323073686f7274253230746f253230626525323067656e65726174696e672532305152253230636f646573" style="width: 120px;height:120px" alt="qr"> -->
-                                            <div class="qrcode"></div>
+                                            <div class="qrcode">
+                                                <input type="hidden" value="{{ $data->id }}">
+                                            </div>
                                     </div>
                                     <div class="row">Aktif</div>
                                 </div>
@@ -64,7 +71,27 @@
                         </div>
                         <div class="row row-clearfix">
                             <div class="text-center">
-                                {{ $datas->links() }}
+                                @if($datas->currentPage() != 1)
+                                    <a href="{{ $datas->previousPageUrl() }}" @if($datas->currentPage() == 1) style="display:none;" @endif > Previous </a>
+                                    <a href="{{ $datas->url(1) }}">1</a>
+<!--                                     <p href="">..</p> -->
+                                @endif
+                                @for($i = max($datas->currentPage() - 5,2); $i < $datas->currentPage(); $i++ )
+                                    <a href="{{ $datas->url($i) }}">{{ $i }}</a>
+                                @endfor
+                                <a href="{{ $datas->url($datas->currentPage()) }}" style="font-weight: bold"> {{$datas->currentPage()}} </a>
+                                @if($datas->currentPage() != $datas->lastPage() && $datas->currentPage() !=  $datas->lastPage() - 1)
+                                    @for($i = $datas->currentPage() + 1; $i < $datas->currentPage() + 5; $i++ )
+                                        @if($i < $datas->lastPage() )
+                                            <a href="{{ $datas->url($i) }}">{{ $i }}</a>
+                                        @endif
+                                    @endfor
+                                @endif
+                                @if($datas->currentPage() != $datas->lastPage())
+<!--                                     <p href="">..</p> -->
+                                    <a href="{{$datas->url($datas->lastPage())}}">{{$datas->lastPage()}}</a>
+                                    <a href="{{ $datas->nextPageUrl() }}"  > Next </a>
+                                @endif
                             </div>
                         </div>
 

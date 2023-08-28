@@ -120,7 +120,7 @@
     <!-- Select Plugin Js -->
     <script src="{{ url('material') }}/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
-    
+
 
     <!-- Slimscroll Plugin Js -->
     <script src="{{ url('material') }}/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
@@ -139,7 +139,25 @@
 
     <script src="{{ url('material') }}/js/admin.js"></script>
     <script src="{{ url('material') }}/plugins/chartjs/Chart.bundle.js"></script>
+    <script src="{{ url('js') }}/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
+    <script>
+        const hapusButton = document.querySelector("#hapus-button");
+
+        if(hapusButton != null){
+            hapusButton.addEventListener("click", function (e) {
+                e.preventDefault();
+                let confirmation = confirm("Apakah Anda Yakin Untuk Menghapus ?");
+                let form = this.parentElement;
+
+                if(confirmation == true){
+                    form.submit();
+                }else if (confirmation == false){
+                    e.preventDefault();
+                }
+            });
+        }
+    </script>
     @stack('scripts')
 </body>
 

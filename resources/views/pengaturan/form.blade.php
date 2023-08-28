@@ -1,3 +1,4 @@
+
 @push('scripts')
     <script>
 
@@ -42,37 +43,54 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="card">
             <div class="header">
-                <a href="{{ route('supplier.index') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ route('teknisi.index') }}" class="btn btn-warning">Kembali</a>
             </div>
             <div class="body">
                 <div class="row clearfix">
                     <div class="col-md-3">
-                        <b>Nama Supplier</b>
+                        <b>Nama</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="nama_supplier" value="@if(isset($data)) {{$data->nama_supplier}} @endif">
+                                <input type="text" class="form-control" name="nama" value="@if(isset($data)){{ $data->nama }}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
                             </span>
                         </div>
                     </div>
+                </div>
+                <div class="row clearfix">
                     <div class="col-md-3">
                         <b>Alamat</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="alamat" value="@if(isset($data)) {{$data->alamat}} @endif">
+                                <input type="text" class="form-control" name="alamat" value="@if(isset($data)){{ $data->alamat }}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
                             </span>
                         </div>
                     </div>
+                </div>
+                <div class="row clearfix">
                     <div class="col-md-3">
-                        <b>No Telepon</b>
+                        <b>Kontak</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="telp_supplier" value="@if(isset($data)) {{$data->telp_supplier}} @endif">
+                                <input type="text" class="form-control" name="kontak" value="@if(isset($data)){{ $data->kontak }}@endif">
+                            </div>
+                            <span class="input-group-addon">
+                                <i style="background-color: rgb(0, 170, 187);"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-3">
+                        <b>Keterangan</b>
+                        <div class="input-group colorpicker colorpicker-element">
+                            <div class="form-line ">
+                                <input type="text" class="form-control" name="keterangan" value="@if(isset($data)){{ $data->keterangan }}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>

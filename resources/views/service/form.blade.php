@@ -7,10 +7,27 @@
         const tableSparepartShow = document.getElementById('table-sparepart-list');
         const tableDetail = document.getElementById('table-detail-sparepart');
         const itemDeleteButton = document.querySelectorAll(".item-delete");
+        const pelangganIdSelect = document.querySelector("#pelanggan_id");
+        const pelangganForm = document.querySelector("#form_pelanggan");
 
         const numberFormat = new Intl.NumberFormat({ style: 'currency' });
 
         let detailArray = [];
+
+
+        function showHidePelangganForm(){
+            let pelangganId = pelangganIdSelect.value;
+
+            if(pelangganId == "baru"){
+                pelangganForm.style.display = 'block';
+            }else if(pelangganId != "baru"){
+                pelangganForm.style.display = 'none';
+            }
+        }
+
+        pelangganIdSelect.addEventListener("change",  function (e){
+            showHidePelangganForm();
+        });
 
         tableSparepartShow.addEventListener("click", function () {
             fetch("{{route('get-item-sparepart')}}",{
@@ -258,7 +275,7 @@
                             <div class="form-line focused">
                                 <select name="teknisi_id" class="form-control">
                                     @foreach($teknisi as $t)
-                                        <option value="{{ $t->id }}" @if(isset($data)) @if($t->id == $data->teknisi_id) selected @endif @endif> {{ $t->nama_teknisi }} </option>
+                                        <option value="{{ $t->id }}" @if(isset($datas)) @if($t->id == $datas->teknisi_id) selected @endif @endif> {{ $t->nama_teknisi }} </option>
                                     @endforeach
                                 </select>
 <!--                                 <input type="text" class="form-control" value="Teknisi 1"> -->
@@ -295,7 +312,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Konsumen
+                        Pelanggan
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li class="dropdown">
@@ -303,28 +320,40 @@
                                 <i class="material-icons">add</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a href="javascript:void(0);" class=" waves-effect waves-block">Tambah Konsumen</a></li>
+                                <li><a href="javascript:void(0);" class=" waves-effect waves-block">Tambah Pelanggan</a></li>
                             </ul>
                         </li>
                     </ul>
                 </div>
                 <div class="body">
-                    <h2 class="card-inside-title">Konsumen</h2>
+                    <h2 class="card-inside-title">Pelanggan</h2>
                     <div class="row clearfix">
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="nama" class="form-control" @if(isset($data)) value="{{ $data->pelanggan->nama_pelanggan }}" @endif placeholder="Nama" required>
+                                    <select class="form-control" name="pelanggan_id" id="pelanggan_id">
+                                        <option value="baru">Tambah Pelanggan Baru</option>
+                                        @foreach($pelanggan as $data)
+                                            <option value="{{ $data->id }}" @if(isset($datas)) @if($data->id == $datas->pelanggan_id) selected @endif @endif>{{ $data->nama_pelanggan }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="alamat" class="form-control" @if(isset($data)) value="{{ $data->pelanggan->alamat_pelanggan }}" @endif placeholder="Alamat" required>
+                            <div id="form_pelanggan" @if(isset($datas)) style="display:none" @endif >
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" name="nama" id="nama_pelanggan" class="form-control" placeholder="Nama">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="kontak" class="form-control" @if(isset($data)) value="{{ $data->pelanggan->telp_pelanggan }}" @endif placeholder="Kontak" required>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" name="alamat" id="alamat_pelanggan" class="form-control" placeholder="Alamat">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" name="kontak" id="telp_pelanggan" class="form-control" placeholder="Kontak">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -350,22 +379,22 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="merk" class="form-control" @if(isset($data)) value="{{ $data->merk }}" @endif placeholder="Merk" required>
+                                    <input type="text" name="merk" class="form-control" @if(isset($datas)) value="{{ $datas->merk }}" @endif placeholder="Merk" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="tipe" class="form-control" @if(isset($data)) value="{{ $data->tipe }}" @endif placeholder="Tipe" required>
+                                    <input type="text" name="tipe" class="form-control" @if(isset($datas)) value="{{ $datas->tipe }}" @endif placeholder="Tipe" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="imei1" class="form-control" @if(isset($data)) value="{{ $data->imei1 }}" @endif placeholder="IMEI 1" >
+                                    <input type="text" name="imei1" class="form-control" @if(isset($datas)) value="{{ $datas->imei1 }}" @endif placeholder="IMEI 1" >
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="imei2" class="form-control" @if(isset($data)) value="{{ $data->imei2 }}" @endif placeholder="IMEI 2">
+                                    <input type="text" name="imei2" class="form-control" @if(isset($datas)) value="{{ $datas->imei2 }}" @endif placeholder="IMEI 2">
                                 </div>
                             </div>
                         </div>
@@ -394,31 +423,31 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <h2 class="card-inside-title">Untuk Klaim Garansi</h2>
-                                    <input name="garansi" type="radio" id="radio_1" value='1' @if(isset($data)) @if($data->garansi == 1) checked="" @endif @endif>
+                                    <input name="garansi" type="radio" id="radio_1" value='1' @if(isset($datas)) @if($datas->garansi == 1) checked="" @endif @endif>
                                     <label for="radio_1">Ya</label>
-                                    <input name="garansi" type="radio" id="radio_2" value='0' @if(isset($data)) @if($data->garansi == 0) checked="" @endif @else checked @endif>
+                                    <input name="garansi" type="radio" id="radio_2" value='0' @if(isset($datas)) @if($datas->garansi == 0) checked="" @endif @else checked @endif>
                                     <label for="radio_2">Tidak</label>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="kerusakan" class="form-control" class="form-control" @if(isset($data)) value="{{ $data->kerusakan }}" @endif placeholder="Kerusakan" required>
+                                    <input type="text" name="kerusakan" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->kerusakan }}" @endif placeholder="Kerusakan" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($data)) value="{{ $data->deskripsi }}" @endif placeholder="Deskripsi" required>
+                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->deskripsi }}" @endif placeholder="Deskripsi" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="kelengkapan" class="form-control" class="form-control" @if(isset($data)) value="{{ $data->kelengkapan }}" @endif placeholder="Kelengkapan" required>
+                                    <input type="text" name="kelengkapan" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->kelengkapan }}" @endif placeholder="Kelengkapan" required>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="biaya" class="form-control money-rupiah" id="biaya" class="form-control" @if(isset($data)) value="{{ $data->biaya }}" @endif placeholder="Total Biaya" required>
+                                    <input type="text" name="biaya" class="form-control money-rupiah" id="biaya" class="form-control" @if(isset($datas)) value="{{ $datas->biaya }}" @endif placeholder="Total Biaya" required>
                                 </div>
                             </div>
                             <div class="form-group">
