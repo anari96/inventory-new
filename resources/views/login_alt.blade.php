@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Sign In | Bootstrap Based Admin Template - Material Design</title>
+    <title>{{ env("APP_NAME") }}</title>
     <!-- Favicon-->
     <link rel="icon" href="{{ url('material') }}/favicon.ico" type="image/x-icon">
 
@@ -22,73 +22,104 @@
     <link href="{{ url('material') }}/plugins/animate-css/animate.css" rel="stylesheet" />
 
     <!-- Custom Css -->
-    <link href="{{ url('material') }}/css/style.css" rel="stylesheet">
+<!--     <link href="{{ url('material') }}/css/style.css" rel="stylesheet"> -->
 </head>
 
-<body class="login-page">
-    <div class="login-box">
-        <div class="logo">
-            <a href="javascript:void(0);">{{ env("APP_NAME") }}</a>
-            {{-- <small>Admin BootStrap Based - Material Design</small> --}}
-        </div>
-        <div class="card">
-            <div class="body">
-                <form id="sign_in" method="POST" action="{{ route('login.auth') }}">
+    <style>
+        html, body{
+            padding:0;
+            height: 100%;
+        }
+        .dark-purple-bg{
+            background-color: #ba68c8;
+            min-height:100%;
+            height:100%;
+        }
+        .white-color{
+            color: white;
+        }
+
+       .form-signin {
+        width: 100%;
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+        }
+        .form-signin .checkbox {
+        font-weight: 400;
+        }
+        .form-signin .form-control {
+        position: relative;
+        box-sizing: border-box;
+        height: auto;
+        padding: 10px;
+        font-size: 16px;
+        }
+        .form-signin .form-control:focus {
+        z-index: 2;
+        }
+        .form-signin input[type="email"] {
+        margin-bottom: -1px;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        }
+        .form-signin input[type="password"] {
+        margin-bottom: 10px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        }
+
+
+
+
+    </style>
+    <body class="login-page">
+
+            <div class="row" style="margin:0;height:100%">
+                <div class="col-md-6 dark-purple-bg">
+                    <div class="form-signin" style="width:100%;margin-top :15em">
+                        <h2 style="margin-left:-9em;color:white;width:25em;font-weight:bold"></h2>
+                        <h4 style="margin-left:-15em;color:white;width:25em"></h4>
+                    </div>
+                    <div class="form-signin" style="width:100%;margin-top :15em">
+                        <h2 style="margin-left:-9em;color:white;width:25em;font-weight:bold">Selamat Datang di {{ env("APP_NAME") }}</h2>
+                        <h4 style="margin-left:-15em;color:white;width:25em">Anggur Cell Siap Melayani dan Memperbaiki Gadget Kesayangan Anda</h4>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form class="form-signin" style="margin-top :15em" method="POST" action="{{ route('login.auth') }}">
                     @csrf
-                    <div class="msg">Sign in to start your session</div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">email</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="email" class="form-control" name="email" placeholder="Email" required autofocus>
+                        <h1 class="h3 mb-3 font-weight-normal" style="color:#9e35af;font-weight:bolder;font-size:4.5em">Log In</h1>
+                        <h1 class="h3 mb-3 font-weight-normal" style="color:#9e35af;font-size:3em"></h1>
+                        <label for="inputEmail" class="sr-only">Email address</label>
+                        <input type="email" id="inputEmail" class="form-control" style="margin-bottom:1.2em" placeholder="Email address" name="email" required autofocus>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" id="inputPassword" class="form-control" name="password" placeholder="Password" required>
+                        <div class="checkbox mb-3">
+                            <label>
+                            <input type="checkbox" name="rememberme" value="remember-me"> Remember me
+                            </label>
                         </div>
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-addon">
-                            <i class="material-icons">lock</i>
-                        </span>
-                        <div class="form-line">
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-8 p-t-5">
-                            <input type="checkbox" name="rememberme" id="rememberme" class="filled-in chk-col-pink">
-                            <label for="rememberme">Remember Me</label>
-                        </div>
-                        <div class="col-xs-4">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit">SIGN IN</button>
-                        </div>
-                    </div>
-                    {{-- <div class="row m-t-15 m-b--20">
-                        <div class="col-xs-6">
-                            <a href="sign-up.html">Register Now!</a>
-                        </div>
-                        <div class="col-xs-6 align-right">
-                            <a href="forgot-password.html">Forgot Password?</a>
-                        </div>
-                    </div> --}}
-                </form>
+                        <button class="btn btn-lg btn-primary btn-block" style="background:#9e35af" type="submit">Sign in</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Jquery Core Js -->
-    <script src="{{ url('material') }}/plugins/jquery/jquery.min.js"></script>
+        <!-- Jquery Core Js -->
+        <script src="{{ url('material') }}/plugins/jquery/jquery.min.js"></script>
 
-    <!-- Bootstrap Core Js -->
-    <script src="{{ url('material') }}/plugins/bootstrap/js/bootstrap.js"></script>
+        <!-- Bootstrap Core Js -->
+        <script src="{{ url('material') }}/plugins/bootstrap/js/bootstrap.js"></script>
 
-    <!-- Waves Effect Plugin Js -->
-    <script src="{{ url('material') }}/plugins/node-waves/waves.js"></script>
+        <!-- Waves Effect Plugin Js -->
+        <script src="{{ url('material') }}/plugins/node-waves/waves.js"></script>
 
-    <!-- Validation Plugin Js -->
-    <script src="{{ url('material') }}/plugins/jquery-validation/jquery.validate.js"></script>
+        <!-- Validation Plugin Js -->
+        <script src="{{ url('material') }}/plugins/jquery-validation/jquery.validate.js"></script>
 
-    <!-- Custom Js -->
-    <script src="{{ url('material') }}/js/admin.js"></script>
-    <script src="{{ url('material') }}/js/pages/examples/sign-in.js"></script>
-</body>
+        <!-- Custom Js -->
+        <script src="{{ url('material') }}/js/admin.js"></script>
+        <script src="{{ url('material') }}/js/pages/examples/sign-in.js"></script>
+    </body>
 
 </html>
