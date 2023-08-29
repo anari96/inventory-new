@@ -81,9 +81,9 @@
                         <h2 style="margin-left:-9em;color:white;width:25em;font-weight:bold"></h2>
                         <h4 style="margin-left:-15em;color:white;width:25em"></h4>
                     </div>
-                    <div class="form-signin" style="width:100%;margin-top :15em">
-                        <h2 style="margin-left:-9em;color:white;width:25em;font-weight:bold">Selamat Datang di {{ env("APP_NAME") }}</h2>
-                        <h4 style="margin-left:-15em;color:white;width:25em">Anggur Cell Siap Melayani dan Memperbaiki Gadget Kesayangan Anda</h4>
+                    <div class="form-signin" style="width:100%;margin-top :15em;margin-left: -1em">
+                        <h2 style="margin-left:0;color:white;width:22em;font-weight:bold">Selamat Datang di {{ env("APP_NAME") }}</h2>
+                        <h4 style="margin-left:0;color:white;width:25em">Anggur Cell Siap Melayani dan Memperbaiki Gadget Kesayangan Anda</h4>
                     </div>
                 </div>
                 <div class="col-md-6">
