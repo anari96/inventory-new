@@ -147,7 +147,7 @@
         if(hapusButton != null){
             hapusButton.addEventListener("click", function (e) {
                 e.preventDefault();
-                let confirmation = confirm("Apakah Anda Yakin Untuk Menghapus ?");
+                let confirmation = confirm("Apakah Anda Yakin Untuk Menghapus? (Kemungkinan akan Berpengaruh pada data lain)");
                 let form = this.parentElement;
 
                 if(confirmation == true){
