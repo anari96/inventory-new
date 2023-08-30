@@ -85,12 +85,16 @@ class TeknisiController extends Controller
         DB::beginTransaction();
         try {
             $data = Teknisi::find($id);
+
+            $service = Service::where('teknisi_id', $data->id);
+
+            $service->delete();
             $data->delete();
             DB::commit();
-            return redirect()->route('teknisi.index')->with('success','Item berhasil dihapus');
+            return redirect()->route('teknisi.index')->with('success','Teknisi berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('teknisi.index')->with('error','Item gagal dihapus');
+            return redirect()->route('teknisi.index')->with('error','Teknisi gagal dihapus');
         }
     }
 }
