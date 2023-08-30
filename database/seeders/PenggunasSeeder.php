@@ -20,6 +20,7 @@ class PenggunasSeeder extends Seeder
             'email' => 'user@email.com',
             'password' => Hash::make('passworduser321!'),
             'usaha_id' => 2,
+            'level_id' => 1,
         ]);
     }
 }
