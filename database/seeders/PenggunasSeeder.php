@@ -15,10 +15,10 @@ class PenggunasSeeder extends Seeder
     public function run(): void
     {
         Pengguna::create([
-            'nama_pengguna' => 'Bagus',
-            'nama_usaha' => 'RM.BAGUS',
-            'email' => 'bagus@email.com',
-            'password' => Hash::make('password'),
+            'nama_pengguna' => 'User',
+            'nama_usaha' => 'User',
+            'email' => 'user@email.com',
+            'password' => Hash::make('passworduser321!'),
             'usaha_id' => 2,
         ]);
     }
