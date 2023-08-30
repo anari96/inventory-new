@@ -6,6 +6,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Teknisi;
+use App\Models\Service;
+use Illuminate\Support\Facades\DB;
 
 use DateInterval;
 use DatePeriod;
@@ -94,7 +96,7 @@ class TeknisiController extends Controller
             return redirect()->route('teknisi.index')->with('success','Teknisi berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('teknisi.index')->with('error','Teknisi gagal dihapus');
+            return redirect()->route('teknisi.index')->with('error',$th);
         }
     }
 }

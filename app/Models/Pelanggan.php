@@ -31,14 +31,13 @@ class Pelanggan extends Model
 
     public static function boot() {
         parent::boot();
-        self::deleting(function($pelanggan) { // before delete() method call this
+        self::deleting(function($pelanggan) {
              $pelanggan->penjualan()->each(function($penjualan) {
-                $penjualan->delete(); // <-- direct deletion
+                $penjualan->delete();
              });
              $pelanggan->service()->each(function($service) {
-                $service->delete(); // <-- raise another deleting event on Post to delete comments
+                $service->delete();
              });
-             // do the rest of the cleanup...
         });
     }
 }
