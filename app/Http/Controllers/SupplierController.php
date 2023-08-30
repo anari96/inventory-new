@@ -21,7 +21,7 @@ class SupplierController extends Controller
     {
         $datas = Supplier::paginate(10);
 
-        return response()->view("supplier.index", compact('datas',"periodeTanggals"));
+        return response()->view("supplier.index", compact('datas'));
     }
 
     /**

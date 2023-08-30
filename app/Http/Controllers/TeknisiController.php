@@ -20,7 +20,7 @@ class TeknisiController extends Controller
     {
         $datas = Teknisi::paginate(10);
 
-        return response()->view("teknisi.index", compact("datas","periode","periodeTanggals"));
+        return response()->view("teknisi.index", compact("datas"));
     }
 
     /**
