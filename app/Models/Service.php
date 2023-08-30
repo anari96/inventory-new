@@ -83,4 +83,14 @@ class Service extends Model
 
         return $total;
     }
+
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function($service){
+            $service->detail_penjualan()->each(function($detail){
+                $detail->delete();
+            });
+        });
+    }
 }

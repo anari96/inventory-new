@@ -50,5 +50,14 @@ class Penjualan extends Model
         return $total;
     }
 
+    public static function boot()
+    {
+        parent::boot();
+        self::deleting(function($penjualan){
+            $penjualan->detail_penjualan()->each(function($detail_penjualan){
+                $detail_penjualan->delete();
+            });
+        });
+    }
 
 }
