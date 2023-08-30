@@ -6,6 +6,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\Pelanggan;
+use App\Models\Penjualan;
+use App\Models\Service;
 use Illuminate\Support\Facades\DB;
 
 class PelangganController extends Controller
@@ -88,12 +90,19 @@ class PelangganController extends Controller
         DB::beginTransaction();
         try {
             $data = Pelanggan::find($id);
+
+            $penjualan = Penjualan::where('pelanggan_id', $data->id);
+            $service = Service::where('pelanggan_id', $data->id);
+
+            $penjualan->delete();
+            $service->delete();
             $data->delete();
+
             DB::commit();
-            return redirect()->route('pelanggan.index')->with('success','Item berhasil dihapus');
+            return redirect()->route('pelanggan.index')->with('success','Pelanggan berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('pelanggan.index')->with('error','Item gagal dihapus');
+            return redirect()->route('pelanggan.index')->with('error',$th);
         }
     }
 
