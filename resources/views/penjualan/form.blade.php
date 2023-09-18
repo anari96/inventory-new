@@ -18,7 +18,11 @@
         let itemIdArray = [];
 
         tableSparepartShow.addEventListener("click", function () {
-            fetch("{{route('get-item')}}",{
+            tableShowData();
+        });
+
+        function tableShowData(){
+             fetch("{{route('get-item')}}",{
                 method: "GET"
             })
             .then(
@@ -75,7 +79,7 @@
                 });
             });
 
-        });
+        }
 
 
         function addEventPilih(element){

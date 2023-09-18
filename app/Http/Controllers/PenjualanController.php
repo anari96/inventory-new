@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Penjualan;
+use App\Models\Profil;
 use App\Models\DetailPenjualan;
 use App\Models\Pelanggan;
 use App\Models\Item;
@@ -111,8 +112,21 @@ class PenjualanController extends Controller
     public function show(string $id): Response
     {
         $datas = Penjualan::find($id);
+
         $data = [
             'datas' => $datas,
+        ];
+        return response()->view('penjualan.show', $data);
+    }
+
+    public function nota(string $id): Response
+    {
+        $datas = Penjualan::find($id);
+        $profil = Profil::first();
+
+        $data = [
+            'datas' => $datas,
+            'profil' => $profil,
         ];
         return response()->view('penjualan.nota', $data);
     }
@@ -197,5 +211,38 @@ class PenjualanController extends Controller
             DB::rollback();
             return redirect()->route('penjualan.index')->with('error','Penjualan gagal dihapus');
         }
+    }
+
+    public function retur_penjualan(String $id)
+    {
+        DB::beginTransaction();
+        try{
+            $detail_penjualan = DetailPenjualan::find($id);
+            $penjualan = $detail_penjualan->penjualan_id;
+
+            $item = Item::find($detail_penjualan->item_id);
+
+            $item->update([
+                'stok' =>  $item->stok + $detail_penjualan->qty,
+            ]);
+
+            $detail_penjualan->delete();
+
+            DB::commit();
+            return redirect()->route('penjualan.show', $penjualan)->with('success','Barang Berhasil diretur');
+        } catch (\Throwable $th){
+            DB::rollback();
+            return redirect()->route('penjualan.show', $penjualan)->with('error','Barang gagal diretur');
+        }
+    }
+
+    public function list_detail(Request $request)
+    {
+        $penjualan = Penjualan::find($request->id_penjualan);
+
+
+        return response()->json([
+            'data'=>$penjualan->detail_penjualan->get()
+        ]);
     }
 }

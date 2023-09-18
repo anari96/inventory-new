@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
             PenggunaUmumSeeder::class,
             TeknisiSeeder::class,
             ProfilsSeeder::class,
+            PelangganSeeder::class,
         ]);
     }
 }

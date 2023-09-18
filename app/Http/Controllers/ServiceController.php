@@ -12,6 +12,7 @@ use App\Models\DetailService;
 use App\Models\Teknisi;
 use App\Models\Sparepart;
 use App\Models\Item;
+use App\Models\Pengguna;
 
 use DateInterval;
 use DatePeriod;
@@ -346,5 +347,51 @@ class ServiceController extends Controller
         ]);
 
         return redirect(route("service.list")."?status=".$request->status);
+    }
+
+    public function guest()
+    {
+        $data = [];
+        return response()->view('service.guest', compact('data'));
+    }
+
+    public function guest_store(Request $request)
+    {
+        $pengguna = Pengguna::where('nama_pengguna','like','%Umum%')->first();
+        $teknisi = Teknisi::where('nama_teknisi','like','%Umum%')->first();
+        $no_nota = "S-". date('Y')."".date('m')."".date('d')."".date("his");
+
+
+        $pelanggan = Pelanggan::create([
+            'nama_pelanggan' => $request->nama,
+            'telp_pelanggan' => $request->kontak,
+            'alamat_pelanggan' => $request->alamat
+        ]);
+
+        $pelanggan_id = $pelanggan->id;
+
+        $pelanggan->save();
+
+        $service = Service::create([
+            'pelanggan_id' => $pelanggan_id,
+            'pengguna_id' => $pengguna->id,
+            'teknisi_id' => $teknisi->id,
+            'no_service' => $no_nota,
+            'merk' => $request->merk,
+            'tipe' => $request->tipe,
+            'imei1' => $request->imei1,
+            'imei2' => $request->imei2,
+            'kerusakan' => $request->kerusakan,
+            'deskripsi' => $request->deskripsi,
+            'kelengkapan' => $request->kelengkapan,
+            'tanggal' => date("Y-m-d"),
+            'garansi' => $request->garansi,
+            'biaya' => 0,
+
+            //status: pending, dikerjakan, selesai, batal, diambil, refund
+            'status' => "pending"
+        ]);
+
+        $service->save();
     }
 }

@@ -15,12 +15,18 @@ class LevelSeeder extends Seeder
     {
         Level::create([
             'nama_level' => 'Admin'
-        ],[
-            'nama_level' => 'Teknisi'
-        ],[
+        ]);
+        Level::create([
             'nama_level' => 'Kasir'
-        ],[
+        ]);
+        Level::create([
             'nama_level' => 'Sales'
+        ]);
+        Level::create([
+            'nama_level' => 'Teknisi'
+        ]);
+        Level::create([
+            'nama_level' => 'Gudang'
         ]);
     }
 }

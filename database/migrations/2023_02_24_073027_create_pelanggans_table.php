@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('pengguna_id')->index();
             $table->string('nama_pelanggan',100);
-            $table->string('email_pelanggan',100);
             $table->string('telp_pelanggan',20);
             $table->text('alamat_pelanggan')->nullable();
             $table->timestamps();

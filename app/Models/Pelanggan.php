@@ -13,9 +13,9 @@ class Pelanggan extends Model
 
     protected $fillable = [
       "nama_pelanggan",
-      "email_pelanggan",
       "telp_pelanggan",
-      "alamat_pelanggan"
+      "alamat_pelanggan",
+      "pengguna_id"
     ];
 
 

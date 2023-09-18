@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Models\Pelanggan;
 use App\Models\Penjualan;
 use App\Models\Service;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PelangganController extends Controller
@@ -38,6 +39,7 @@ class PelangganController extends Controller
             "nama_pelanggan" => $request->nama_pelanggan,
             "telp_pelanggan" => $request->telp_pelanggan,
             "alamat_pelanggan" => $request->alamat_pelanggan,
+            "pengguna_id" => Auth::user()->id,
         ]);
 
         return redirect(route("pelanggan.index"));
@@ -102,7 +104,7 @@ class PelangganController extends Controller
             return redirect()->route('pelanggan.index')->with('success','Pelanggan berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();
-            return redirect()->route('pelanggan.index')->with('error',$th);
+            return redirect()->route('pelanggan.index')->with('error',$th->getMessage());
         }
     }
 

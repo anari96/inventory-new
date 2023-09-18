@@ -10,11 +10,9 @@ class Profil extends Model
     use HasFactory;
 
     protected $fillable = [
-        "nama",
+        "nama_toko",
         "alamat",
         "kontak",
         "keterangan",
-        "logo1",
-        "logo2",
     ];
 }

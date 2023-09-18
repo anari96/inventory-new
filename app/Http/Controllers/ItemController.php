@@ -73,19 +73,10 @@ class ItemController extends Controller
                 'harga_item'=>str_replace("Rp ","",str_replace(".","",$request->harga_item)),
                 'tipe_jual'=>$request->tipe_jual,
                 'sku'=>$sku,
-                'barcode'=>$request->barcode,
                 'gambar_item' => $gambar,
+                'stok'=>$request->stok,
+                'stok_gudang'=>$request->stok_gudang,
             ]);
-            if($request->has('lacak_stok') && $request->lacak_stok){
-                $item->update([
-                    'stok'=>$request->stok
-                ]);
-            }
-            if($request->pengenal == "warna_dan_bentuk"){
-                $item->update([
-                    'warna_item'=>$request->warna_item
-                ]);
-            }
             DB::commit();
             return redirect()->route('item.index')->with('success','Berhasil menambahkan item');
         } catch (\Throwable $th) {
@@ -154,19 +145,13 @@ class ItemController extends Controller
                 'biaya_item'=>str_replace("Rp ","",str_replace(".","",$request->biaya_item)),
                 'harga_item'=>str_replace("Rp ","",str_replace(".","",$request->harga_item)),
                 'sku' => $request->sku,
-                'barcode' => $request->barcode,
-
                 'tipe_jual' => $request->tipe_jual,
                 'warna_item' => $request->warna_item,
                 'bentuk_item'=>$request->bentuk_item ?? 0,
                 'gambar_item' => $gambar ?? $old_gambar,
+                'stok'=>$request->stok,
+                'stok_gudang'=>$request->stok_gudang,
             ]);
-            if($request->has('lacak_stok') && $request->lacak_stok){
-                $item->update([
-                    'lacak_stok'=>true,
-                    'stok'=>$request->stok
-                ]);
-            }
 
             if($old_gambar != null && Storage::exists($old_gambar) && $gambar != null) Storage::delete($old_gambar);
             DB::commit();
@@ -210,7 +195,7 @@ class ItemController extends Controller
         }
 
         if(request()->has('search') && request()->search != 0 && request()->search != null && request()->search != ''){
-            $datas = $datas->where('id','like','%'.request()->search.'%');
+            $datas = $datas->where('id',request()->search);
         }
 
         return response()->json([
@@ -229,7 +214,7 @@ class ItemController extends Controller
         $datas = Item::whereIn('kategori_item_id',$id_sparepart_kategori);
 
         if(request()->has('search') && request()->search != 0 && request()->search != null && request()->search != ''){
-            $datas = $datas->where('id','like','%'.request()->search.'%');
+            $datas = $datas->where('id',request()->search);
         }
 
         return response()->json([

@@ -167,7 +167,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+<!--                <div class="row">
                     <div class="col-md-12">
                         <p>Dijual Per</p>
                         <div class="demo-radio-button">
@@ -178,25 +178,18 @@
 
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group form-float">
                             <div class="form-line">
                                 <input type="text" name="sku" class="form-control" value="{{ old('sku',@$data->sku) }}">
-                                <label class="form-label">Sku</label>
+                                <label class="form-label">SKU/Barcode</label>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-float">
-                            <div class="form-line">
-                                <input type="text" name="barcode" class="form-control" value="{{ old('barcode',@$data->barcode) }}">
-                                <label class="form-label">Barcode</label>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -219,26 +212,29 @@
 
 
                 <div class="demo-switch">
-                    <div class="row clearfix">
-                        <div class="col-sm-3">
-                            <div class="demo-switch-title">Lacal Stok</div>
-                            <div class="switch">
-                                <label><input type="checkbox" name="lacak_stok" id="lacak_stok" checked @if(old('lacak_stok',@$data->lacak_stok)) checked @endif><span class="lever "></span></label>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row" id="lacak_stok_input" @if(old('lacak_stok',@$data->lacak_stok))  @endif>
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group form-float">
                                 <div class="form-line">
                                     <input type="number" name="stok" class="form-control" value="{{ old('stok',@$data->stok ?? 0) }}">
-                                    <label class="form-label">Stok Tersedia</label>
+                                    <label class="form-label">Stok Toko</label>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group form-float">
+                                <div class="form-line">
+                                    <input type="number" name="stok_gudang" class="form-control" value="{{ old('stok',@$data->stok_gudang ?? 0) }}">
+                                    <label class="form-label">Stok Gudang</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

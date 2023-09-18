@@ -38,7 +38,7 @@
                                             <td>{{ $data->jumlah_barang }}</td>
                                             <td>Rp. {{ number_format($data->total) }}</td>
                                             <td>
-                                                <a href="{{ route('penjualan.show', [$id = $data->id]) }}" class="btn btn-primary">Nota</a>
+                                                <a href="{{ route('penjualan.show', [$id = $data->id]) }}" class="btn btn-primary">Detail</a>
                                                 <a href="{{ route('penjualan.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('penjualan.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf

@@ -18,12 +18,16 @@ class Pengguna extends Authenticatable
         'password',
         'nama_usaha',
         'api_token',
-        'usaha_id'
+        'level_id'
     ];
 
     protected $hidden = [
         'password',
     ];
 
-    
+    public function level()
+    {
+        return $this->belongsTo(Level::class);
+    }
+
 }

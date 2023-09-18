@@ -16,11 +16,14 @@ class KategoriSeeder extends Seeder
         KategoriItem::create([
             "pengguna_id" => 1,
             "nama_kategori" => 'Umum',
-        ],[
+        ]);
+
+        KategoriItem::create([
             "pengguna_id" => 1,
             "nama_kategori" => 'Sparepart Toko',
-        ],[
+        ]);
 
+        KategoriItem::create([
             "pengguna_id" => 1,
             "nama_kategori" => 'Sparepart Luar',
         ]);

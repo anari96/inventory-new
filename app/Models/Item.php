@@ -16,9 +16,9 @@ class Item extends Model
         'biaya_item',
         'tipe_jual',
         'sku',
-        'barcode',
         'lacak_stok',
         'stok',
+        'stok_gudang',
         'warna_item',
         'bentuk_item',
         'gambar_item',
@@ -38,5 +38,22 @@ class Item extends Model
             return 0;
         }
         return ($this->biaya_item - $this->harga_item) / $this->harga_item * 100;
+    }
+
+    public function retur_penjualan()
+    {
+        return $this->hasMany(DetailReturPenjualan::class);
+    }
+
+    public function getTotalReturPenjualanAttribute()
+    {
+        $retur_penjualan = $this->retur_penjualan;
+        $total = 0;
+
+        foreach($retur_penjualan as $data){
+            $total += $data->qty;
+        }
+
+        return $total;
     }
 }

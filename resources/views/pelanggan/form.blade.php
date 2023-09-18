@@ -1,4 +1,3 @@
-
 @push('scripts')
     <script>
 

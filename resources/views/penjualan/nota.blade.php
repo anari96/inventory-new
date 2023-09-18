@@ -59,17 +59,25 @@ body{
 <!-- Default : width='1560' Last : width='1460' -->
 <table style=" margin-top: 0px; margin-left: 0px;" class="table-tok" width="100%" border="0" cellspacing="0" cellpadding="2">
   <tr>
-    <td height="87" colspan="5" style=��font-size:13px�� align="center">
-      <div class="head">
-      </td>
-  </div>
+    <div class="head">
+        <td height="87" colspan="5" style=��font-size:13px�� align="center">
+            <p>{{ $profil->nama_toko }}</p>
+            <p>{{ $profil->alamat }}</p>
+            <p>{{ $profil->kontak }}</p>
+        </td>
+    </div>
   </tr>
   </table>
   <table style="margin-top: -15px;">
    <tr class="teks">
+    <td colspan="2">No. Nota </td>
+    <td> : </td>
+    <td colspan="3" align="left">{{ $datas->nomor_nota }}</td>
+  </tr>
+   <tr class="teks">
     <td colspan="2">Tanggal </td>
     <td> : </td>
-    <td colspan="3" align="left">  </td>
+    <td colspan="3" align="left">{{ $datas->tanggal_penjualan }}</td>
   </tr>
 
   </table>
@@ -86,21 +94,26 @@ body{
   </div>
 <!--put foreach here -->
 @foreach($datas->detail_penjualan as $detail)
-  <tr>
-    <td><div class="teks">{{ $detail->item->nama_item }}</div></td>
-    <td align="right"><div class="teks">{{ $detail->item->sku }}</div></td>
-    <td align="right"><div class="teks">{{ $detail->harga_item }}</div></td>
-    <td align="right"><div class="teks">(diskon)</div></td>
-    <td align="right"><div class="teks">{{$detail->qty}}</div></td>
-    <td align="right"><div class="teks">{{ $detail->qty * $detail->harga_item }}</div></td>
-  </tr>
+    @php
+        $grandTotal = 0;
+        $subTotal =  $detail->qty * ($detail->harga_item - $detail->diskon);
+        $grandTotal += $subTotal;
+    @endphp
+    <tr>
+        <td><div class="teks">{{ $detail->item->nama_item }}</div></td>
+        <td align="right"><div class="teks">{{ $detail->item->sku }}</div></td>
+        <td align="right"><div class="teks">Rp. {{ number_format($detail->harga_item) }}</div></td>
+        <td align="right"><div class="teks">Rp. {{ number_format($detail->diskon) }}</div></td>
+        <td align="right"><div class="teks">{{$detail->qty}}</div></td>
+        <td align="right"><div class="teks">Rp. {{ number_format($subTotal) }}</div></td>
+    </tr>
 @endforeach
 <!-- this is the foreach tail -->
   <tr class="garisatas teks2">
     <td colspan="3" align="left">Total Belanja (Rp) : </td>
-    <td colspan="3" align="right" bgcolor="#F5F5F5">(GrandTotal)</td>
+    <td colspan="3" align="right" bgcolor="#F5F5F5">Rp. {{ number_format($grandTotal) }}</td>
   </tr>
-  <tr class="teks2">
+<!--  <tr class="teks2">
     <td  colspan="3" align="left"> Uang Bayar (Rp) : </td>
     <td colspan="3" align="right">(Uang Bayar)</td>
   </tr>
@@ -108,33 +121,26 @@ body{
   <tr class="garisbawah teks2">
     <td colspan="3" align="left">Uang Kembali (Rp) : </td>
     <td colspan="3" align="right">(Kembali)</td>
-  </tr>
+  </tr>-->
 
 </table>
 
 <table style="margin-left: 0px;">
   <tr>
     <td colspan="2"><div class="teks">Kasir :</div></td>
-    <td colspan="3" align="right"><div class="teks"> (nama kasir) </div></td>
-  </tr>
-  <tr>
-    <td colspan="2"><div class="teks">Sales :</div></td>
-    <td colspan="3" align="right"><div class="teks"> (sales) </div></td>
+    <td colspan="3" align="right"><div class="teks">{{ $datas->pengguna->nama_pengguna }}</div></td>
   </tr>
   <tr>
     <td colspan="2"><div class="teks">Pelanggan :</div></td>
-    <td colspan="3" align="right"><div class="teks"> (nama pelanggan) </div></td>
-  </tr>
-  <tr>
-    <td colspan="2"><div class="teks">No Telp :</div></td>
-    <td colspan="3" align="right"><div class="teks"> (no telepon) </div></td>
+    <td colspan="3" align="right"><div class="teks">{{ $datas->pelanggan->nama_pelanggan }}</div></td>
   </tr>
 </table>
 
 <table style=" margin-top: 0px; margin-left: 0px;" class="table-tok" width="100%" border="0" cellspacing="0" cellpadding="2">
   <tr>
-    <td height="87" colspan="5" style=��font-size:10px�� align="center">
+    <td height="87" colspan="5" style="font-size:10px" align="center">
       <div class="head">
+            <p>{{ $profil->keterangan }}</p>
         </div>
       </td>
   </tr>

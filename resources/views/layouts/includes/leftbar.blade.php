@@ -30,62 +30,55 @@
                 </a>
             </li>
 
-
-            {{-- <li>
-                <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">bar_chart</i>
-                    <span>Laporan</span>
-                </a>
-                <ul class="ml-menu">
-                    <li>
-                        <a href="#">Ringkasan Penjualan</a>
-                    </li>
-                    <li>
-                        <a href="#">Penjualan Berdasarkan Barang</a>
-                    </li>
-                    <li>
-                        <a href="#">Penjualan Berdasarkan Kategori</a>
-                    </li>
-                    <li>
-                        <a href="#">Penjualan Berdasarkan Karyawan</a>
-                    </li>
-                    <li>
-                        <a href="#">Penjualan Berdasarkan Karyawan</a>
-                    </li>
-                    <li>
-                        <a href="#">Penjualan Berdasarkan Jenis Pembayaran</a>
-                    </li>
-                    <li>
-                        <a href="#">Struk</a>
-                    </li>
-                    <li>
-                        <a href="#">Penjualan berdasarkan pengubah</a>
-                    </li>
-                    <li>
-                        <a href="#">Diskon</a>
-                    </li>
-                    <li>
-                        <a href="#">Pajak</a>
-                    </li>
-                </ul>
-            </li> --}}
-
             <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">shopping_basket</i>
-                    <span>Barang</span>
+                    <span>Master Data</span>
                 </a>
                 <ul class="ml-menu">
                     <li>
-                        <a href="{{ route('item.index') }}">Daftar Barang</a>
+                        <a href="{{ route('pelanggan.index') }}">Pelanggan</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('item.index') }}">Barang</a>
                     </li>
                     <li>
                         <a href="{{ route('kategori-item.index') }}">Kategori</a>
                     </li>
+                    <li>
+                        <a href="{{ route('teknisi.index') }}">Teknisi</a>
+                    </li>
+                    <li>
+                        <a href="">Sales</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('supplier.index') }}">Supplier</a>
+                    </li>
                 </ul>
             </li>
-
-
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Transaksi</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a href="{{ route('penjualan.index') }}">Penjualan</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pembelian.index') }}">Pembelian</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('retur_penjualan.index') }}">Retur Penjualan</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('retur_pembelian.index') }}">Retur Pembelian</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('transaksi_gudang.index') }}">Transaksi Gudang</a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">shopping_basket</i>
@@ -95,9 +88,6 @@
                     <li>
                         <a href="{{ route('service.index') }}">Service</a>
                     </li>
-<!--                    <li>
-                        <a href="{{ route('service.create') }}">Input Data</a>
-                    </li> -->
                     <li>
                         <a href="{{ route('service.list') }}">List</a>
                     </li>
@@ -112,95 +102,10 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="{{ route('penjualan.index') }}">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Penjualan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('pembelian.index') }}">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Pembelian</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('teknisi.index') }}">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Teknisi</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('pelanggan.index') }}">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Pelanggan</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('supplier.index') }}">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Supplier</span>
-                </a>
-            </li>
-<!--            <li> <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Handphone</span>
-                </a>
-                <ul class="ml-menu">
-                </ul>
-            </li>
-
-
-            <li> <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Acc & Sparepart</span>
-                </a>
-                <ul class="ml-menu">
-                </ul>
-            </li>
-
-            <li> <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>List</span>
-                </a>
-                <ul class="ml-menu">
-                </ul>
-            </li>
-
-            <li> <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Pengeluaran</span>
-                </a>
-                <ul class="ml-menu">
-                </ul>
-            </li>
-
-            <li> <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
-                    <span>Customer</span>
-                </a>
-                <ul class="ml-menu">
-                </ul>
-            </li> -->
-
-            {{-- <li>
-                <a href="#">
-                    <i class="material-icons">inventory</i>
-                    <span>Pengelolaan Inventaris</span>
-                </a>
-            </li> --}}
-
         </ul>
     </div>
     <!-- #Menu -->
     <!-- Footer -->
-    <div class="legal">
-        <div class="copyright">
-            &copy; 2016 - 2017 <a href="javascript:void(0);">AdminBSB - Material Design</a>.
-        </div>
-        <div class="version">
-            <b>Version: </b> 1.0.5
-        </div>
-    </div>
+
     <!-- #Footer -->
 </aside>
