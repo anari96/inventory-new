@@ -78,6 +78,8 @@ class PenjualanController extends Controller
             "pelanggan_id" => $request->pelanggan_id,
             "tanggal_penjualan" => $request->tanggal,
             "nomor_nota" => $request->no_penjualan,
+            "metode_bayar" => $request->metode_bayar,
+            "uang_bayar" => $request->uang_bayar,
             "pengguna_id" => auth()->user()->id
         ]);
 
@@ -159,6 +161,7 @@ class PenjualanController extends Controller
             "pelanggan_id" => $request->pelanggan_id,
             "tanggal_penjualan" => $request->tanggal,
             "nomor_nota" => $request->no_penjualan,
+            "uang_bayar" => $request->uang_bayar,
             "pengguna_id" => auth()->user()->id
         ]);
 

@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_retur_pembelians', function (Blueprint $table) {
+        Schema::create('permissions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('retur_pembelian_id');
-            $table->string('nama_item');
-            $table->unsignedBigInteger('item_id');
-            $table->integer('qty');
+            $table->unsignedBigInteger("role_id");
+            $table->unsignedBigInteger("menu_id");
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -27,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_retur_pembelians');
+        Schema::dropIfExists('permissions');
     }
 };

@@ -5,19 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetailTransaksiGudang extends Model
+class Role extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        "transaksi_gudang_id",
-        "item_id",
-        "qty",
+       "nama_role",
     ];
 
 
-    public function item()
-    {
-        return $this->belongsTo(Item::class);
+    public function menu(){
+    	return $this->belongsToMany(Menu::class, 'permissions', 'role_id', 'menu_id');
     }
 }

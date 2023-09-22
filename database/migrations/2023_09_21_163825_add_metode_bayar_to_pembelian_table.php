@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaksi_gudangs', function (Blueprint $table) {
-            $table->id();
-            $table->string('toko')->nullable();
-            $table->string('keterangan');
-            $table->timestamps();
+        Schema::table('pembelians', function (Blueprint $table) {
+            $table->string('metode_bayar');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaksi_gudangs');
+        Schema::table('pembelians', function (Blueprint $table) {
+            $table->dropColumn("metode_bayar");
+        });
     }
 };

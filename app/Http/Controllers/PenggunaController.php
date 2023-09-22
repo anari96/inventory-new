@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengguna;
-use App\Models\Level;
+use App\Models\Role;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -31,10 +31,10 @@ class PenggunaController extends Controller
      */
     public function create(): Response
     {
-        $level = Level::all();
+        $role = Role::all();
 
         $data = [
-            "level" => $level
+            "role" => $role
         ];
 
         return response()->view("pengguna.create", $data);
@@ -50,14 +50,14 @@ class PenggunaController extends Controller
         $request->validate([
             "nama_pengguna" => "required",
             "email" => "required",
-            "level_id" => "required",
+            "role_id" => "required",
             "password" => "required",
             "c_password" => "required|same:password",
         ]);
             Pengguna::create([
                 "nama_pengguna" => $request->nama_pengguna,
                 "email" => $request->email,
-                "level_id" => $request->level_id,
+                "role_id" => $request->role_id,
                 'password' => Hash::make($request->password),
             ]);
 
@@ -84,11 +84,11 @@ class PenggunaController extends Controller
     public function edit(string $id): Response
     {
         $datas = Pengguna::find($id);
-        $level = Level::all();
+        $role = Role::all();
 
         $data = [
             "datas" => $datas,
-            "level" => $level
+            "role" => $role
         ];
 
         return response()->view("pengguna.edit", $data);
@@ -106,7 +106,7 @@ class PenggunaController extends Controller
                 $request->validate([
                     "nama_pengguna" => "required",
                     "email" => "required",
-                    "level_id" => "required",
+                    "role_id" => "required",
                     "password" => "required",
                     "c_password" => "required|same:password",
                 ]);
@@ -114,7 +114,7 @@ class PenggunaController extends Controller
                 $request->validate([
                     "nama_pengguna" => "required",
                     "email" => "required",
-                    "level_id" => "required",
+                    "role_id" => "required",
                 ]);
             }
 
@@ -123,7 +123,7 @@ class PenggunaController extends Controller
             $pengguna->update([
                 "nama_pengguna" => $request->nama_pengguna,
                 "email" => $request->email,
-                "level_id" => $request->level_id,
+                "role_id" => $request->role_id,
             ]);
 
 

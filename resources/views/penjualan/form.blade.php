@@ -8,6 +8,7 @@
         const itemDeleteButton = document.querySelectorAll(".item-delete");
         const itemDiskonInput = document.querySelectorAll(".item-diskon");
         const itemQtyInput = document.querySelectorAll(".qty");
+        const uangBayarInput = document.getElementById("uang_bayar");
 
         let itemId = document.querySelectorAll(".item_id");
 
@@ -217,6 +218,10 @@
             countSubTotal(e);
         } );
 
+        uangBayarInput.addEventListener("input", function(event){
+           countGrandTotal();
+        });
+
         function countSubTotal(e){
             e.addEventListener("input", function(event){
                let qty = this.parentElement.parentElement.children[2].children[0];
@@ -239,15 +244,28 @@
         }
 
         function countGrandTotal(){
+            let kembaliInput = document.getElementById("kembali");
+            let uangBayarInput = document.getElementById("uang_bayar");
             let subTotal = document.querySelectorAll(".subTotal");
             let grandTotal = document.querySelector("#grandTotal");
             let grandTotalValue = 0;
+            let kembaliValue = 0;
             subTotal.forEach((element) => {
                 subTotalValue = parseFloat(element.textContent.replaceAll(",",""));
                 grandTotalValue += subTotalValue;
             });
 
             grandTotal.textContent = numberFormat.format(grandTotalValue);
+            // kembaliValue = Math.max(0,uang_bayar.value - parseInt(grandTotalValue));
+            kembaliValue = uang_bayar.value - parseInt(grandTotalValue);
+            if(kembaliValue < 0 ){
+                kembaliInput.value = "Uang Bayar Tidak Cukup";
+            }else if (kembaliInput >= 0){
+                kembaliInput.value = numberFormat.format(parseInt(kembaliValue));
+            }else{
+                kembaliInput.value = numberFormat.format(parseInt(kembaliValue));
+            }
+            console.log(numberFormat.format(parseInt(kembaliValue)));
         }
 
         countGrandTotal();
@@ -374,6 +392,24 @@
                                             <option value="{{ $data->id }}" @if(isset($datas)) @if($data->id == $datas->pelanggan_id) selected @endif @endif>{{ $data->nama_pelanggan }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select class="form-control" name="metode_bayar">
+                                        <option value="cash">Cash</option>
+                                        <option value="kredit">Kredit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="number" id="uang_bayar" name="uang_bayar" required class="form-control" placeholder="Uang Bayar" step="500">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="kembali" name="kembali" readonly value="0" class="form-control" placeholder="Kembali"  step="500">
                                 </div>
                             </div>
                             <div class="form-group">

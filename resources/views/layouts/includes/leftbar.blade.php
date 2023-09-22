@@ -49,7 +49,7 @@
                         <a href="{{ route('teknisi.index') }}">Teknisi</a>
                     </li>
                     <li>
-                        <a href="">Sales</a>
+                        <a href="{{ route('sale.index') }}">Sales</a>
                     </li>
                     <li>
                         <a href="{{ route('supplier.index') }}">Supplier</a>
@@ -99,6 +99,23 @@
                     </li>
                     <li>
                         <a href="{{ route('service.garansi') }}">Garansi</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);" class="menu-toggle">
+                    <i class="material-icons">shopping_basket</i>
+                    <span>Pengaturan</span>
+                </a>
+                <ul class="ml-menu">
+                    <li>
+                        <a href="{{ route('pengguna.index') }}">Pengguna</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('role.index') }}">Role Pengguna</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('profil.index') }}">Profil Toko</a>
                     </li>
                 </ul>
             </li>

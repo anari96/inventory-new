@@ -76,10 +76,10 @@
                         <b>Role Pengguna</b>
                         <div class="input-group ">
                             <div class="form-line">
-                                <select name="level_id" class="form-control show-tick">
+                                <select name="role_id" class="form-control show-tick">
                                     <option value="">Pilih Role</option>
-                                    @foreach($level as $l)
-                                        <option value="{{ $l->id }}" @if(isset($datas)) @if($l->id == $datas->level_id) selected @endif @endif>{{ $l->nama_level }}</option>
+                                    @foreach($role as $l)
+                                        <option value="{{ $l->id }}" @if(isset($datas)) @if($l->id == $datas->role_id) selected @endif @endif>{{ $l->nama_role }}</option>
                                     @endforeach
                                 </select>
                             </div>

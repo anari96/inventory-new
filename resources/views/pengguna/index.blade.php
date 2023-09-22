@@ -30,7 +30,7 @@
                                         <tr>
                                             <td>{{ $data->nama_pengguna }}</td>
                                             <td>{{ $data->email }}</td>
-                                            <td>{{ $data->level->nama_level }}</td>
+                                            <td>{{ $data->role->nama_role }}</td>
                                             <td>
                                                 <a href="{{ route('pengguna.edit', $data->id) }}" class="btn btn-primary">Edit</a>
                                                 @if($data->id != 1)

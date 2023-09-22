@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('retur_pembelians', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pengguna_id');
-            $table->string('no_penjualan');
+            $table->string('no_pembelian');
             $table->string('keterangan');
             $table->date('tanggal');
             $table->timestamps();

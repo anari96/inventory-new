@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaksi_gudangs', function (Blueprint $table) {
-            $table->id();
-            $table->string('toko')->nullable();
-            $table->string('keterangan');
-            $table->timestamps();
+        Schema::table('penjualans', function (Blueprint $table) {
+            $table->unsignedBigInteger("uang_bayar")->after("tanggal_penjualan");
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaksi_gudangs');
+        Schema::table('penjualans', function (Blueprint $table) {
+            $table->dropColumn("uang_bayar");
+        });
     }
 };

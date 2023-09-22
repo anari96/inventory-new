@@ -20,6 +20,8 @@ use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ReturPenjualanController;
 use App\Http\Controllers\ReturPembelianController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\PembayaranPiutangController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -72,6 +74,8 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('sale', SaleController::class);
     Route::resource('retur_penjualan', ReturPenjualanController::class);
     Route::resource('retur_pembelian', ReturPembelianController::class);
+    Route::resource('role', RoleController::class);
+    Route::resource('pembayaran_piutang', PembayaranPiutangController::class);
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {

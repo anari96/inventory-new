@@ -21,17 +21,17 @@
                                 <thead>
                                     <tr>
                                         <th>Tanggal</th>
-                                        <th>Nama Toko</th>
+                                        <th>Keterangan</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($datas as $key => $data)
                                         <tr>
-                                            <td>{{ $data->tanggal_penjualan }}</td>
-                                            <td>{{ $data->nama_toko }}</td>
+                                            <td>{{ $data->tanggal }}</td>
+                                            <td>{{ $data->keterangan }}</td>
                                             <td>
-                                                <a href="{{ route('transaksi_gudang.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
+<!--                                                 <a href="{{ route('transaksi_gudang.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a> -->
                                                 <form action="{{ route('transaksi_gudang.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')

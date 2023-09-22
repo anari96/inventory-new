@@ -13,7 +13,8 @@ class ReturPenjualan extends Model
         "no_penjualan",
         "pelanggan_id",
         "keterangan",
-        "sale_id"
+        "sale_id",
+        "tanggal",
     ];
 
     public function detail()

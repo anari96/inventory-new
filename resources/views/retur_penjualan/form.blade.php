@@ -268,7 +268,7 @@
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="card">
             <div class="header">
-                <a href="{{ route('penjualan.index') }}" class="btn btn-warning">Kembali</a>
+                <a href="{{ route('retur_penjualan.index') }}" class="btn btn-warning">Kembali</a>
             </div>
             <div class="body">
 

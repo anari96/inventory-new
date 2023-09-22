@@ -14,6 +14,8 @@ class Penjualan extends Model
     protected $fillable = [
         'pengguna_id',
         'nomor_nota',
+        'uang_bayar',
+        'metode_bayar',
         'pelanggan_id',
         'tanggal_penjualan',
 
@@ -49,6 +51,20 @@ class Penjualan extends Model
         }
         return $total;
     }
+
+    public function getStatusLunasAttribute()
+    {
+        if($this->uang_bayar < $this->total){
+            return false;
+        }else if($this->uang_bayar >= $this->total){
+            return true;
+        }
+    }
+
+    // public function scopeLunas($query)
+    // {
+    //     // return $this->where()
+    // }
 
     public static function boot()
     {
