@@ -229,7 +229,7 @@
                                         </td>
                                         <td>{{ number_format($d->item->harga_item) }}</td>
                                         <td class="subTotal">{{ number_format( $d->qty * ($d->item->harga_item - $d->diskon)) }}</td>
-                                        <td><a href="{{ route('penjualan.retur', $d->id) }}" class="btn btn-danger item-delete" type="button" >Retur</a></td>
+<!--                                         <td><a href="{{ route('penjualan.retur', $d->id) }}" class="btn btn-danger item-delete" type="button" >Retur</a></td> -->
                                     </tr>
                                 @endforeach
                         </tbody>

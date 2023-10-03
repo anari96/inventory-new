@@ -7,6 +7,7 @@
         const tableSparepartShow = document.getElementById('table-sparepart-list');
         const tableDetail = document.getElementById('table-detail-item');
         const itemDeleteButton = document.querySelectorAll(".item-delete");
+        const uangBayarInput = document.getElementById("uang_bayar");
 
         let itemId = document.querySelectorAll(".item_id");
 
@@ -170,6 +171,10 @@
             });
         }
 
+        uangBayarInput.addEventListener("input", function(event){
+           countGrandTotal();
+        });
+
         itemDeleteButton.forEach( (e)=>{
             e.addEventListener("click", function(event){
                 this.parentElement.parentElement.remove();
@@ -179,6 +184,8 @@
 
 
         function countGrandTotal(){
+            let kembaliInput = document.getElementById("kembali");
+            let uangBayarInput = document.getElementById("uang_bayar");
             let subTotal = document.querySelectorAll(".subTotal");
             let grandTotal = document.querySelector("#grandTotal");
             let grandTotalValue = 0;
@@ -188,6 +195,15 @@
             });
 
             grandTotal.textContent = numberFormat.format(grandTotalValue);
+
+            kembaliValue = uang_bayar.value - parseInt(grandTotalValue);
+            if(kembaliValue < 0 ){
+                kembaliInput.value = "Uang Bayar Tidak Cukup";
+            }else if (kembaliInput >= 0){
+                kembaliInput.value = numberFormat.format(parseInt(kembaliValue));
+            }else{
+                kembaliInput.value = numberFormat.format(parseInt(kembaliValue));
+            }
         }
         countGrandTotal();
     </script>
@@ -313,6 +329,24 @@
                                             <option value="{{ $data->id }}" @if(isset($datas)) @if($data->id == $datas->supplier_id) selected @endif @endif>{{ $data->nama_supplier }}</option>
                                         @endforeach
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <select class="form-control" name="metode_bayar">
+                                        <option value="cash">Cash</option>
+                                        <option value="kredit">Kredit</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="number" id="uang_bayar" name="uang_bayar" required class="form-control" placeholder="Uang Bayar" step="500">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="kembali" name="kembali" readonly value="0" class="form-control" placeholder="Kembali"  step="500">
                                 </div>
                             </div>
                             <div class="form-group">

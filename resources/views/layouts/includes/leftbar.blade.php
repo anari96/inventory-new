@@ -43,7 +43,10 @@
                         <a href="{{ route('item.index') }}">Barang</a>
                     </li>
                     <li>
-                        <a href="{{ route('kategori-item.index') }}">Kategori</a>
+                        <a href="{{ route('kategori-item.index') }}">Kategori Item</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('jenis_item.index') }}">Jenis Item</a>
                     </li>
                     <li>
                         <a href="{{ route('teknisi.index') }}">Teknisi</a>
@@ -73,6 +76,12 @@
                     </li>
                     <li>
                         <a href="{{ route('retur_pembelian.index') }}">Retur Pembelian</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pembayaran_piutang.index') }}">Pembayaran Piutang</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pembayaran_hutang.index') }}">Pembayaran Hutang</a>
                     </li>
                     <li>
                         <a href="{{ route('transaksi_gudang.index') }}">Transaksi Gudang</a>

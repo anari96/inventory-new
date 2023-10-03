@@ -33,6 +33,10 @@ class Penjualan extends Model
         return $this->hasMany(DetailPenjualan::class);
     }
 
+    public function pembayaran_piutang(){
+        return $this->hasMany(PembayaranPiutang::class);
+    }
+
     public function getTotalAttribute()
     {
         $total = 0;
@@ -42,6 +46,15 @@ class Penjualan extends Model
         return $total;
     }
 
+
+    public function getTotalPembayaranPiutangAttribute()
+    {
+        $total = 0;
+        foreach ($this->pembayaran_piutang as $pembayaran_piutang) {
+            $total += $pembayaran_piutang->uang_bayar;
+        }
+        return $total;
+    }
 
     public function getJumlahBarangAttribute()
     {
@@ -54,9 +67,9 @@ class Penjualan extends Model
 
     public function getStatusLunasAttribute()
     {
-        if($this->uang_bayar < $this->total){
+        if($this->total_pembayaran_piutang < $this->total){
             return false;
-        }else if($this->uang_bayar >= $this->total){
+        }else if($this->total_pembayaran_piutang >= $this->total){
             return true;
         }
     }

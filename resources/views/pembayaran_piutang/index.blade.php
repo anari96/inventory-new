@@ -21,6 +21,8 @@
                                         <th>Nomor Penjualan</th>
                                         <th>Pelanggan</th>
                                         <th>Total</th>
+                                        <th>Jumlah Bayar</th>
+                                        <th>Status</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -30,8 +32,18 @@
                                             <td>{{ $data->nomor_nota }}</td>
                                             <td>{{ $data->pelanggan->nama_pelanggan }}</td>
                                             <td>{{ number_format($data->total) }}</td>
+                                            <td>{{ number_format($data->total_pembayaran_piutang) }}</td>
                                             <td>
-                                                <a href="{{ route('pembayaran_piutang.edit', $data->id) }}" class="btn btn-primary">Bayar</a>
+                                                @if(!$data->status_lunas)
+                                                    Belum Lunas
+                                                @elseif($data->status_lunas)
+                                                    Lunas
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(!$data->status_lunas)
+                                                    <a href="{{ route('pembayaran_piutang.edit', $data->id) }}" class="btn btn-primary">Bayar</a>
+                                                @endif
                                             </td>
 
                                     @endforeach

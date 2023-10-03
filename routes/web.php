@@ -22,6 +22,7 @@ use App\Http\Controllers\ReturPenjualanController;
 use App\Http\Controllers\ReturPembelianController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PembayaranPiutangController;
+use App\Http\Controllers\PembayaranHutangController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,7 +48,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::put('profil/update', [ProfilController::class, 'update'])->name('profil.update');
     Route::get('get-item', [ItemController::class,'getItem'])->name('get-item');
     Route::get('get-item-sparepart', [ItemController::class,'getItemSparepart'])->name('get-item-sparepart');
-
+    Route::get('get-jenis-kategori',[JenisItemController::class,"getJenisByKategoriId"])->name('get-jenis-kategori');
     Route::resource('kategori-item', KategoriItemController::class);
     Route::resource('jenis_item', JenisItemController::class);
     Route::resource('diskon', DiskonController::class);
@@ -76,6 +77,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('retur_pembelian', ReturPembelianController::class);
     Route::resource('role', RoleController::class);
     Route::resource('pembayaran_piutang', PembayaranPiutangController::class);
+    Route::resource('pembayaran_hutang', PembayaranHutangController::class);
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {

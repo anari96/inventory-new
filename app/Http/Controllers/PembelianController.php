@@ -77,6 +77,8 @@ class PembelianController extends Controller
             "supplier_id" => $request->supplier_id,
             "tanggal_pembelian" => $request->tanggal,
             "nomor_nota" => $request->no_pembelian,
+            "metode_bayar" => $request->metode_bayar,
+            "uang_bayar" => $request->uang_bayar,
             "pengguna_id" => auth()->user()->id
         ]);
 
@@ -140,6 +142,8 @@ class PembelianController extends Controller
             "supplier_id" => $request->supplier_id,
             "tanggal_pembelian" => $request->tanggal,
             "nomor_nota" => $request->no_pembelian,
+            "metode_bayar" => $request->metode_bayar,
+            "uang_bayar" => $request->uang_bayar,
             "pengguna_id" => auth()->user()->id
         ]);
 

@@ -2,27 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Penjualan;
-use App\Models\PembayaranPiutang;
+use App\Models\Pembelian;
+use App\Models\PembayaranHutang;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
-class PembayaranPiutangController extends Controller
+class PembayaranHutangController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
-        $datas = Penjualan::where('metode_bayar', "kredit")->paginate(10);
+        $datas = Pembelian::where('metode_bayar', "kredit")->paginate(10);
 
         $data = [
            "datas" => $datas,
         ];
 
-        return response()->view('pembayaran_piutang.index', $data);
+        return response()->view('pembayaran_hutang.index', $data);
     }
 
     /**
@@ -30,7 +30,7 @@ class PembayaranPiutangController extends Controller
      */
     public function create(): Response
     {
-        return response()->view('pembayaran_piutang.create');
+        //
     }
 
     /**
@@ -46,7 +46,6 @@ class PembayaranPiutangController extends Controller
      */
     public function show(string $id): Response
     {
-        //
     }
 
     /**
@@ -54,15 +53,16 @@ class PembayaranPiutangController extends Controller
      */
     public function edit(string $id): Response
     {
-        $datas = Penjualan::find($id);
-        $pembayaran_piutangs = PembayaranPiutang::where("penjualan_id", $id)->get();
+
+        $datas = Pembelian::find($id);
+        $pembayaran_hutangs = PembayaranHutang::where("pembelian_id", $id)->get();
 
         $data = [
             "datas" => $datas,
-            "pembayaran_piutangs" => $pembayaran_piutangs,
+            "pembayaran_hutangs" => $pembayaran_hutangs,
         ];
 
-        return response()->view("pembayaran_piutang.edit", $data);
+        return response()->view("pembayaran_hutang.edit", $data);
     }
 
     /**
@@ -72,16 +72,16 @@ class PembayaranPiutangController extends Controller
     {
         DB::beginTransaction();
         try{
-            PembayaranPiutang::create([
+            PembayaranHutang::create([
                 "uang_bayar" => $request->uang_bayar,
-                "penjualan_id" => $id,
+                "pembelian_id" => $id,
             ]);
 
             DB::commit();
-            return redirect()->route('pembayaran_piutang.index')->with('success','Pembayaran Piutang berhasil ditambah');
+            return redirect()->route('pembayaran_hutang.index')->with('success','Pembayaran Hutang berhasil ditambah');
         } catch (\Throwable $th){
             DB::rollback();
-            return redirect()->route('pembayaran_piutang.index')->with('error','Pembayaran Piutang gagal ditambah');
+            return redirect()->route('pembayaran_hutang.index')->with('error','Pembayaran Hutang gagal ditambah');
         }
     }
 

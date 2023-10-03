@@ -15,12 +15,18 @@ class Pembelian extends Model
         "supplier_id",
         "tanggal_pembelian",
         "nomor_nota",
+        "uang_bayar",
+        "metode_bayar",
         "pengguna_id",
     ];
 
 
     public function detail_pembelian(){
         return $this->hasMany(DetailPembelian::class);
+    }
+
+    public function supplier(){
+        return $this->belongsTo(Supplier::class);
     }
 
     public function getTotalAttribute()
@@ -32,6 +38,18 @@ class Pembelian extends Model
         return $total;
     }
 
+    public function pembayaran_hutang(){
+        return $this->hasMany(PembayaranHutang::class);
+    }
+
+    public function getTotalPembayaranHutangAttribute()
+    {
+        $total = 0;
+        foreach ($this->pembayaran_hutang as $pembayaran_hutang) {
+            $total += $pembayaran_hutang->uang_bayar;
+        }
+        return $total;
+    }
 
     public function getJumlahBarangAttribute()
     {
@@ -40,5 +58,14 @@ class Pembelian extends Model
             $total += $detail->qty;
         }
         return $total;
+    }
+
+    public function getStatusLunasAttribute()
+    {
+        if($this->total_pembayaran_hutang < $this->total){
+            return false;
+        }else if($this->total_pembayaran_hutang >= $this->total){
+            return true;
+        }
     }
 }
