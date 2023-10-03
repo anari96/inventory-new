@@ -7,6 +7,39 @@
         new AutoNumeric('#harga_item', { currencySymbol : 'Rp ',decimalPlaces: 0, digitGroupSeparator: '.', decimalCharacter: ',' })
         new AutoNumeric('#biaya_item', { currencySymbol : 'Rp ',decimalPlaces: 0, digitGroupSeparator: '.', decimalCharacter: ',' });
 
+        let jenis_item_id = document.getElementById("jenis_item_id");
+        let kategori_item_id = document.getElementById("kategori_item_id");
+
+        kategori_item_id.addEventListener("change", function () {
+            console.log(this.value);
+            fetch("{{ route('get-jenis-kategori') }}/?kategori_item_id=" + this.value, {
+                method: "GET",
+            }).then(
+               (response) => {
+                   return response.json();
+                }
+            ).then((data) => {
+                    // console.log(data);
+
+                    while(jenis_item_id.firstChild){
+                        jenis_item_id.removeChild(jenis_item_id.firstChild);
+                    }
+
+                    let items = data;
+                    items.data.forEach(item => {
+                        console.log(item);
+                        let jenisOptionText = document.createTextNode(item.nama_jenis);
+                        let jenisOption = document.createElement("option");
+                        jenisOption.setAttribute('value', item.id);
+                        jenisOption.appendChild(jenisOptionText);
+                        jenis_item_id.appendChild(jenisOption);
+                        $('#jenis_item_id').selectpicker("destroy");
+                        $('#jenis_item_id').selectpicker();
+                    })
+                }
+            );
+        });
+
         $(document).ready(function(){
             var input = $("#lacak_stok_input");
             $('#lacak_stok').on('change', function(){
@@ -131,11 +164,25 @@
                         <div class="form-group form-float ">
                             <div class="form-line focused">
                                 <label for="" class="form-label" style="top: -18px">Kategori</label>
-                                <select class="form-control" name="kategori_item_id">
+                                <select class="form-control" name="kategori_item_id" id="kategori_item_id">
                                     <option value="">Tidak Ada</option>
                                     @foreach ($kategoris as $kategori)
                                         <option value="{{ $kategori->id }}" @if(old('kategori_item_id',@$data->kategori_item_id) == $kategori->id) selected @endif>{{ $kategori->nama_kategori }}</option>
                                     @endforeach
+                                </select>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group form-float ">
+                            <div class="form-line focused">
+                                <label for="" class="form-label" style="top: -18px">Jenis Item</label>
+                                <select class="form-control" name="jenis_item_id" id="jenis_item_id">
+                                    <option value="">Pilih Kategori Terlebih dahulu</option>
                                 </select>
                             </div>
 
@@ -166,19 +213,6 @@
 
                     </div>
                 </div>
-
-<!--                <div class="row">
-                    <div class="col-md-12">
-                        <p>Dijual Per</p>
-                        <div class="demo-radio-button">
-                            <input name="tipe_jual" type="radio" id="radio_30" value="satuan" class="with-gap" @if(old('tipe_jual',@$data->tipe_jual)=='satuan'||old('tipe_jual',@$data->tipe_jual)=='') checked="true" @endif>
-                            <label for="radio_30">Satuan</label>
-                            <input name="tipe_jual" type="radio" id="radio_31" value="berat" class="with-gap" @if(old('tipe_jual',@$data->tipe_jual)=='berat') checked="true" @endif>
-                            <label for="radio_31">Berat</label>
-
-                        </div>
-                    </div>
-                </div> -->
 
                 <div class="row">
                     <div class="col-md-6">

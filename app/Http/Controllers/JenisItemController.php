@@ -137,4 +137,13 @@ class JenisItemController extends Controller
             return redirect()->route('jenis_item.index')->with('error',$th->getMessage());
         }
     }
+
+    public function getJenisByKategoriId(Request $request)
+    {
+        $jenis_item = JenisItem::where("kategori_item_id", $request->kategori_item_id);
+
+        return response()->json([
+            "data"=>$jenis_item->get(),
+        ]);
+    }
 }
