@@ -81,7 +81,8 @@ class ServiceController extends Controller
             $pelanggan = Pelanggan::create([
                 'nama_pelanggan' => $request->nama,
                 'telp_pelanggan' => $request->kontak,
-                'alamat_pelanggan' => $request->alamat
+                'alamat_pelanggan' => $request->alamat,
+                'pengguna_id' => auth()->user()->id
             ]);
             $pelanggan->save();
         }
@@ -93,18 +94,19 @@ class ServiceController extends Controller
             $pelanggan_id = $pelanggan->id;
         }
 
+
         $service = Service::create([
             'pelanggan_id' => $pelanggan_id,
-            'pengguna_id' => $request->pengguna_id,
+            'pengguna_id' => auth()->user()->id,
             'teknisi_id' => $request->teknisi_id,
             'no_service' => $request->no_service,
             'merk' => $request->merk,
             'tipe' => $request->tipe,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
-            'kerusakan' => $request->kerusakan,
+            'kerusakan' => implode(",",$request->kerusakan),
             'deskripsi' => $request->deskripsi,
-            'kelengkapan' => $request->kelengkapan,
+            'kelengkapan' => implode(",",$request->kelengkapan),
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
@@ -157,16 +159,28 @@ class ServiceController extends Controller
      */
     public function edit(string $id): Response
     {
+        $list_kerusakan = [
+            ["mati_total","Mati Total"],["nand_emmc","NAND/EMMC"],["not_charging","Not Charging"],["no_signal","No Signal"],["battery","Battery"],["lcd_ts"," LCD/TS"],["mic_audio","Mic Audio"],["software_bypass","Software/Bypass"],["dll","Dll"]
+        ];
+        $list_kelengkapan = [
+            ["simcard","Simcard"],["memory_card","Memory Card"],["back_casing","Back Casing"]
+        ];
         $datas = Service::find($id);
         $detail = DetailService::where("service_id", $id)->get();
         $teknisi = Teknisi::all();
         $pelanggan = Pelanggan::all();
+        $kelengkapan = explode(",",$datas->kelengkapan);
+        $kerusakan = explode(",",$datas->kerusakan);
 
         $data = [
             "datas" => $datas,
             "detail" => $detail,
             "teknisi" => $teknisi,
-            "pelanggan" => $pelanggan
+            "pelanggan" => $pelanggan,
+            "list_kelengkapan" => $list_kelengkapan,
+            "list_kerusakan" => $list_kerusakan,
+            "kelengkapan" => $kelengkapan,
+            "kerusakan" => $kerusakan
         ];
 
         // dd($detail);
@@ -203,7 +217,8 @@ class ServiceController extends Controller
             $pelanggan = Pelanggan::create([
                 'nama_pelanggan' => $request->nama,
                 'telp_pelanggan' => $request->kontak,
-                'alamat_pelanggan' => $request->alamat
+                'alamat_pelanggan' => $request->alamat,
+                'pengguna_id' => auth()->user()->id,
             ]);
             $pelanggan->save();
         }
@@ -222,9 +237,9 @@ class ServiceController extends Controller
             'teknisi_id' => $request->teknisi_id,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
-            'kerusakan' => $request->kerusakan,
+            'kerusakan' => implode(",",$request->kerusakan),
             'deskripsi' => $request->deskripsi,
-            'kelengkapan' => $request->kelengkapan,
+            'kelengkapan' => implode(",",$request->kelengkapan),
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),

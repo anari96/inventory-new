@@ -50,7 +50,7 @@
                         <b>Nama Role</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="nama_role" value="@if(isset($data)){{ $data->nama_role }}@endif">
+                                <input type="text" class="form-control" name="nama_role" value="@if(isset($datas)){{ $datas->nama_role }}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2">
-                        <p>Detail Role</p>
+                        <p style="font-weight:bold;">Detail Role</p>
                     </div>
                     <div class="col-md-1">
                     </div>
@@ -74,7 +74,7 @@
                 @foreach($menu_lists as $menu_list)
                     <div class="row">
                         <div class="col-md-2">
-                            <p style="font-weight:bold;">{{ str_replace("_"," ",$menu_list->nama_menu) }}</p>
+                            <p>{{ str_replace("_"," ",$menu_list->nama_menu) }}</p>
                         </div>
                         @php
                             $menu_action = $menu_model->where("nama_menu", $menu_list->nama_menu)->get();
@@ -82,8 +82,13 @@
 
                         @foreach($menu_action as $menu_aksi)
                             <div class="col-md-1">
+                            @if(isset($datas))
+                                <input type="checkbox" id="{{ $menu_aksi->nama_menu }}_{{$menu_aksi->aksi_menu}}" name="menu_id[]" value="{{ $menu_aksi->id }}" @if( \Helper::hakAksesUser($id,$menu_aksi->nama_menu,$menu_aksi->aksi_menu)) checked @endif ) class="filled-in"/>
+                                <label for="{{ $menu_aksi->nama_menu }}_{{$menu_aksi->aksi_menu}}">{{ $menu_aksi->aksi_menu }}</label>
+                            @else
                                 <input type="checkbox" id="{{ $menu_aksi->nama_menu }}_{{$menu_aksi->aksi_menu}}" name="menu_id[]" value="{{ $menu_aksi->id }}" class="filled-in"/>
                                 <label for="{{ $menu_aksi->nama_menu }}_{{$menu_aksi->aksi_menu}}">{{ $menu_aksi->aksi_menu }}</label>
+                            @endif
                             </div>
                         @endforeach
                     </div>

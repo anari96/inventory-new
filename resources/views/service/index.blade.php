@@ -50,9 +50,7 @@
                                         <th>Tipe</th>
                                         <th>IMEI 1</th>
                                         <th>IMEI 2</th>
-                                        <th>Kerusakan</th>
                                         <th>Deskripsi</th>
-                                        <th>Kelengkapan</th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -67,9 +65,7 @@
                                             <td>{{ $data->tipe }}</td>
                                             <td>{{ $data->imei1 }}</td>
                                             <td>{{ $data->imei2 }}</td>
-                                            <td>{{ $data->kerusakan }}</td>
                                             <td>{{ $data->deskripsi }}</td>
-                                            <td>{{ $data->kelengkapan }}</td>
                                             <td>
                                                 <a href="{{ route('service.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('service.destroy', $data->id) }}" method="POST" style="display:inline">

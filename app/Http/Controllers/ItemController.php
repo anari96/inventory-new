@@ -202,8 +202,10 @@ class ItemController extends Controller
             $datas = $datas->where('id',request()->search);
         }
 
+        $data = $datas->paginate(10);
+
         return response()->json([
-            'data'=>$datas->get()
+            'data'=>$data,
         ]);
     }
     public function getItemSparepart(Request $request)

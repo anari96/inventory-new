@@ -29,7 +29,7 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-
+            @if( \Helper::hakAkses("master_data", "View") )
             <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">shopping_basket</i>
@@ -59,6 +59,7 @@
                     </li>
                 </ul>
             </li>
+            @endif
             <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">shopping_basket</i>
