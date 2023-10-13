@@ -182,6 +182,9 @@
                             <div class="form-line focused">
                                 <label for="" class="form-label" style="top: -18px">Jenis Item</label>
                                 <select class="form-control" name="jenis_item_id" id="jenis_item_id">
+                                    @if(isset($data))
+                                        <option value="{{ $data->jenis_item_id }}" selected>{{$data->jenis_item->nama_jenis}}</option>
+                                    @endif
                                     <option value="">Pilih Kategori Terlebih dahulu</option>
                                 </select>
                             </div>

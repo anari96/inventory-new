@@ -32,6 +32,11 @@ class Item extends Model
         ]);
     }
 
+    public function jenis_item()
+    {
+        return $this->belongsTo(JenisItem::class);
+    }
+
     public function getMarginHargaAttribute()
     {
         //margin harga dalam persen
