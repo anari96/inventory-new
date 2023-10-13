@@ -23,7 +23,7 @@
     <div class="menu">
         <ul class="list">
             <li class="header" style="background: #361c35; color:white">MAIN NAVIGATION</li>
-            <li class="active">
+            <li class="{{ (request()->is('dashboard*')) ? 'active' : '' }}">
                 <a href="{{ route('service.dashboard') }}">
                     <i class="material-icons">home</i>
                     <span>Dashboard</span>
@@ -31,8 +31,8 @@
             </li>
             @if( \Helper::hakAkses("master_data", "View") )
             <li>
-                <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
+                <a href="javascript:void(0);" class="menu-toggle {{ (request()->is('pelanggan*', 'item*', 'urusan*', 'kategori-item*', 'jenis_item*', 'teknisi*','sale*','supplier*' ) ) ? 'toggled' : '' }} ">
+                    <i class="material-icons">inventory_2</i>
                     <span>Master Data</span>
                 </a>
                 <ul class="ml-menu">
@@ -61,7 +61,7 @@
             </li>
             @endif
             <li>
-                <a href="javascript:void(0);" class="menu-toggle">
+                <a href="javascript:void(0);" class="menu-toggle {{ (request()->is('penjualan*', 'pembelian*', 'retur_penjualan*', 'retur_pembelian*', 'pembayaran_piutang*', 'pembayaran_hutang*','transaksi_gudang*','pembayaran_service*' ) ) ? 'toggled' : '' }}">
                     <i class="material-icons">shopping_basket</i>
                     <span>Transaksi</span>
                 </a>
@@ -89,9 +89,15 @@
                     </li>
                 </ul>
             </li>
+            <li class="{{ (request()->is('service*')) ? 'active' : '' }}">
+                <a href="{{ route('service.index') }}">
+                    <i class="material-icons">receipt_long</i>
+                    <span>Service</span>
+                </a>
+            </li>
             <li>
                 <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
+                    <i class="material-icons">receipt_long</i>
                     <span>Service</span>
                 </a>
                 <ul class="ml-menu">
@@ -113,8 +119,8 @@
                 </ul>
             </li>
             <li>
-                <a href="javascript:void(0);" class="menu-toggle">
-                    <i class="material-icons">shopping_basket</i>
+                <a href="javascript:void(0);" class="menu-toggle {{ (request()->is('pengguna*','role*','profil*')) ? 'toggled' : '' }}">
+                    <i class="material-icons">settings</i>
                     <span>Pengaturan</span>
                 </a>
                 <ul class="ml-menu">
