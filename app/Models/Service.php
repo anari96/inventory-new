@@ -84,6 +84,16 @@ class Service extends Model
         return $total;
     }
 
+    public function scopeCari($query,$name){
+        return $query->whereHas("pelanggan", function($q) use($name){
+            $q->where("nama_pelanggan", "like", "%".$name."%");
+        });
+    }
+
+    public function scopeTanggal($query,$begin,$end){
+        return $query->whereBetween("created_at", [$begin->format('Y-m-d'), $end->format('Y-m-d')]);
+    }
+
     public static function boot()
     {
         parent::boot();

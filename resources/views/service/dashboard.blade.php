@@ -104,7 +104,7 @@ function getChartJs(type) {
                             </div>
                         </div>
 
-                        <div class="row clearfix">
+<!--                        <div class="row clearfix">
                             <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                                 <div class="info-box bg-pink hover-expand-effect" style="height: auto">
                                     <div class="icon">
@@ -149,13 +149,13 @@ function getChartJs(type) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
             <!-- #END# Task Info -->
         </div>
-        <div class="row-clearfix">
+<!--        <div class="row-clearfix">
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
@@ -193,9 +193,9 @@ function getChartJs(type) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="row-clearfix">
+<!--        <div class="row-clearfix">
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
@@ -210,10 +210,10 @@ function getChartJs(type) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
 
-        <div class="row-clearfix">
+<!--        <div class="row-clearfix">
             <div class="col-md-12">
                 <div class="card">
                     <div class="header">
@@ -250,9 +250,9 @@ function getChartJs(type) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
-        <div class="row clearfix">
+<!--        <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
@@ -294,7 +294,7 @@ function getChartJs(type) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
     </div>
 @endsection

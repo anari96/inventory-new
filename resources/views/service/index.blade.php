@@ -1,6 +1,9 @@
 @extends('layouts.app')
-
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endpush
 @push('scripts')
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         $(function() {
@@ -37,20 +40,67 @@
                         <a href="{{ route('service.create') }}" class="btn btn-primary">Tambah Service</a>
                     </div>
                     <div class="body">
-                        @include('layouts.includes.filter')
+
+                        <form action="" id="filter-form">
+                            <div class="row">
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">date_range</i>
+                                        </span>
+                                        <div class="form-line">
+
+                                            <input type="text" class="form-control" name="periode" id="daterange"
+                                                value="@if(isset($periode)){{ $periode[0] }} - {{ $periode[1] }} @endif">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">assignment</i>
+                                        </span>
+                                        <div class="form-line">
+                                            <select class="form-control" name="status">
+                                                <option value="">Pilih Status</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="dikerjakan">Dikerjakan</option>
+                                                <option value="selesai">Selesai</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">person</i>
+                                        </span>
+                                        <div class="form-line">
+                                            <input class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <button class="btn btn-primary">Filter</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
                         <div class="table-responsive">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
                                     <tr>
-                                        <th>Tanggal</th>
-                                        <th>Nama Pelanggan</th>
-                                        <th>Nama Teknisi</th>
-                                        <th>No. Hp</th>
-                                        <th>Merek</th>
-                                        <th>Tipe</th>
-                                        <th>IMEI 1</th>
-                                        <th>IMEI 2</th>
-                                        <th>Deskripsi</th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'tanggal','sorting_order' => $sorting_order])}}">Tanggal</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'nama_pelanggan','sorting_order' => $sorting_order])}}">Nama Pelanggan/No. Telepon</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'status','sorting_order' =>$sorting_order])}}">Status</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'merk','sorting_order' =>$sorting_order])}}">Merek</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'tipe','sorting_order' =>$sorting_order])}}">Tipe</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'imei1','sorting_order' => $sorting_order])}}">IMEI 1</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'imei2','sorting_order' => $sorting_order])}}">IMEI 2</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'deskripsi','sorting_order' => $sorting_order])}}">Deskripsi</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'nama_teknisi','sorting_order' =>$sorting_order])}}">Nama Teknisi</a></th>
                                         <th>#</th>
                                     </tr>
                                 </thead>
@@ -58,14 +108,14 @@
                                     @foreach($datas as $data)
                                         <tr>
                                             <td>{{ $data->tanggal }}</td>
-                                            <td>{{ $data->pelanggan->nama_pelanggan }}</td>
-                                            <td>{{ $data->teknisi->nama_teknisi }}</td>
-                                            <td>{{ $data->pelanggan->telp_pelanggan }}</td>
+                                            <td>{{ $data->pelanggan->nama_pelanggan }} ({{ $data->pelanggan->telp_pelanggan }})</td>
+                                            <td>{{ $data->status }}</td>
                                             <td>{{ $data->merk }}</td>
                                             <td>{{ $data->tipe }}</td>
                                             <td>{{ $data->imei1 }}</td>
                                             <td>{{ $data->imei2 }}</td>
                                             <td>{{ $data->deskripsi }}</td>
+                                            <td>{{ $data->teknisi->nama_teknisi }}</td>
                                             <td>
                                                 <a href="{{ route('service.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('service.destroy', $data->id) }}" method="POST" style="display:inline">
@@ -79,29 +129,7 @@
                                     @endforeach
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td colspan="5">
-                                            @if($datas->currentPage() != 1)
-                                                <a href="{{ $datas->previousPageUrl() }}" @if($datas->currentPage() == 1) style="display:none;" @endif > Previous </a>
-                                                <a href="{{ $datas->url(1) }}">1</a>
-                                            @endif
-                                            @for($i = max($datas->currentPage() - 5,2); $i < $datas->currentPage(); $i++ )
-                                                <a href="{{ $datas->url($i) }}">{{ $i }}</a>
-                                            @endfor
-                                            <a href="{{ $datas->url($datas->currentPage()) }}" style="font-weight: bold"> {{$datas->currentPage()}} </a>
-                                            @if($datas->currentPage() != $datas->lastPage() && $datas->currentPage() !=  $datas->lastPage() - 1)
-                                                @for($i = $datas->currentPage() + 1; $i < $datas->currentPage() + 5; $i++ )
-                                                    @if($i < $datas->lastPage() )
-                                                        <a href="{{ $datas->url($i) }}">{{ $i }}</a>
-                                                    @endif
-                                                @endfor
-                                            @endif
-                                            @if($datas->currentPage() != $datas->lastPage())
-                                                <a href="{{$datas->url($datas->lastPage())}}">{{$datas->lastPage()}}</a>
-                                                <a href="{{ $datas->nextPageUrl() }}"  > Next </a>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                    @include("layouts.includes.pagination")
                                 </tfoot>
                             </table>
                         </div>

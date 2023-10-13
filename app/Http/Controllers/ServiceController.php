@@ -23,37 +23,87 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request): Response
-    {
 
-
-        // this will default to a time of 00:00:00
-        $begin = new DateTime('-1 month');
-        $end = new DateTime();
-        $periode = [
-            $begin->format('d/m/Y'),
-            $end->format('d/m/Y'),
+    public $list_kerusakan = [
+            ["mati_total","Mati Total"],["nand_emmc","NAND/EMMC"],["not_charging","Not Charging"],["no_signal","No Signal"],["battery","Battery"],["lcd_ts"," LCD/TS"],["mic_audio","Mic Audio"],["software_bypass","Software/Bypass"],["dll","Dll"]
+        ];
+    public $list_kelengkapan = [
+            ["simcard","Simcard"],["memory_card","Memory Card"],["back_casing","Back Casing"]
         ];
 
-        if(request()->periode){
-            $periode = explode(" - ",request()->periode);
-            $begin = DateTime::createFromFormat('d/m/Y', $periode[0]);
-            $end = DateTime::createFromFormat('d/m/Y', $periode[1]);
+    public function index(Request $request)
+    {
+        // try{
+            // dd( url()->current());
+            // dd( '?'.http_build_query($request->query()));
+            // this will default to a time of 00:00:00
+            $begin = new DateTime('-1 month');
+            $end = new DateTime();
+            $periode = [
+                $begin->format('d/m/Y'),
+                $end->format('d/m/Y'),
+            ];
 
-        }
-        $end->modify('+1 day');
+            if(request()->periode){
+                $periode = explode(" - ",request()->periode);
+                $begin = DateTime::createFromFormat('d/m/Y', $periode[0]);
+                $end = DateTime::createFromFormat('d/m/Y', $periode[1]);
 
-        $interval = new DateInterval('P1D');
-        $daterange = new DatePeriod($begin, $interval, $end);
-        $periodeTanggals = [];
-        foreach($daterange as $date) {
+            }
+            $end->modify('+1 day');
 
-            $periodeTanggals[] = strftime("%d-%b", strtotime($date->format("Y-m-d")));
-        }
+            $interval = new DateInterval('P1D');
+            $daterange = new DatePeriod($begin, $interval, $end);
+            $periodeTanggals = [];
+            foreach($daterange as $date) {
 
-        $datas = Service::whereBetween("created_at", [$begin->format('Y-m-d'), $end->format('Y-m-d')])->paginate(10);
+                $periodeTanggals[] = strftime("%d-%b", strtotime($date->format("Y-m-d")));
+            }
 
-        return response()->view("service.index", compact("datas","periodeTanggals","periode"));
+            $datas = new Service;
+
+            if(!isset($request->sorting_order)){
+                $sorting_order = "asc";
+            }
+            if(isset($request->sorting_order)){
+                if($request->sorting_order == "desc"){
+                    $sorting_order = "asc";
+                }else if($request->sorting_order == "asc"){
+                    $sorting_order = "desc";
+                }
+            }
+
+
+            if(isset($begin) && isset($end)){
+                $datas = $datas->tanggal($begin,$end);
+            }
+
+            if(isset($request->status)){
+                $datas = $datas->where("status",$request->status);
+            }
+
+            if(isset($request->nama_pelanggan)){
+                $datas = $datas->cari($request->nama_pelanggan);
+            }
+
+            if(isset($request->order)){
+                $order = $request->order;
+                if($request->order == "nama_pelanggan"){
+                    $datas = $datas->orderBy(Pelanggan::select("nama_pelanggan")
+                        ->whereColumn('pelanggans.id','services.pelanggan_id')
+                    , $sorting_order);
+                }else{
+                    $datas = $datas->orderBy($request->order, $sorting_order);
+                }
+            }
+
+            $datas = $datas->paginate(10);
+
+            return response()->view("service.index", compact("request","datas","periodeTanggals","periode","sorting_order"));
+        // }catch(\Throwable $th){
+        //
+        //     return redirect()->route('service.index');
+        // }
     }
 
     /**
@@ -61,12 +111,17 @@ class ServiceController extends Controller
      */
     public function create(): Response
     {
+        $list_kerusakan = $this->list_kerusakan;
+        $list_kelengkapan = $this->list_kelengkapan;
+
         $teknisi = Teknisi::all();
         $pelanggan = Pelanggan::all();
 
         $data = [
             "teknisi" => $teknisi,
             "pelanggan" => $pelanggan,
+            "list_kelengkapan" => $list_kelengkapan,
+            "list_kerusakan" => $list_kerusakan,
         ];
 
         return response()->view("service.create", $data);
@@ -94,6 +149,8 @@ class ServiceController extends Controller
             $pelanggan_id = $pelanggan->id;
         }
 
+        $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : $request->kerusakan;
+        $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : $request->kelengkapan;
 
         $service = Service::create([
             'pelanggan_id' => $pelanggan_id,
@@ -104,9 +161,9 @@ class ServiceController extends Controller
             'tipe' => $request->tipe,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
-            'kerusakan' => implode(",",$request->kerusakan),
+            'kerusakan' => $kerusakan,
             'deskripsi' => $request->deskripsi,
-            'kelengkapan' => implode(",",$request->kelengkapan),
+            'kelengkapan' => $kerusakan,
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
@@ -159,12 +216,8 @@ class ServiceController extends Controller
      */
     public function edit(string $id): Response
     {
-        $list_kerusakan = [
-            ["mati_total","Mati Total"],["nand_emmc","NAND/EMMC"],["not_charging","Not Charging"],["no_signal","No Signal"],["battery","Battery"],["lcd_ts"," LCD/TS"],["mic_audio","Mic Audio"],["software_bypass","Software/Bypass"],["dll","Dll"]
-        ];
-        $list_kelengkapan = [
-            ["simcard","Simcard"],["memory_card","Memory Card"],["back_casing","Back Casing"]
-        ];
+        $list_kerusakan = $this->list_kerusakan;
+        $list_kelengkapan = $this->list_kelengkapan;
         $datas = Service::find($id);
         $detail = DetailService::where("service_id", $id)->get();
         $teknisi = Teknisi::all();

@@ -436,14 +436,9 @@
 <!--                                     <input type="text" name="kerusakan" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->kerusakan }}" @endif placeholder="Kerusakan" required> -->
                                 @foreach($list_kerusakan as $key => $list)
 
-                                    <input type="checkbox" id="md_checkbox_{{ $key }}" class="filled-in chk-col-red" name="kerusakan[]" value="{{$list[0]}}" @if(in_array($list[0], $kerusakan)) checked @endif />
+                                    <input type="checkbox" id="md_checkbox_{{ $key }}" class="filled-in chk-col-red" name="kerusakan[]" value="{{$list[0]}}" @if(isset($datas)) @if(in_array($list[0], $kerusakan)) checked @endif @endif />
                                     <label for="md_checkbox_{{$key}}">{{$list[1]}}</label>
                                 @endforeach
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->deskripsi }}" @endif placeholder="Deskripsi" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -451,9 +446,14 @@
                                     <h2 class="card-inside-title">Kelengkapan</h2>
 <!--                                    <input type="text" name="kelengkapan" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->kelengkapan }}" @endif placeholder="Kelengkapan" required> -->
                                 @foreach($list_kelengkapan as $key => $list)
-                                    <input type="checkbox" id="md_checkbox_kelengkapan_{{ $key }}" class="filled-in chk-col-red" name="kerusakan[]" value="{{$list[0]}}" @if(in_array($list[0], $kelengkapan)) checked @endif/>
+                                    <input type="checkbox" id="md_checkbox_kelengkapan_{{ $key }}" class="filled-in chk-col-red" name="kerusakan[]" value="{{$list[0]}}" @if(isset($datas)) @if(in_array($list[0], $kelengkapan)) checked @endif @endif/>
                                     <label for="md_checkbox_kelengkapan_{{$key}}">{{$list[1]}}</label>
                                 @endforeach
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->deskripsi }}" @endif placeholder="Deskripsi" required>
                                 </div>
                             </div>
                             <div class="form-group">
