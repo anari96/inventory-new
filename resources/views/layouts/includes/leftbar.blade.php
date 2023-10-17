@@ -95,7 +95,7 @@
                     <span>Service</span>
                 </a>
             </li>
-            <li>
+<!--            <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">receipt_long</i>
                     <span>Service</span>
@@ -117,7 +117,7 @@
                         <a href="{{ route('service.garansi') }}">Garansi</a>
                     </li>
                 </ul>
-            </li>
+            </li>-->
             <li>
                 <a href="javascript:void(0);" class="menu-toggle {{ (request()->is('pengguna*','role*','profil*')) ? 'toggled' : '' }}">
                     <i class="material-icons">settings</i>

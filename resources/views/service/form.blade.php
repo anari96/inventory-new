@@ -446,7 +446,7 @@
                                     <h2 class="card-inside-title">Kelengkapan</h2>
 <!--                                    <input type="text" name="kelengkapan" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->kelengkapan }}" @endif placeholder="Kelengkapan" required> -->
                                 @foreach($list_kelengkapan as $key => $list)
-                                    <input type="checkbox" id="md_checkbox_kelengkapan_{{ $key }}" class="filled-in chk-col-red" name="kerusakan[]" value="{{$list[0]}}" @if(isset($datas)) @if(in_array($list[0], $kelengkapan)) checked @endif @endif/>
+                                    <input type="checkbox" id="md_checkbox_kelengkapan_{{ $key }}" class="filled-in chk-col-red" name="kelengkapan[]" value="{{$list[0]}}" @if(isset($datas)) @if(in_array($list[0], $kelengkapan)) checked @endif @endif/>
                                     <label for="md_checkbox_kelengkapan_{{$key}}">{{$list[1]}}</label>
                                 @endforeach
                                 </div>
@@ -458,7 +458,12 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="biaya" class="form-control money-rupiah" id="biaya" class="form-control" @if(isset($datas)) value="{{ $datas->biaya }}" @endif placeholder="Total Biaya" required>
+                                    <input type="text" name="biaya" class="form-control money-rupiah" id="biaya" class="form-control" @if(isset($datas)) value="{{ $datas->biaya }}" @endif placeholder="Biaya Service" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" name="uang_bayar" class="form-control money-rupiah" id="uang_bayar" class="form-control" @if(isset($datas)) value="{{ $datas->uang_bayar }}" @endif placeholder="Uang Muka (DP)" required>
                                 </div>
                             </div>
                             <div class="form-group">

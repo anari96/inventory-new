@@ -126,26 +126,38 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <h4 class="card-inside-title">Untuk Klaim Garansi</h4>
-                                    <input name="garansi" type="radio" id="radio_1" value='1' checked>
+                                    <input name="garansi" type="radio" id="radio_1" value='1'>
                                     <label for="radio_1">Ya</label>
-                                    <input name="garansi" type="radio" id="radio_2" value='0'>
+                                    <input name="garansi" type="radio" id="radio_2" value='0' checked>
                                     <label for="radio_2">Tidak</label>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="kerusakan" class="form-control" class="form-control" placeholder="Kerusakan" required>
+                                    <h4 class="card-inside-title">Kerusakan</h4>
+                                    @foreach($list_kerusakan as $key => $list)
+
+                                        <input type="checkbox" id="md_checkbox_{{ $key }}" class="filled-in chk-col-red" name="kerusakan[]" value="{{$list[0]}}" @if(isset($datas)) @if(in_array($list[0], $kerusakan)) checked @endif @endif />
+                                        <label for="md_checkbox_{{$key}}">{{$list[1]}}</label>
+                                    @endforeach
+<!--                                     <input type="text" name="kerusakan" class="form-control" class="form-control" placeholder="Kerusakan" required> -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <h4 class="card-inside-title">Kelengkapan</h4>
+
+                                    @foreach($list_kelengkapan as $key => $list)
+                                        <input type="checkbox" id="md_checkbox_kelengkapan_{{ $key }}" class="filled-in chk-col-red" name="kelengkapan[]" value="{{$list[0]}}" @if(isset($datas)) @if(in_array($list[0], $kelengkapan)) checked @endif @endif/>
+                                        <label for="md_checkbox_kelengkapan_{{$key}}">{{$list[1]}}</label>
+                                    @endforeach
+<!--                                     <input type="text" name="kelengkapan" class="form-control" class="form-control"  placeholder="Kelengkapan" required> -->
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" name="deskripsi" class="form-control" class="form-control" placeholder="Deskripsi" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="kelengkapan" class="form-control" class="form-control"  placeholder="Kelengkapan" required>
                                 </div>
                             </div>
                             <div class="form-group">

@@ -37,8 +37,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/guest', [ServiceController::class,'guest'])->name('service.guest');
+Route::get('/servis_online', [ServiceController::class,'guest'])->name('service.guest');
 Route::post('/guest/store', [ServiceController::class,'guest_store'])->name('service.guest.store');
+Route::get('/guest/done', [ServiceController::class,'guest_done'])->name('service.guest_done');
 Route::get('/login', [LoginController::class,'loginView'])->name('login');
 Route::post('/login', [LoginController::class,'loginAuth'])->name('login.auth');
 Route::group(['middleware' => ['auth:penggunas','auth']], function () {
@@ -55,7 +56,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('jenis_item', JenisItemController::class);
     Route::resource('diskon', DiskonController::class);
 
-    Route::post('service/proses/{id}', [ServiceController::class, 'proses'])->name('service.proses');
+    Route::get('service/proses/{id}', [ServiceController::class, 'proses'])->name('service.proses');
     Route::get('/', [ServiceController::class, 'dashboard'])->name('service.dashboard');
     Route::get('service/list', [ServiceController::class, 'list'])->name('service.list');
     Route::get('service/list_terpakai', [ServiceController::class, 'list_terpakai'])->name('service.list_terpakai');

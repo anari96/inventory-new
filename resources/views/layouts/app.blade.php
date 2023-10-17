@@ -142,19 +142,22 @@
     <script src="{{ url('js') }}/davidshimjs/qrcodejs/qrcode.min.js"></script>
 
     <script>
-        const hapusButton = document.querySelector("#hapus-button");
+        const hapusButton = document.querySelectorAll("#hapus-button");
 
         if(hapusButton != null){
-            hapusButton.addEventListener("click", function (e) {
-                e.preventDefault();
-                let confirmation = confirm("Apakah Anda Yakin Untuk Menghapus? (Kemungkinan akan Berpengaruh pada data lain)");
-                let form = this.parentElement;
+            hapusButton.forEach((el)=>{
 
-                if(confirmation == true){
-                    form.submit();
-                }else if (confirmation == false){
+                el.addEventListener("click", function (e) {
                     e.preventDefault();
-                }
+                    let confirmation = confirm("Apakah Anda Yakin Untuk Menghapus? (Kemungkinan akan Berpengaruh pada data lain)");
+                    let form = this.parentElement;
+
+                    if(confirmation == true){
+                        form.submit();
+                    }else if (confirmation == false){
+                        e.preventDefault();
+                    }
+                });
             });
         }
     </script>

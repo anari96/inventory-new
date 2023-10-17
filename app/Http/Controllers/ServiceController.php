@@ -33,7 +33,7 @@ class ServiceController extends Controller
 
     public function index(Request $request)
     {
-        // try{
+        try{
             // dd( url()->current());
             // dd( '?'.http_build_query($request->query()));
             // this will default to a time of 00:00:00
@@ -95,15 +95,18 @@ class ServiceController extends Controller
                 }else{
                     $datas = $datas->orderBy($request->order, $sorting_order);
                 }
+            }else{
+
+                $datas = $datas->orderBy("created_at", "desc");
             }
 
             $datas = $datas->paginate(10);
 
             return response()->view("service.index", compact("request","datas","periodeTanggals","periode","sorting_order"));
-        // }catch(\Throwable $th){
-        //
-        //     return redirect()->route('service.index');
-        // }
+        }catch(\Throwable $th){
+
+            return redirect()->route('service.index');
+        }
     }
 
     /**
@@ -414,13 +417,18 @@ class ServiceController extends Controller
             "status" => $request->status,
         ]);
 
-        return redirect(route("service.list")."?status=".$request->status);
+        return redirect(route("service.index"));
     }
 
     public function guest()
     {
-        $data = [];
-        return response()->view('service.guest', compact('data'));
+        $list_kerusakan = $this->list_kerusakan;
+        $list_kelengkapan = $this->list_kelengkapan;
+        $data = [
+            "list_kerusakan" => $list_kerusakan,
+            "list_kelengkapan" => $list_kelengkapan,
+        ];
+        return response()->view('service.guest', $data);
     }
 
     public function guest_store(Request $request)
@@ -433,12 +441,16 @@ class ServiceController extends Controller
         $pelanggan = Pelanggan::create([
             'nama_pelanggan' => $request->nama,
             'telp_pelanggan' => $request->kontak,
-            'alamat_pelanggan' => $request->alamat
+            'alamat_pelanggan' => $request->alamat,
+            'pengguna_id' => $pengguna->id,
         ]);
 
         $pelanggan_id = $pelanggan->id;
 
         $pelanggan->save();
+
+        $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : $request->kerusakan;
+        $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : $request->kelengkapan;
 
         $service = Service::create([
             'pelanggan_id' => $pelanggan_id,
@@ -449,9 +461,9 @@ class ServiceController extends Controller
             'tipe' => $request->tipe,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
-            'kerusakan' => $request->kerusakan,
+            'kerusakan' => $kerusakan,
             'deskripsi' => $request->deskripsi,
-            'kelengkapan' => $request->kelengkapan,
+            'kelengkapan' => $kelengkapan,
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
             'biaya' => 0,
@@ -461,5 +473,11 @@ class ServiceController extends Controller
         ]);
 
         $service->save();
+        return redirect(route("service.guest_done"));
+    }
+
+    public function guest_done()
+    {
+        return response()->view('service.guest_done');
     }
 }

@@ -88,7 +88,7 @@
                             </div>
                         </form>
 
-                        <div class="table-responsive">
+                        <div class="table">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
                                     <tr>
@@ -109,7 +109,7 @@
                                         <tr>
                                             <td>{{ $data->tanggal }}</td>
                                             <td>{{ $data->pelanggan->nama_pelanggan }} ({{ $data->pelanggan->telp_pelanggan }})</td>
-                                            <td>{{ $data->status }}</td>
+                                            <td>{{ $data->status }} - ( {{$data->status_lunas}} )</td>
                                             <td>{{ $data->merk }}</td>
                                             <td>{{ $data->tipe }}</td>
                                             <td>{{ $data->imei1 }}</td>
@@ -117,6 +117,27 @@
                                             <td>{{ $data->deskripsi }}</td>
                                             <td>{{ $data->teknisi->nama_teknisi }}</td>
                                             <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Action <span class="caret"></span>
+                                                    </button>
+                                                    <ul class="dropdown-menu">
+                                                        @if($data->status != "pending")
+                                                            <li><a href="{{ route('service.proses', $data->id) }}?status=pending">Pending</a></li>
+                                                        @endif
+
+                                                        @if($data->status != "dikerjakan")
+                                                            <li><a href="{{ route('service.proses', $data->id) }}?status=dikerjakan">Dikerjakan</a></li>
+                                                        @endif
+                                                        @if($data->status != "selesai")
+                                                            <li><a href="{{ route('service.proses', $data->id) }}?status=selesai">Selesai</a></li>
+                                                        @endif
+                                                            <li role="separator" class="divider"></li>
+                                                            <li><a href="{{ route('pembayaran_service.edit', $data->id) }}">Bayar</a></li>
+                                                            <li><a href="{{ route('pesan.edit', $data->id) }}">Kirim Pesan</a></li>
+<!--                                                             <li><a href="javascript:void(0);">Batal</a></li> -->
+                                                    </ul>
+                                                </div>
                                                 <a href="{{ route('service.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
                                                 <form action="{{ route('service.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
