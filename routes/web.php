@@ -23,6 +23,8 @@ use App\Http\Controllers\ReturPembelianController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\PembayaranPiutangController;
 use App\Http\Controllers\PembayaranHutangController;
+use App\Http\Controllers\PembayaranServiceController;
+use App\Http\Controllers\PesanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,6 +81,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('pembayaran_piutang', PembayaranPiutangController::class);
     Route::resource('pembayaran_hutang', PembayaranHutangController::class);
     Route::resource('pembayaran_service', PembayaranServiceController::class);
+    Route::resource('pesan', PesanController::class);
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {
