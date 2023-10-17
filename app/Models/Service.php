@@ -44,6 +44,38 @@ class Service extends Model
         return $this->hasMany(DetailService::class);
     }
 
+    public function pembayaran_service()
+    {
+        return $this->hasMany(PembayaranService::class);
+    }
+
+    public function getGrandTotalAttribute()
+    {
+        return $this->biaya + $this->total_sparepart;
+    }
+
+    public function getTotalPembayaranServiceAttribute()
+    {
+        $total = 0;
+        foreach ($this->pembayaran_service as $pembayaran_service) {
+            $total += $pembayaran_service->uang_bayar;
+        }
+        return $total;
+    }
+
+    public function getStatusLunasAttribute()
+    {
+        if($this->biaya != 0){
+            if($this->total_pembayaran_service < $this->grand_total){
+                return "Belum Lunas";
+            }else if($this->total_pembayaran_service >= $this->grand_total){
+                return "Sudah Lunas";
+            }
+        }else if($this->biaya == 0){
+           return "Belum Ditanggapi";
+        }
+    }
+
     public function getTotalSparepartAttribute()
     {
         $total = 0;
@@ -98,7 +130,7 @@ class Service extends Model
     {
         parent::boot();
         self::deleting(function($service){
-            $service->detail_penjualan()->each(function($detail){
+            $service->detail()->each(function($detail){
                 $detail->delete();
             });
         });

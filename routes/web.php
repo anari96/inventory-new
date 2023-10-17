@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('role', RoleController::class);
     Route::resource('pembayaran_piutang', PembayaranPiutangController::class);
     Route::resource('pembayaran_hutang', PembayaranHutangController::class);
+    Route::resource('pembayaran_service', PembayaranServiceController::class);
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {
