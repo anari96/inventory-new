@@ -26,7 +26,8 @@ class Service extends Model
         "imei2",
         "tanggal",
         "status",
-        "biaya"
+        "biaya",
+        "uang_bayar"
     ];
 
     public function pelanggan()
@@ -60,7 +61,7 @@ class Service extends Model
         foreach ($this->pembayaran_service as $pembayaran_service) {
             $total += $pembayaran_service->uang_bayar;
         }
-        return $total;
+        return $total+$this->uang_bayar;
     }
 
     public function getStatusLunasAttribute()

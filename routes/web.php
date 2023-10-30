@@ -25,6 +25,7 @@ use App\Http\Controllers\PembayaranPiutangController;
 use App\Http\Controllers\PembayaranHutangController;
 use App\Http\Controllers\PembayaranServiceController;
 use App\Http\Controllers\PesanController;
+use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -83,6 +84,12 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::resource('pembayaran_hutang', PembayaranHutangController::class);
     Route::resource('pembayaran_service', PembayaranServiceController::class);
     Route::resource('pesan', PesanController::class);
+    Route::get('laporan', [LaporanController::class,'index'])->name('laporan');
+    Route::prefix('laporan')->group(function(){
+        Route::get('/penjualan', [LaporanController::class,'penjualan'])->name('laporan.penjualan');
+        Route::get('/pembelian', [LaporanController::class,'pembelian'])->name('laporan.pembelian');
+        Route::get('/service', [LaporanController::class,'service'])->name('laporan.service');
+    });
 });
 
 // Route::group(['middleware' => ['auth:penggunas']], function () {
