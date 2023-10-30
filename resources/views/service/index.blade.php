@@ -88,7 +88,7 @@
                             </div>
                         </form>
 
-                        <div class="table">
+                        <div class="table" style="overflow-x:auto">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
                                     <tr>
