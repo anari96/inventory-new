@@ -24,10 +24,10 @@ class ServiceController extends Controller
      * Display a listing of the resource.
      */
 
-    public $list_kerusakan = [
+    private $list_kerusakan = [
             ["mati_total","Mati Total"],["nand_emmc","NAND/EMMC"],["not_charging","Not Charging"],["no_signal","No Signal"],["battery","Battery"],["lcd_ts"," LCD/TS"],["mic_audio","Mic Audio"],["software_bypass","Software/Bypass"],["dll","Dll"]
         ];
-    public $list_kelengkapan = [
+    private $list_kelengkapan = [
             ["simcard","Simcard"],["memory_card","Memory Card"],["back_casing","Back Casing"]
         ];
 
@@ -135,7 +135,7 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        if($request->pelanggan_id == "baru"){
+        if($request->pelanggan_id == null){
             $pelanggan = Pelanggan::create([
                 'nama_pelanggan' => $request->nama,
                 'telp_pelanggan' => $request->kontak,
@@ -146,14 +146,14 @@ class ServiceController extends Controller
         }
 
 
-        if($request->pelanggan_id != "baru"){
+        if($request->pelanggan_id != null){
             $pelanggan_id = $request->pelanggan_id;
-        }else if($request->pelanggan_id == "baru"){
+        }else if($request->pelanggan_id == null){
             $pelanggan_id = $pelanggan->id;
         }
 
-        $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : $request->kerusakan;
-        $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : $request->kelengkapan;
+        $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : " ";
+        $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : " ";
 
         $service = Service::create([
             'pelanggan_id' => $pelanggan_id,
@@ -170,7 +170,7 @@ class ServiceController extends Controller
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
-
+            'uang_bayar' => $request->uang_bayar,
             //status: pending, dikerjakan, selesai, batal, diambil, refund
             'status' => "pending"
         ]);
@@ -269,7 +269,7 @@ class ServiceController extends Controller
 
         $old_detail->delete();
 
-        if($request->pelanggan_id != "baru"){
+        if($request->pelanggan_id == null){
             $pelanggan = Pelanggan::create([
                 'nama_pelanggan' => $request->nama,
                 'telp_pelanggan' => $request->kontak,
@@ -279,12 +279,14 @@ class ServiceController extends Controller
             $pelanggan->save();
         }
 
-
-        if($request->pelanggan_id != "baru"){
+        if($request->pelanggan_id != null){
             $pelanggan_id = $request->pelanggan_id;
-        }else if($request->pelanggan_id == "baru"){
+        }else if($request->pelanggan_id == null){
             $pelanggan_id = $pelanggan->id;
         }
+
+        $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : " ";
+        $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : " ";
 
         $data->update([
             'merk' => $request->merk,
@@ -293,13 +295,13 @@ class ServiceController extends Controller
             'teknisi_id' => $request->teknisi_id,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
-            'kerusakan' => implode(",",$request->kerusakan),
+            'kerusakan' => $kerusakan,
             'deskripsi' => $request->deskripsi,
-            'kelengkapan' => implode(",",$request->kelengkapan),
+            'kelengkapan' => $kelengkapan,
             'tanggal' => date("Y-m-d"),
             'garansi' => $request->garansi,
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
-
+            'uang_bayar' => $request->uang_bayar,
             //status: pending, dikerjakan, selesai, batal, diambil, refund
         ]);
 
@@ -433,47 +435,67 @@ class ServiceController extends Controller
 
     public function guest_store(Request $request)
     {
-        $pengguna = Pengguna::where('nama_pengguna','like','%Umum%')->first();
-        $teknisi = Teknisi::where('nama_teknisi','like','%Umum%')->first();
-        $no_nota = "S-". date('Y')."".date('m')."".date('d')."".date("his");
+        DB::beginTransaction();
+        try{
+
+            $request->validate([
+                "nama" => "string|required|max:255",
+                "alamat" => "string|required|max:255",
+                "kontak" => "string|required|max:255",
+                "merk" => "string|required|max:255",
+                "tipe" => "string|required|max:255",
+                "imei1" => "string|max:15",
+                "imei2" => "string|max:15",
+            ]);
+
+            $pengguna = Pengguna::where('nama_pengguna','like','%Umum%')->first();
+            $teknisi = Teknisi::where('nama_teknisi','like','%Umum%')->first();
+            $no_nota = "S-". date('Y')."".date('m')."".date('d')."".date("his");
 
 
-        $pelanggan = Pelanggan::create([
-            'nama_pelanggan' => $request->nama,
-            'telp_pelanggan' => $request->kontak,
-            'alamat_pelanggan' => $request->alamat,
-            'pengguna_id' => $pengguna->id,
-        ]);
+            $pelanggan = Pelanggan::create([
+                'nama_pelanggan' => $request->nama,
+                'telp_pelanggan' => $request->kontak,
+                'alamat_pelanggan' => $request->alamat,
+                'pengguna_id' => $pengguna->id,
+            ]);
 
-        $pelanggan_id = $pelanggan->id;
+            $pelanggan_id = $pelanggan->id;
 
-        $pelanggan->save();
+            $pelanggan->save();
 
-        $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : $request->kerusakan;
-        $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : $request->kelengkapan;
+            $kerusakan = (isset($request->kerusakan)) ? implode(",",$request->kerusakan) : $request->kerusakan;
+            $kelengkapan = (isset($request->kelengkapan)) ? implode(",",$request->kelengkapan) : $request->kelengkapan;
 
-        $service = Service::create([
-            'pelanggan_id' => $pelanggan_id,
-            'pengguna_id' => $pengguna->id,
-            'teknisi_id' => $teknisi->id,
-            'no_service' => $no_nota,
-            'merk' => $request->merk,
-            'tipe' => $request->tipe,
-            'imei1' => $request->imei1,
-            'imei2' => $request->imei2,
-            'kerusakan' => $kerusakan,
-            'deskripsi' => $request->deskripsi,
-            'kelengkapan' => $kelengkapan,
-            'tanggal' => date("Y-m-d"),
-            'garansi' => $request->garansi,
-            'biaya' => 0,
+            $service = Service::create([
+                'pelanggan_id' => $pelanggan_id,
+                'pengguna_id' => $pengguna->id,
+                'teknisi_id' => $teknisi->id,
+                'no_service' => $no_nota,
+                'merk' => $request->merk,
+                'tipe' => $request->tipe,
+                'imei1' => $request->imei1,
+                'imei2' => $request->imei2,
+                'kerusakan' => $kerusakan,
+                'deskripsi' => $request->deskripsi,
+                'kelengkapan' => $kelengkapan,
+                'tanggal' => date("Y-m-d"),
+                'garansi' => $request->garansi,
+                'biaya' => 0,
+                'uang_bayar' => 0,
 
-            //status: pending, dikerjakan, selesai, batal, diambil, refund
-            'status' => "pending"
-        ]);
+                //status: pending, dikerjakan, selesai, batal, diambil, refund
+                'status' => "pending"
+            ]);
 
-        $service->save();
-        return redirect(route("service.guest_done"));
+            $service->save();
+            DB::commit();
+            return redirect()->route('service.guest')->with('success','Pesan Berhasil Dikirim, Harap tunggu jawaban dari kami.');
+
+        } catch (\Throwable $th){
+            DB::rollback();
+            return redirect()->route('service.guest')->with('error','Harap Check kembali isi Form');
+        }
     }
 
     public function guest_done()

@@ -22,8 +22,16 @@
     <!-- Animation Css -->
     <link href="{{ url('material') }}/plugins/animate-css/animate.css" rel="stylesheet" />
 
+    <!-- Morris Chart Css-->
+    <link href="{{ url('material') }}/plugins/morrisjs/morris.css" rel="stylesheet" />
+
     <!-- Custom Css -->
 <!--     <link href="{{ url('material') }}/css/style.css" rel="stylesheet"> -->
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="{{ url('material') }}/css/themes/all-themes.css" rel="stylesheet" />
+
+    <link href="{{ url('material') }}/plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
     <style>
         body{
             width:70%;
@@ -43,10 +51,24 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="body">
+                    <section class="content">
+                        @if (session('error'))
+                            <div class="alert bg-red">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        @if (session('success'))
+                            <div class="alert bg-green">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                    </section>
                     <h1 class="h3 mb-3 font-weight-normal" style="color:#9e35af;font-weight:bolder;font-size:4.5em">Service Pelanggan Baru</h1>
                     <h2 class="card-inside-title">Pelanggan</h2>
                     <div class="row clearfix">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-6 col-md-6">
                             <div id="form_pelanggan">
                                 <div class="form-group">
                                     <div class="form-line">
@@ -79,7 +101,7 @@
                 <div class="body">
                     <h2 class="card-inside-title">Detail Gadget</h2>
                     <div class="row clearfix">
-                        <div class="col-sm-12 col-md-12">
+                        <div class="col-sm-4 col-md-4">
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" name="merk" class="form-control"  placeholder="Merk" required>
@@ -172,21 +194,35 @@
     </div>
 </div>
 </form>
-        <!-- Jquery Core Js -->
-        <script src="{{ url('material') }}/plugins/jquery/jquery.min.js"></script>
+    <!-- Jquery Core Js -->
+    <script src="{{ url('material') }}/plugins/jquery/jquery.min.js"></script>
 
-        <!-- Bootstrap Core Js -->
-        <script src="{{ url('material') }}/plugins/bootstrap/js/bootstrap.js"></script>
+    <!-- Bootstrap Core Js -->
+    <script src="{{ url('material') }}/plugins/bootstrap/js/bootstrap.js"></script>
 
-        <!-- Waves Effect Plugin Js -->
-        <script src="{{ url('material') }}/plugins/node-waves/waves.js"></script>
+    <!-- Select Plugin Js -->
+    <script src="{{ url('material') }}/plugins/bootstrap-select/js/bootstrap-select.js"></script>
 
-        <!-- Validation Plugin Js -->
-        <script src="{{ url('material') }}/plugins/jquery-validation/jquery.validate.js"></script>
 
-        <!-- Custom Js -->
-        <script src="{{ url('material') }}/js/admin.js"></script>
-        <script src="{{ url('material') }}/js/pages/examples/sign-in.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="{{ url('material') }}/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="{{ url('material') }}/plugins/node-waves/waves.js"></script>
+
+    <!-- Jquery CountTo Plugin Js -->
+    <script src="{{ url('material') }}/plugins/jquery-countto/jquery.countTo.js"></script>
+
+    <!-- Morris Plugin Js -->
+    <script src="{{ url('material') }}/plugins/raphael/raphael.min.js"></script>
+    <script src="{{ url('material') }}/plugins/morrisjs/morris.js"></script>
+
+
+
+    <script src="{{ url('material') }}/js/admin.js"></script>
+    <script src="{{ url('material') }}/plugins/chartjs/Chart.bundle.js"></script>
+    <script src="{{ url('js') }}/davidshimjs/qrcodejs/qrcode.min.js"></script>
     </body>
 
 </html>

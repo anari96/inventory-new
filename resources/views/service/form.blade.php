@@ -332,7 +332,7 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <select class="form-control" name="pelanggan_id" id="pelanggan_id">
-                                        <option value="baru">Tambah Pelanggan Baru</option>
+                                        <option value="">Tambah Pelanggan Baru</option>
                                         @foreach($pelanggan as $data)
                                             <option value="{{ $data->id }}" @if(isset($datas)) @if($data->id == $datas->pelanggan_id) selected @endif @endif>{{ $data->nama_pelanggan }}</option>
                                         @endforeach
