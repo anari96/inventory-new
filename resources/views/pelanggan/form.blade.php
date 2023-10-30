@@ -50,7 +50,7 @@
                         <b>Nama Pelanggan</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="nama_pelanggan" value="@if(isset($data)) {{$data->nama_pelanggan}} @endif">
+                                <input type="text" class="form-control" name="nama_pelanggan" value="@if(isset($data)){{$data->nama_pelanggan}}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
@@ -63,7 +63,7 @@
                         <b>No. Telepon</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="telp_pelanggan" value="@if(isset($data)) {{$data->telp_pelanggan}} @endif">
+                                <input type="text" class="form-control" name="telp_pelanggan" value="@if(isset($data)){{$data->telp_pelanggan}}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
@@ -76,7 +76,7 @@
                         <b>Alamat</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line ">
-                                <input type="text" class="form-control" name="alamat_pelanggan" value="@if(isset($data)) {{$data->alamat_pelanggan}} @endif">
+                                <input type="text" class="form-control" name="alamat_pelanggan" value="@if(isset($data)){{$data->alamat_pelanggan}}@endif">
                             </div>
                             <span class="input-group-addon">
                                 <i style="background-color: rgb(0, 170, 187);"></i>
