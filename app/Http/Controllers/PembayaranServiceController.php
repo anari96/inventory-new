@@ -66,6 +66,14 @@ class PembayaranServiceController extends Controller
     {
         DB::beginTransaction();
         try{
+
+            $datas = Service::find($id);
+
+            if($request->uang_bayar >= $datas->grand_total){
+                $datas->update([
+                    "status_pembayaran" => "lunas"
+                ]);
+            }
             PembayaranService::create([
                 "uang_bayar" => $request->uang_bayar,
                 "service_id" => $id,

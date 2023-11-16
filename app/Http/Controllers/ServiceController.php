@@ -171,8 +171,10 @@ class ServiceController extends Controller
             'garansi' => $request->garansi,
             'biaya' => str_replace("Rp ","",str_replace(".","",$request->biaya)),
             'uang_bayar' => $request->uang_bayar,
-            //status: pending, dikerjakan, selesai, batal, diambil, refund
-            'status' => "pending"
+            //status: pending, dikerjakan, selesai, batal
+            'status' => "pending",
+            //status_pembayaran: belum_ditanggapi, belum_lunas, lunas
+            'status_pembayaran' => "belum_lunas"
         ]);
 
         $service->save();
@@ -199,6 +201,8 @@ class ServiceController extends Controller
             }
         }
 
+
+        \Helper::addUserLog('Menambah Service Untuk Pelanggan '. $service->pelanggan->nama, $service->toArray());
         return redirect(route("service.index"));
     }
 
@@ -319,14 +323,11 @@ class ServiceController extends Controller
                     $item->update([
                         "stok" => $item->stok - $request->jumlah[$i],
                     ]);
-                    // $sparepart = Sparepart::find($request->id[$i]);
-                    // $sparepart->update([
-                    //     "stok" => $sparepart->stok - $request->jumlah[$i]
-                    // ]);
             }
         }
 
 
+        \Helper::addUserLog('Mengubah Service Untuk Pelanggan '. $service->pelanggan->nama, $service->toArray());
         return redirect(route("service.index"));
     }
 
@@ -340,6 +341,9 @@ class ServiceController extends Controller
             $data = Service::find($id);
             $data->delete();
             DB::commit();
+
+
+            \Helper::addUserLog('Mengubah Service '. $service->no_service .' Untuk Pelanggan '. $service->pelanggan->nama, "");
             return redirect()->route('service.index')->with('success','Item berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();

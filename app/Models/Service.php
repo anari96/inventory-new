@@ -27,7 +27,8 @@ class Service extends Model
         "tanggal",
         "status",
         "biaya",
-        "uang_bayar"
+        "uang_bayar",
+        "status_pembayaran"
     ];
 
     public function pelanggan()
@@ -75,6 +76,24 @@ class Service extends Model
         }else if($this->biaya == 0){
            return "Belum Ditanggapi";
         }
+    }
+
+    public function getStatusPembayaranLabelAttribute()
+    {
+        $status_pembayaran = "";
+        switch ($this->status_pembayaran){
+            case "belum_ditanggapi":
+                $status_pembayaran =  "Belum Ditanggapi";
+                break;
+            case "belum_lunas":
+                $status_pembayaran = "Belum Lunas";
+                break;
+            case "lunas":
+                $status_pembayaran = "Lunas";
+                break;
+        }
+
+        return $status_pembayaran;
     }
 
     public function getTotalSparepartAttribute()
