@@ -44,7 +44,7 @@
                                     <tr>
                                         <td colspan="3">
                                             <div class="text-center">
-                                                {{ $datas->links() }}
+                                                @include("layouts.includes.pagination")
                                             </div>
                                         </td>
                                     </tr>

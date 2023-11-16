@@ -73,6 +73,21 @@
                                 <div class="col-lg-2 col-md-3">
                                     <div class="input-group">
                                         <span class="input-group-addon">
+                                            <i class="material-icons">assignment</i>
+                                        </span>
+                                        <div class="form-line">
+                                            <select class="form-control" name="status">
+                                                <option value="">Pilih Status Pembayaran</option>
+                                                <option value="belum_ditanggapi">Belum Ditanggapi</option>
+                                                <option value="belum_lunas">Belum Lunas</option>
+                                                <option value="lunas">Sudah Lunas</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
                                             <i class="material-icons">person</i>
                                         </span>
                                         <div class="form-line">
@@ -99,7 +114,7 @@
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'tipe','sorting_order' =>$sorting_order])}}">Tipe</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'imei1','sorting_order' => $sorting_order])}}">IMEI 1</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'imei2','sorting_order' => $sorting_order])}}">IMEI 2</a></th>
-                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'deskripsi','sorting_order' => $sorting_order])}}">Deskripsi</a></th>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'deskripsi','sorting_order' => $sorting_order])}}">Kerusakan</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'nama_teknisi','sorting_order' =>$sorting_order])}}">Nama Teknisi</a></th>
                                         <th>#</th>
                                     </tr>
@@ -109,7 +124,21 @@
                                         <tr>
                                             <td>{{ $data->tanggal }}</td>
                                             <td>{{ $data->pelanggan->nama_pelanggan }} ({{ $data->pelanggan->telp_pelanggan }})</td>
-                                            <td>{{ $data->status }} - ( {{$data->status_lunas}} )</td>
+                                            <td>
+                                                @switch($data->status)
+                                                    @case("pending")
+                                                        <span class="label label-warning">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        @break
+                                                    @case("dikerjakan")
+                                                        <span class="label label-primary">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        @break
+                                                    @case("selesai")
+                                                        <span class="label label-success">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        @break
+                                                    @default
+                                                        <span class="label label-success">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                @endswitch
+                                            </td>
                                             <td>{{ $data->merk }}</td>
                                             <td>{{ $data->tipe }}</td>
                                             <td>{{ $data->imei1 }}</td>

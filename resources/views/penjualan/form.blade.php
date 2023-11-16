@@ -136,7 +136,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="number" id="uang_bayar" name="uang_bayar" required class="form-control" placeholder="Uang Bayar" step="500">
+                                    <input type="number" id="uang_bayar" name="uang_bayar" required class="form-control" placeholder="Uang Bayar" step="500" @if(isset($datas)) value='{{$datas->uang_bayar}}' @endif>
                                 </div>
                             </div>
                             <div class="form-group">
