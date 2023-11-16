@@ -25,6 +25,7 @@ use App\Http\Controllers\PembayaranPiutangController;
 use App\Http\Controllers\PembayaranHutangController;
 use App\Http\Controllers\PembayaranServiceController;
 use App\Http\Controllers\PesanController;
+use App\Http\Controllers\MerkController;
 use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
@@ -69,7 +70,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::get('penjualan/retur/{id}', [PenjualanController::class, 'retur_penjualan'])->name('penjualan.retur');
     Route::resource('penjualan', PenjualanController::class);
     Route::resource('pembelian', PembelianController::class);
-
+    Route::resource('merk', MerkController::class);
     Route::resource('teknisi', TeknisiController::class);
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('supplier', SupplierController::class);
