@@ -74,38 +74,50 @@ class PenjualanController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-       $penjualan = Penjualan::create([
-            "pelanggan_id" => $request->pelanggan_id,
-            "tanggal_penjualan" => $request->tanggal,
-            "nomor_nota" => $request->no_penjualan,
-            "metode_bayar" => $request->metode_bayar,
-            "uang_bayar" => $request->uang_bayar,
-            "pengguna_id" => auth()->user()->id
-        ]);
+        DB::beginTransaction();
+        try {
 
-       $penjualan->save();
+            $penjualan = Penjualan::create([
+                    "pelanggan_id" => $request->pelanggan_id,
+                    "tanggal_penjualan" => $request->tanggal,
+                    "nomor_nota" => $request->no_penjualan,
+                    "metode_bayar" => $request->metode_bayar,
+                    "uang_bayar" => $request->uang_bayar,
+                    "pengguna_id" => auth()->user()->id
+                ]);
 
-        if(isset($request->jumlah)){
-            for($i = 0; $i < count($request->jumlah);$i++){
-                    $item = Item::find($request->id[$i]);
+            $penjualan->save();
 
-                    DetailPenjualan::create([
-                        "penjualan_id" => $penjualan->id,
-                        "item_id" => $request->id[$i],
-                        "qty" => $request->jumlah[$i],
-                        "diskon" => $request->diskon[$i],
-                        "harga_item" => $item->harga_item,
-                    ]);
+            if(isset($request->jumlah)){
+                for($i = 0; $i < count($request->jumlah);$i++){
+                        $item = Item::find($request->id[$i]);
 
-                    $item->update([
-                        "stok" => $item->stok - $request->jumlah[$i],
-                    ]);
+                        DetailPenjualan::create([
+                            "penjualan_id" => $penjualan->id,
+                            "item_id" => $request->id[$i],
+                            "qty" => $request->jumlah[$i],
+                            "diskon" => $request->diskon[$i],
+                            "harga_item" => $item->harga_item,
+                        ]);
 
+                        $item->update([
+                            "stok" => $item->stok - $request->jumlah[$i],
+                        ]);
+                }
             }
+
+            DB::commit();
+            \Helper::addUserLog('Menambah Penjualan Untuk Pelanggan '. $penjualan->pelanggan->nama, $penjualan->toArray());
+
+            // return redirect(route("penjualan.index"));
+
+            return redirect()->route('penjualan.index')->with('success','Penjualan berhasil ditambah');
+        } catch(\Throwable $th){
+            DB::rollback();
+
+            return redirect()->route('penjualan.index')->with('error','Penjualan gagal ditambah');
         }
 
-
-        return redirect(route("penjualan.index"));
     }
 
     /**
@@ -154,47 +166,58 @@ class PenjualanController extends Controller
      */
     public function update(Request $request, string $id): RedirectResponse
     {
+
         $penjualan = Penjualan::find($id);
-        $old_detail = DetailPenjualan::where("penjualan_id", $penjualan->id);
+        DB::beginTransaction();
+        try{
+            $old_detail = DetailPenjualan::where("penjualan_id", $penjualan->id);
 
-        $penjualan->update([
-            "pelanggan_id" => $request->pelanggan_id,
-            "tanggal_penjualan" => $request->tanggal,
-            "nomor_nota" => $request->no_penjualan,
-            "uang_bayar" => $request->uang_bayar,
-            "pengguna_id" => auth()->user()->id
-        ]);
-
-        // dd($old_detail->count());
-
-        foreach($old_detail->get() as $o){
-            $item_old = Item::find($o->item_id);
-            $item_old->update([
-                "stok" => $item_old->stok + $o->qty
+            $penjualan->update([
+                "pelanggan_id" => $request->pelanggan_id,
+                "tanggal_penjualan" => $request->tanggal,
+                "nomor_nota" => $request->no_penjualan,
+                "uang_bayar" => $request->uang_bayar,
+                "pengguna_id" => auth()->user()->id
             ]);
-        }
 
-        $old_detail->delete();
+            // dd($old_detail->count());
 
-        if(isset($request->jumlah)){
-            for($i = 0; $i < count($request->jumlah);$i++){
-                    $item = Item::find($request->id[$i]);
-
-                    DetailPenjualan::create([
-                        "penjualan_id" => $penjualan->id,
-                        "item_id" => $request->id[$i],
-                        "qty" => $request->jumlah[$i],
-                        "diskon" => $request->diskon[$i],
-                        "harga_item" => $item->harga_item,
-                    ]);
-
-                    $item->update([
-                        "stok" => $item->stok - $request->jumlah[$i],
-                    ]);
+            foreach($old_detail->get() as $o){
+                $item_old = Item::find($o->item_id);
+                $item_old->update([
+                    "stok" => $item_old->stok + $o->qty
+                ]);
             }
-        }
 
-        return redirect(route("penjualan.index"));
+            $old_detail->delete();
+
+            if(isset($request->jumlah)){
+                for($i = 0; $i < count($request->jumlah);$i++){
+                        $item = Item::find($request->id[$i]);
+
+                        DetailPenjualan::create([
+                            "penjualan_id" => $penjualan->id,
+                            "item_id" => $request->id[$i],
+                            "qty" => $request->jumlah[$i],
+                            "diskon" => $request->diskon[$i],
+                            "harga_item" => $item->harga_item,
+                        ]);
+
+                        $item->update([
+                            "stok" => $item->stok - $request->jumlah[$i],
+                        ]);
+                }
+            }
+
+
+            DB::commit();
+            \Helper::addUserLog('Mengubah Penjualan Untuk Pelanggan '. $penjualan->pelanggan->nama, $penjualan->toArray());
+            return redirect()->route("penjualan.index")->with("success","Penjualan Berhasil Diubah");
+
+        }catch( \Throwable $th){
+            DB::rollback();
+            return redirect()->route("penjualan.index")->with("erro","Penjualan Gagal Diubah");
+        }
     }
 
     /**
@@ -209,11 +232,14 @@ class PenjualanController extends Controller
             $detail->delete();
             $data->delete();
             DB::commit();
+            \Helper::addUserLog('Menghapus Penjualan Untuk Pelanggan '. $data->pelanggan->nama, $data->toArray());
             return redirect()->route('penjualan.index')->with('success','Penjualan berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();
             return redirect()->route('penjualan.index')->with('error','Penjualan gagal dihapus');
         }
+
+
     }
 
     public function retur_penjualan(String $id)
