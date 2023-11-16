@@ -3,6 +3,7 @@ namespace App\Helpers;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\Log;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -64,5 +65,42 @@ class Helper{
 
         return $res;
 
+    }
+
+    public static function getMyIP()
+    {
+        $ipaddress = '';
+        if (getenv('HTTP_CLIENT_IP'))
+            $ipaddress = getenv('HTTP_CLIENT_IP');
+        else if(getenv('HTTP_X_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+        else if(getenv('HTTP_X_FORWARDED'))
+            $ipaddress = getenv('HTTP_X_FORWARDED');
+        else if(getenv('HTTP_FORWARDED_FOR'))
+            $ipaddress = getenv('HTTP_FORWARDED_FOR');
+        else if(getenv('HTTP_FORWARDED'))
+           $ipaddress = getenv('HTTP_FORWARDED');
+        else if(getenv('REMOTE_ADDR'))
+            $ipaddress = getenv('REMOTE_ADDR');
+        else
+            $ipaddress = 'UNKNOWN';
+        return $ipaddress;
+    }
+
+    // User Log
+    // Helper::addUserLog('Menambah Penjualan', $query->toArray());
+    public static function addUserLog($action,$actionDetail = null,$ip = null)
+    {
+        if($ip == null){
+            $ip = Helper::getMyIP();
+        }
+
+        Log::create([
+            'action'=>$action,
+            'action_detail'=>json_encode($actionDetail),
+            'user_id'=>Auth::user()->id,
+            'ip'=>$ip,
+            'ip_detail'=>NULL
+        ]);
     }
 }
