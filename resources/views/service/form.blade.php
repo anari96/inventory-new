@@ -18,7 +18,7 @@
         function showHidePelangganForm(){
             let pelangganId = pelangganIdSelect.value;
 
-            if(pelangganId == "baru"){
+            if(pelangganId == ""){
                 pelangganForm.style.display = 'block';
             }else if(pelangganId != "baru"){
                 pelangganForm.style.display = 'none';
@@ -286,14 +286,17 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <b>Kasir</b>
+                        <b>Sales</b>
                         <div class="input-group colorpicker colorpicker-element">
                             <div class="form-line focused">
-                                <input type="hidden" name="pengguna_id" value="{{ auth()->user()->id }}" required>
-                                <input type="text" class="form-control" value="{{ auth()->user()->nama_pengguna }}" required>
+                                <select name="sale_id" class="form-control">
+                                    @foreach($sale as $s)
+                                        <option value="{{ $s->id }}" @if(isset($datas)) @if($s->id == $datas->sales_id) selected @endif @endif> {{ $s->nama_sales }} </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <span class="input-group-addon">
-                                <i style="background-color: rgba(0, 0, 0, 0.7);"></i>
+                                <i style="background-color: rgb(0, 170, 187);"></i>
                             </span>
                         </div>
                     </div>
@@ -379,12 +382,11 @@
                         <div class="col-sm-12 col-md-12">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="merk" class="form-control" @if(isset($datas)) value="{{ $datas->merk }}" @endif placeholder="Merk" required>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="form-line">
-                                    <input type="text" name="tipe" class="form-control" @if(isset($datas)) value="{{ $datas->tipe }}" @endif placeholder="Tipe" required>
+                                    <select class="form-control" name="merk" id="merk">
+                                        @foreach($merk as $data)
+                                            <option value="{{ $data->nama_merk }}" @if(isset($datas)) @if(strcmp($data->nama_merek,$datas->merk)) selected="" @endif @endif>{{ $data->nama_merk }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -423,9 +425,9 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <h2 class="card-inside-title">Untuk Klaim Garansi</h2>
-                                    <input name="garansi" type="radio" id="radio_1" value='1' @if(isset($datas)) @if($datas->garansi == 1) checked="" @endif @endif>
+                                    <input name="garansi" type="radio" id="radio_1" value='1' @if(isset($datas) && !isset($garansi)) @if($datas->garansi == 1) checked="" @endif @elseif(isset($garansi)) checked @endif>
                                     <label for="radio_1">Ya</label>
-                                    <input name="garansi" type="radio" id="radio_2" value='0' @if(isset($datas)) @if($datas->garansi == 0) checked="" @endif @else checked @endif>
+                                    <input name="garansi" type="radio" id="radio_2" value='0' @if(isset($datas) && !isset($garansi)) @if($datas->garansi == 0) checked="" @endif @elseif(isset($garansi)) @else checked @endif>
                                     <label for="radio_2">Tidak</label>
                                 </div>
                             </div>
@@ -453,7 +455,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->deskripsi }}" @endif placeholder="Deskripsi" required>
+                                    <input type="text" name="deskripsi" class="form-control" class="form-control" @if(isset($datas)) value="{{ $datas->deskripsi }}" @endif placeholder="Kerusakan" required>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -463,7 +465,17 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" name="uang_bayar" class="form-control money-rupiah" id="uang_bayar" class="form-control" @if(isset($datas)) value="{{ $datas->uang_bayar }}" @endif placeholder="Uang Muka (DP)" required>
+
+                                    @php
+                                        if(isset($datas) && !isset($garansi)){
+                                            $uang_bayar = $datas->uang_bayar;
+                                        }else if(isset($garansi)){
+                                            $uang_bayar = 0;
+                                        }else{
+                                            $uang_bayar = 0;
+                                        }
+                                    @endphp
+                                    <input type="number" name="uang_bayar" class="form-control money-rupiah" id="uang_bayar" class="form-control" value="{{ $uang_bayar }}" placeholder="Uang Muka (DP)" required>
                                 </div>
                             </div>
                             <div class="form-group">

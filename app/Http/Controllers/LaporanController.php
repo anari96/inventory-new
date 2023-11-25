@@ -27,7 +27,7 @@ class LaporanController extends Controller
 
         foreach($penjualan->get() as $penjualan)
         {
-            $pendapatan += $penjualan->total();
+            $pendapatan += $penjualan->total;
         }
 
         $data = $penjualan->paginate(10);

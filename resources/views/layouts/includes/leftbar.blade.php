@@ -95,6 +95,12 @@
                     <span>Service</span>
                 </a>
             </li>
+            <li class="{{ (request()->is('laporan*')) ? 'active' : '' }}">
+                <a href="{{ route('laporan') }}">
+                    <i class="material-icons">receipt_long</i>
+                    <span>Laporan</span>
+                </a>
+            </li>
 <!--            <li>
                 <a href="javascript:void(0);" class="menu-toggle">
                     <i class="material-icons">receipt_long</i>
@@ -112,9 +118,6 @@
                     </li>
                     <li>
                         <a href="{{ route('service.kas') }}">Kas</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('service.garansi') }}">Garansi</a>
                     </li>
                 </ul>
             </li>-->

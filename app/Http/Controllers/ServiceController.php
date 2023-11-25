@@ -10,8 +10,10 @@ use App\Models\Pelanggan;
 use App\Models\Service;
 use App\Models\DetailService;
 use App\Models\Teknisi;
+use App\Models\Sale;
 use App\Models\Sparepart;
 use App\Models\Item;
+use App\Models\Merk;
 use App\Models\Pengguna;
 
 use DateInterval;
@@ -82,6 +84,10 @@ class ServiceController extends Controller
                 $datas = $datas->where("status",$request->status);
             }
 
+            if(isset($request->status_pembayaran)){
+                $datas = $datas->where("status_pembayaran",$request->status_pembayaran);
+            }
+
             if(isset($request->nama_pelanggan)){
                 $datas = $datas->cari($request->nama_pelanggan);
             }
@@ -96,11 +102,15 @@ class ServiceController extends Controller
                     $datas = $datas->orderBy($request->order, $sorting_order);
                 }
             }else{
-
                 $datas = $datas->orderBy("created_at", "desc");
             }
 
-            $datas = $datas->paginate(10);
+            if($request->status != "batal"){
+                $datas = $datas->whereNot("status","batal")->paginate(10);
+            }else if($request->status == "batal"){
+
+                $datas = $datas->paginate(10);
+            }
 
             return response()->view("service.index", compact("request","datas","periodeTanggals","periode","sorting_order"));
         }catch(\Throwable $th){
@@ -119,10 +129,14 @@ class ServiceController extends Controller
 
         $teknisi = Teknisi::all();
         $pelanggan = Pelanggan::all();
+        $merk = Merk::all();
+        $sale = Sale::all();
 
         $data = [
             "teknisi" => $teknisi,
             "pelanggan" => $pelanggan,
+            "sale" => $sale,
+            "merk" => $merk,
             "list_kelengkapan" => $list_kelengkapan,
             "list_kerusakan" => $list_kerusakan,
         ];
@@ -135,6 +149,10 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            "imei1" => "max:18",
+            "imei2" => "max:18"
+        ]);
         if($request->pelanggan_id == null){
             $pelanggan = Pelanggan::create([
                 'nama_pelanggan' => $request->nama,
@@ -159,9 +177,9 @@ class ServiceController extends Controller
             'pelanggan_id' => $pelanggan_id,
             'pengguna_id' => auth()->user()->id,
             'teknisi_id' => $request->teknisi_id,
+            'sale_id' => $request->sale_id,
             'no_service' => $request->no_service,
             'merk' => $request->merk,
-            'tipe' => $request->tipe,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
             'kerusakan' => $kerusakan,
@@ -189,11 +207,15 @@ class ServiceController extends Controller
                         "jumlah" => $request->jumlah[$i],
                     ]);
 
-
-
                     $item->update([
                         "stok" => $item->stok - $request->jumlah[$i],
                     ]);
+
+                    if($request->garansi == 1){
+                        $item->update([
+                            "stok_gudang" => $item->stok_gudang + $request->jumlah[$i],
+                        ]);
+                    }
                     // $sparepart = Sparepart::find($request->id[$i]);
                     // $sparepart->update([
                     //     "stok" => $sparepart->stok - $request->jumlah[$i]
@@ -228,7 +250,9 @@ class ServiceController extends Controller
         $datas = Service::find($id);
         $detail = DetailService::where("service_id", $id)->get();
         $teknisi = Teknisi::all();
+        $sale = Sale::all();
         $pelanggan = Pelanggan::all();
+        $merk = Merk::all();
         $kelengkapan = explode(",",$datas->kelengkapan);
         $kerusakan = explode(",",$datas->kerusakan);
 
@@ -236,13 +260,16 @@ class ServiceController extends Controller
             "datas" => $datas,
             "detail" => $detail,
             "teknisi" => $teknisi,
+            "sale" => $sale,
             "pelanggan" => $pelanggan,
+            "merk" => $merk,
             "list_kelengkapan" => $list_kelengkapan,
             "list_kerusakan" => $list_kerusakan,
             "kelengkapan" => $kelengkapan,
             "kerusakan" => $kerusakan
         ];
 
+        // dd($datas->merk);
         // dd($detail);
         return response()->view("service.edit", $data);
     }
@@ -295,8 +322,8 @@ class ServiceController extends Controller
         $data->update([
             'merk' => $request->merk,
             'pelanggan_id' => $pelanggan_id,
-            'tipe' => $request->tipe,
             'teknisi_id' => $request->teknisi_id,
+            'sale_id' => $request->sale_id,
             'imei1' => $request->imei1,
             'imei2' => $request->imei2,
             'kerusakan' => $kerusakan,
@@ -327,7 +354,7 @@ class ServiceController extends Controller
         }
 
 
-        \Helper::addUserLog('Mengubah Service Untuk Pelanggan '. $service->pelanggan->nama, $service->toArray());
+        \Helper::addUserLog('Mengubah Service Untuk Pelanggan '. $data->pelanggan->nama, $data->toArray());
         return redirect(route("service.index"));
     }
 
@@ -339,11 +366,11 @@ class ServiceController extends Controller
         DB::beginTransaction();
         try {
             $data = Service::find($id);
+            \Helper::addUserLog('Mengubah Service '. $data->no_service .' Untuk Pelanggan '. $data->pelanggan->nama, "");
             $data->delete();
             DB::commit();
 
 
-            \Helper::addUserLog('Mengubah Service '. $service->no_service .' Untuk Pelanggan '. $service->pelanggan->nama, "");
             return redirect()->route('service.index')->with('success','Item berhasil dihapus');
         } catch (\Throwable $th) {
             DB::rollback();
@@ -505,5 +532,38 @@ class ServiceController extends Controller
     public function guest_done()
     {
         return response()->view('service.guest_done');
+    }
+
+    public function create_garansi($id)
+    {
+        $garansi = 1;
+        $list_kerusakan = $this->list_kerusakan;
+        $list_kelengkapan = $this->list_kelengkapan;
+        $datas = Service::find($id);
+        $detail = DetailService::where("service_id", $id)->get();
+        $teknisi = Teknisi::all();
+        $pelanggan = Pelanggan::all();
+        $sale = Sale::all();
+        $merk = Merk::all();
+        $kelengkapan = explode(",",$datas->kelengkapan);
+        $kerusakan = explode(",",$datas->kerusakan);
+
+        $data = [
+            "datas" => $datas,
+            "detail" => $detail,
+            "teknisi" => $teknisi,
+            "pelanggan" => $pelanggan,
+            "sale" => $sale,
+            "merk" => $merk,
+            "list_kelengkapan" => $list_kelengkapan,
+            "list_kerusakan" => $list_kerusakan,
+            "kelengkapan" => $kelengkapan,
+            "kerusakan" => $kerusakan,
+            "garansi" => $garansi
+        ];
+
+        // dd($datas->merk);
+        // dd($detail);
+        return response()->view("service.create_garansi", $data);
     }
 }

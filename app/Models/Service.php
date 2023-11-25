@@ -15,6 +15,7 @@ class Service extends Model
         "pelanggan_id",
         "pengguna_id",
         "teknisi_id",
+        "sale_id",
         "no_service",
         "merk",
         "tipe",
@@ -138,7 +139,7 @@ class Service extends Model
 
     public function scopeCari($query,$name){
         return $query->whereHas("pelanggan", function($q) use($name){
-            $q->where("nama_pelanggan", "like", "%".$name."%");
+            $q->where("nama_pelanggan", "like", "%".$name."%")->orWhere("no_service", $name);
         });
     }
 

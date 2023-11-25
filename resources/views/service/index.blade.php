@@ -63,9 +63,11 @@
                                         <div class="form-line">
                                             <select class="form-control" name="status">
                                                 <option value="">Pilih Status</option>
-                                                <option value="pending">Pending</option>
-                                                <option value="dikerjakan">Dikerjakan</option>
-                                                <option value="selesai">Selesai</option>
+                                                <option value="pending" @if($request->status == "pending") selected @endif
+                                                )>Pending</option>
+                                                <option value="dikerjakan" @if($request->status == "dikerjakan") selected @endif>Dikerjakan</option>
+                                                <option value="selesai" @if($request->status == "selesai") selected @endif>Selesai</option>
+                                                <option value="batal" @if($request->status == "batal") selected @endif>Batal</option>
                                             </select>
                                         </div>
                                     </div>
@@ -76,11 +78,11 @@
                                             <i class="material-icons">assignment</i>
                                         </span>
                                         <div class="form-line">
-                                            <select class="form-control" name="status">
+                                            <select class="form-control" name="status_pembayaran">
                                                 <option value="">Pilih Status Pembayaran</option>
-                                                <option value="belum_ditanggapi">Belum Ditanggapi</option>
-                                                <option value="belum_lunas">Belum Lunas</option>
-                                                <option value="lunas">Sudah Lunas</option>
+                                                <option value="belum_ditanggapi" @if($request->status_pembayaran == "belum_ditanggapi") selected @endif>Belum Ditanggapi</option>
+                                                <option value="belum_lunas" @if($request->status_pembayaran == "belum_lunas") selected @endif>Belum Lunas</option>
+                                                <option value="lunas" @if($request->status_pembayaran == "lunas") selected @endif>Sudah Lunas</option>
                                             </select>
                                         </div>
                                     </div>
@@ -91,29 +93,27 @@
                                             <i class="material-icons">person</i>
                                         </span>
                                         <div class="form-line">
-                                            <input class="form-control" placeholder="Nama Pelanggan" name="nama_pelanggan">
+                                            <input class="form-control" placeholder="No. Service/Nama Pelanggan" name="nama_pelanggan" value="{{ $request->nama_pelanggan }}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-2 col-md-3">
                                     <div class="input-group">
-                                        <button class="btn btn-primary">Filter</button>
+                                        <button class="btn btn-primary">Cari</button>
                                     </div>
                                 </div>
                             </div>
                         </form>
 
-                        <div class="table" style="overflow-x:auto">
+                        <div class="table" style="">
                             <table class="table table-hover dashboard-task-infos">
                                 <thead>
                                     <tr>
+                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'no_service','sorting_order' => $sorting_order])}}">No. Service</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'tanggal','sorting_order' => $sorting_order])}}">Tanggal</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'nama_pelanggan','sorting_order' => $sorting_order])}}">Nama Pelanggan/No. Telepon</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'status','sorting_order' =>$sorting_order])}}">Status</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'merk','sorting_order' =>$sorting_order])}}">Merek</a></th>
-                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'tipe','sorting_order' =>$sorting_order])}}">Tipe</a></th>
-                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'imei1','sorting_order' => $sorting_order])}}">IMEI 1</a></th>
-                                        <th><a href="{{request()->fullUrlWithQuery(['order' => 'imei2','sorting_order' => $sorting_order])}}">IMEI 2</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'deskripsi','sorting_order' => $sorting_order])}}">Kerusakan</a></th>
                                         <th><a href="{{request()->fullUrlWithQuery(['order' => 'nama_teknisi','sorting_order' =>$sorting_order])}}">Nama Teknisi</a></th>
                                         <th>#</th>
@@ -122,27 +122,39 @@
                                 <tbody>
                                     @foreach($datas as $data)
                                         <tr>
+                                            <td>{{ $data->no_service }}</td>
                                             <td>{{ $data->tanggal }}</td>
                                             <td>{{ $data->pelanggan->nama_pelanggan }} ({{ $data->pelanggan->telp_pelanggan }})</td>
                                             <td>
                                                 @switch($data->status)
                                                     @case("pending")
-                                                        <span class="label label-warning">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        <span class="label label-danger">{{ $data->status }}</span>
                                                         @break
                                                     @case("dikerjakan")
-                                                        <span class="label label-primary">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        <span class="label label-primary">{{ $data->status }}</span>
                                                         @break
                                                     @case("selesai")
-                                                        <span class="label label-success">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        <span class="label label-success">{{ $data->status }}</span>
+                                                        @break
+                                                    @case("batal")
+                                                        <span class="label label-danger">{{ $data->status }}</span>
                                                         @break
                                                     @default
-                                                        <span class="label label-success">{{ $data->status }}</span> - ( {{$data->status_pembayaran_label}} )
+                                                        <span class="label label-success">{{ $data->status }}</span>
+                                                @endswitch
+                                                @switch($data->status_pembayaran)
+                                                    @case('belum_ditanggapi')
+                                                        <span class="label label-danger">{{ $data->status_pembayaran_label }}</span>
+                                                        @break
+                                                    @case('belum_lunas')
+                                                        <span class="label label-warning">{{ $data->status_pembayaran_label }}</span>
+                                                        @break
+                                                    @case('lunas')
+                                                        <span class="label label-success">{{ $data->status_pembayaran_label }}</span>
+                                                        @break
                                                 @endswitch
                                             </td>
                                             <td>{{ $data->merk }}</td>
-                                            <td>{{ $data->tipe }}</td>
-                                            <td>{{ $data->imei1 }}</td>
-                                            <td>{{ $data->imei2 }}</td>
                                             <td>{{ $data->deskripsi }}</td>
                                             <td>{{ $data->teknisi->nama_teknisi }}</td>
                                             <td>
@@ -154,12 +166,14 @@
                                                         @if($data->status != "pending")
                                                             <li><a href="{{ route('service.proses', $data->id) }}?status=pending">Pending</a></li>
                                                         @endif
-
                                                         @if($data->status != "dikerjakan")
                                                             <li><a href="{{ route('service.proses', $data->id) }}?status=dikerjakan">Dikerjakan</a></li>
                                                         @endif
                                                         @if($data->status != "selesai")
                                                             <li><a href="{{ route('service.proses', $data->id) }}?status=selesai">Selesai</a></li>
+                                                        @endif
+                                                        @if($data->status != "batal")
+                                                            <li><a href="{{ route('service.proses', $data->id) }}?status=batal">Batal</a></li>
                                                         @endif
                                                             <li role="separator" class="divider"></li>
                                                             <li><a href="{{ route('pembayaran_service.edit', $data->id) }}">Bayar</a></li>
@@ -168,6 +182,9 @@
                                                     </ul>
                                                 </div>
                                                 <a href="{{ route('service.edit', [$id = $data->id]) }}" class="btn btn-primary">Edit</a>
+                                                @if($data->status == "selesai" && $data->status_pembayaran == "lunas")
+                                                    <a href="{{ route('service.garansi.create', [$id = $data->id]) }}" class="btn btn-primary">Garansi</a>
+                                                @endif
                                                 <form action="{{ route('service.destroy', $data->id) }}" method="POST" style="display:inline">
                                                     @csrf
                                                     @method('DELETE')

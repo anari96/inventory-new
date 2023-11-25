@@ -63,7 +63,7 @@ Route::group(['middleware' => ['auth:penggunas','auth']], function () {
     Route::get('service/list', [ServiceController::class, 'list'])->name('service.list');
     Route::get('service/list_terpakai', [ServiceController::class, 'list_terpakai'])->name('service.list_terpakai');
     Route::get('service/kas', [ServiceController::class, 'kas'])->name('service.kas');
-    Route::get('service/garansi', [ServiceController::class, 'garansi'])->name('service.garansi');
+    Route::get('service/garansi/{id}', [ServiceController::class, 'create_garansi'])->name('service.garansi.create');
     Route::resource('service', ServiceController::class);
 
 
